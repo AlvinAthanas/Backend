@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "feedback")
-public class FeedBack {
+public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,14 +19,14 @@ public class FeedBack {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public FeedBack(String content, String response, LocalDate date, User user) {
+    public Feedback(String content, String response, LocalDate date, User user) {
         this.content = content;
         this.response = response;
         this.date = date;
         this.user = user;
     }
 
-    public FeedBack() {
+    public Feedback() {
     }
 
     public Long getId() {

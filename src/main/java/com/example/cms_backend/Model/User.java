@@ -30,7 +30,7 @@ public class User {
 
 
     @OneToMany(mappedBy = "user")
-    List<FeedBack>  feedBacks;
+    List<Feedback> feedbacks;
 
     @OneToMany(mappedBy = "user")
     List<Attendance>  attendances;
@@ -169,12 +169,12 @@ public class User {
 
 
 
-    public List<FeedBack> getFeedBacks() {
-        return feedBacks;
+    public List<Feedback> getFeedBacks() {
+        return feedbacks;
     }
 
-    public void setFeedBacks(List<FeedBack> feedBacks) {
-        this.feedBacks = feedBacks;
+    public void setFeedBacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
     }
 
     public List<Attendance> getAttendances() {
