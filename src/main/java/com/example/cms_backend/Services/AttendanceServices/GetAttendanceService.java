@@ -1,13 +1,28 @@
 package com.example.cms_backend.Services.AttendanceServices;
 
+import com.example.cms_backend.Abstractions.Query;
+import com.example.cms_backend.Exceptions.AttendanceNotFoundException;
+import com.example.cms_backend.Model.Entities.Attendance;
 import com.example.cms_backend.Repositories.AttendanceRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-public class GetAttendanceService {
+public class GetAttendanceService implements Query<Long, Attendance> {
     private final AttendanceRepository attendanceRepository;
 
     public GetAttendanceService(AttendanceRepository attendanceRepository) {
         this.attendanceRepository = attendanceRepository;
+    }
+
+    @Override
+    public ResponseEntity<Attendance> execute(Long id) {
+        Optional<Attendance> attendanceOptional = attendanceRepository.findById(id);
+        if (attendanceOptional.isPresent()) {
+            return ResponseEntity.ok(attendanceOptional.get());
+        }
+        throw new AttendanceNotFoundException();
     }
 }
