@@ -15,15 +15,14 @@ public class Feedback {
     private String response;
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
-    public Feedback(String content, String response, LocalDate date, User user) {
+    public Feedback(String content, String response, LocalDate date) {
         this.content = content;
         this.response = response;
         this.date = date;
-        this.user = user;
+
     }
 
     public Feedback() {
@@ -61,11 +60,13 @@ public class Feedback {
         this.date = date;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
+
+
 }

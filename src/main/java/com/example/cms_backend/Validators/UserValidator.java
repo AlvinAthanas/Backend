@@ -2,7 +2,6 @@ package com.example.cms_backend.Validators;
 
 import com.example.cms_backend.Exceptions.ErrorMessages;
 import com.example.cms_backend.Exceptions.UserNotValidException;
-import com.example.cms_backend.Model.Entities.ErrorResponse;
 import com.example.cms_backend.Model.Entities.User;
 
 import java.util.regex.Pattern;

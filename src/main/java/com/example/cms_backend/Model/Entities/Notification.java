@@ -15,23 +15,19 @@ public class Notification {
     private String message;
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id", referencedColumnName = "id")
-    private Group group;
+    @Column(name = "group_id")
+    private Long groupId;
 
     public Notification() {
     }
 
-    public Notification(String title, String message, LocalDate date, User user, Group group) {
+    public Notification(String title, String message, LocalDate date) {
         this.title = title;
         this.message = message;
         this.date = date;
-        this.user = user;
-        this.group = group;
     }
 
     public Long getId() {
@@ -66,19 +62,19 @@ public class Notification {
         this.date = date;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public Group getGroup() {
-        return group;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 }

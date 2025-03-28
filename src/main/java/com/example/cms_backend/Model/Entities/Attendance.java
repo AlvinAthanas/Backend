@@ -14,19 +14,16 @@ public class Attendance {
     private String status;
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
-    private Event event;
+    @Column(name = "user_id")
+    private Long userId;
 
-    public Attendance(String status, LocalDate date, User user, Event event) {
+    @Column(name = "event_id")
+    private Long eventId;
+
+    public Attendance(String status, LocalDate date) {
         this.status = status;
         this.date = date;
-        this.user = user;
-        this.event = event;
     }
 
     public Attendance() {}
@@ -55,19 +52,19 @@ public class Attendance {
         this.date = date;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public Event getEvent() {
-        return event;
+    public Long getEventId() {
+        return eventId;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 }

@@ -16,21 +16,19 @@ public class FinancialTransaction {
     private Long amount;
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parish_id", referencedColumnName = "id")
-    private Parish parish;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "parish_id")
+    private Long parishId;
 
-    public FinancialTransaction(String type, String description, Long amount, LocalDate date, Parish parish, User user) {
+    @Column(name = "user_id")
+    private Long userId;
+
+    public FinancialTransaction(String type, String description, Long amount, LocalDate date) {
         this.type = type;
         this.description = description;
         this.amount = amount;
         this.date = date;
-        this.parish = parish;
-        this.user = user;
+
     }
 
     public FinancialTransaction() {
@@ -76,19 +74,19 @@ public class FinancialTransaction {
         this.date = date;
     }
 
-    public Parish getParish() {
-        return parish;
+    public Long getParishId() {
+        return parishId;
     }
 
-    public void setParish(Parish parish) {
-        this.parish = parish;
+    public void setParishId(Long parishId) {
+        this.parishId = parishId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

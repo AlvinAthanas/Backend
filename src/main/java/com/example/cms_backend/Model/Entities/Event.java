@@ -18,24 +18,21 @@ public class Event {
     @Column(name = "date_time")
     private LocalDateTime dateTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parish_id", referencedColumnName = "id")
-    private Parish parish;
+    @Column(name = "parish_id")
+    private Long parishId;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_id")
     private List<Attendance> attendances;
 
-    public Event(String name, String description, String location, LocalDateTime dateTime, User user, Parish parish) {
+    public Event(String name, String description, String location, LocalDateTime dateTime) {
         this.name = name;
         this.description = description;
         this.location = location;
         this.dateTime = dateTime;
-        this.user = user;
-        this.parish = parish;
     }
 
     public Event() {
@@ -81,19 +78,27 @@ public class Event {
         this.dateTime = dateTime;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public Parish getParish() {
-        return parish;
+    public Long getParishId() {
+        return parishId;
     }
 
-    public void setParish(Parish parish) {
-        this.parish = parish;
+    public void setParishId(Long parishId) {
+        this.parishId = parishId;
+    }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
     }
 }

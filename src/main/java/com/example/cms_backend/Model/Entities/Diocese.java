@@ -15,7 +15,8 @@ public class Diocese {
     private String location;
     private String bishopName;
 
-    @OneToMany(mappedBy = "diocese")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "diocese_id")
     private List<Parish> parishes;
 
     public Diocese(String name, String location, String bishopName) {
@@ -66,5 +67,6 @@ public class Diocese {
     public void setParishes(List<Parish> parishes) {
         this.parishes = parishes;
     }
+
 }
 

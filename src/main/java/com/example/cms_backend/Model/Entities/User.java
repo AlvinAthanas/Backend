@@ -24,10 +24,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private String maritalStatus;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parish_id", referencedColumnName = "id")
-    private Parish parish;
+    @Column(name = "parish_id")
+    private Long parishId;
 
     @ManyToMany
     @JoinTable(
@@ -45,22 +43,28 @@ public class User {
     )
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     List<Feedback> feedbacks;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     List<Attendance>  attendances;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     List<Event> events;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     List<Contribution>  contributions;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     List<Notification>   notifications;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     List<FinancialTransaction> transactionsRecorded;
 
 
@@ -156,13 +160,8 @@ public class User {
         this.maritalStatus = maritialStatus;
     }
 
-    public Parish getParish() {
-        return parish;
-    }
 
-    public void setParish(Parish parish) {
-        this.parish = parish;
-    }
+
 
     public List<Feedback> getFeedbacks() {
         return feedbacks;
@@ -235,5 +234,13 @@ public class User {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Long getParishId() {
+        return parishId;
+    }
+
+    public void setParishId(Long parishId) {
+        this.parishId = parishId;
     }
 }

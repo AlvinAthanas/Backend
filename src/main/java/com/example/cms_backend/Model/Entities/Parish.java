@@ -16,25 +16,29 @@ public class Parish {
     private String contactInfo;
 
     //PARISHES and DIOCESE
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dioceseId", referencedColumnName = "id") //TODO: set nullable to false
-    private Diocese diocese;
+    @Column(name = "diocese_id") //TODO: set nullable to false
+    private Long dioceseId;
 
     //PARISH AND USERS
-    @OneToMany(mappedBy = "parish")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parish_id")
     private List<User> users;
 
     //PARISH AND GROUPS
-    @OneToMany(mappedBy = "parish")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parish_id")
     private List<Group> groups;
 
-    @OneToMany(mappedBy = "parish")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parish_id")
     private List<Contribution> contributions;
 
-    @OneToMany(mappedBy = "parish")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parish_id")
     private List<FinancialTransaction> transactions;
 
-    @OneToMany(mappedBy = "parish")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parish_id")
     private List<Event> events;
 
     public Parish(Long id, String name, String location, String contactInfo, Diocese diocese) {
@@ -42,7 +46,7 @@ public class Parish {
         this.name = name;
         this.location = location;
         this.contactInfo = contactInfo;
-        this.diocese = diocese;
+
     }
 
     public Parish() {
@@ -81,13 +85,6 @@ public class Parish {
         this.contactInfo = contactInfo;
     }
 
-    public Diocese getDiocese() {
-        return diocese;
-    }
-
-    public void setDiocese(Diocese diocese) {
-        this.diocese = diocese;
-    }
 
     public List<User> getUsers() {
         return users;
@@ -127,6 +124,14 @@ public class Parish {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public Long getDioceseId() {
+        return dioceseId;
+    }
+
+    public void setDioceseId(Long dioceseId) {
+        this.dioceseId = dioceseId;
     }
 }
 

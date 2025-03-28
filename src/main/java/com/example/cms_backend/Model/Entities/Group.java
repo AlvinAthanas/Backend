@@ -1,5 +1,6 @@
 package com.example.cms_backend.Model.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,21 +17,20 @@ public class Group {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Notification>  notifications;
 
     @ManyToMany(mappedBy = "groups")
+    @JsonIgnore
     private Set<User> users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parish_id", referencedColumnName = "id")
-    private Parish parish;
+    @Column(name = "parish_id")
+    private Long parishId;
 
-    public Group(String name, String description, Group group, Set<User> users, Parish parish) {
+    public Group(String name, String description, Set<User> users) {
         this.name = name;
         this.description = description;
         this.users = users;
-        this.parish = parish;
     }
 
 
@@ -71,13 +71,6 @@ public class Group {
         this.users = users;
     }
 
-    public Parish getParish() {
-        return parish;
-    }
-
-    public void setParish(Parish parish) {
-        this.parish = parish;
-    }
 
     public List<Notification> getNotifications() {
         return notifications;
@@ -85,5 +78,13 @@ public class Group {
 
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    public Long getParishId() {
+        return parishId;
+    }
+
+    public void setParishId(Long parishId) {
+        this.parishId = parishId;
     }
 }

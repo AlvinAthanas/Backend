@@ -16,21 +16,18 @@ public class Contribution {
     private String description;
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parish_id", referencedColumnName = "id")
-    private Parish parish;
+    @Column(name = "parish_id")
+    private Long parishId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
-    public Contribution(Long amount, String type, String description, LocalDate date, Parish parish, User user) {
+    public Contribution(Long amount, String type, String description, LocalDate date) {
         this.amount = amount;
         this.type = type;
         this.description = description;
         this.date = date;
-        this.parish = parish;
-        this.user = user;
+
     }
 
     public Contribution() {}
@@ -75,19 +72,19 @@ public class Contribution {
         this.date = date;
     }
 
-    public Parish getParish() {
-        return parish;
+    public Long getParishId() {
+        return parishId;
     }
 
-    public void setParish(Parish parish) {
-        this.parish = parish;
+    public void setParishId(Long parishId) {
+        this.parishId = parishId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

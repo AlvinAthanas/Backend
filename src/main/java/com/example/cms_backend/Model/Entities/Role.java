@@ -1,5 +1,6 @@
 package com.example.cms_backend.Model.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -15,6 +16,7 @@ public class Role {
 
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Set<User> users;
 
     public Role(String name) {
@@ -51,4 +53,6 @@ public class Role {
     public void setUsers(Set<User> users) {
         this.users = users;
     }
+
+
 }
