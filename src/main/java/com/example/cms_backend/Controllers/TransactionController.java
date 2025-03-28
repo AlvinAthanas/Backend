@@ -17,22 +17,33 @@ public class TransactionController {
     private final UpdateTransactionService updateTransactionService;
     private final DeleteTransactionService deleteTransactionService;
     private final GetTransactionsService  getTransactionsService;
+    private final CreateTransactionsService createTransactionsService;
+    private final SearchTransactionService searchTransactionService;
 
     public TransactionController(CreateTransactionService createTransactionService,
                                  GetTransactionService getTransactionService,
                                  UpdateTransactionService updateTransactionService,
                                  DeleteTransactionService deleteTransactionService,
-                                 GetTransactionsService getTransactionsService) {
+                                 GetTransactionsService getTransactionsService,
+                                 CreateTransactionsService createTransactionsService,
+                                 SearchTransactionService searchTransactionService) {
         this.createTransactionService = createTransactionService;
         this.getTransactionService = getTransactionService;
         this.updateTransactionService = updateTransactionService;
         this.deleteTransactionService = deleteTransactionService;
         this.getTransactionsService = getTransactionsService;
+        this.createTransactionsService = createTransactionsService;
+        this.searchTransactionService = searchTransactionService;
     }
 
     @PostMapping("/transaction")
     public ResponseEntity<TransactionDTO> createTransaction(@RequestBody FinancialTransaction transaction){
         return createTransactionService.execute(transaction);
+    }
+
+    @PostMapping("/transactions")
+    public ResponseEntity<List<FinancialTransaction>> createTransactions(@RequestBody List<FinancialTransaction> transactions){
+        return createTransactionsService.execute(transactions);
     }
 
     @GetMapping("/transaction/{id}")
@@ -44,6 +55,13 @@ public class TransactionController {
     public ResponseEntity<List<FinancialTransaction>> getTransactions(){
         return getTransactionsService.execute(null);
     }
+
+    @GetMapping("/transaction/search")
+    public ResponseEntity<List<FinancialTransaction>> searchTransactionByType(@RequestParam String type){
+        return searchTransactionService.execute(type);
+    }
+
+
 
     @PutMapping("/transaction/{id}")
     public ResponseEntity<TransactionDTO> updateTransaction(@PathVariable Long id, @RequestBody FinancialTransaction transaction){

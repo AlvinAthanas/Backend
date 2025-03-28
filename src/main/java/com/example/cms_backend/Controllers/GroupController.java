@@ -16,22 +16,33 @@ public class GroupController {
     private final DeleteGroupService deleteGroupService;
     private final GetGroupService getGroupService;
     private final GetGroupsService getGroupsService;
+    private final SearchGroupService searchGroupService;
+    private final CreateGroupsService createGroupsService;
 
     public GroupController(CreateGroupService createGroupService,
                            UpdateGroupService updateGroupService,
                            DeleteGroupService deleteGroupService,
                            GetGroupService getGroupService,
-                           GetGroupsService getGroupsService) {
+                           GetGroupsService getGroupsService,
+                           SearchGroupService searchGroupService,
+                           CreateGroupsService createGroupsService) {
         this.createGroupService = createGroupService;
         this.updateGroupService = updateGroupService;
         this.deleteGroupService = deleteGroupService;
         this.getGroupService = getGroupService;
         this.getGroupsService = getGroupsService;
+        this.searchGroupService = searchGroupService;
+        this.createGroupsService = createGroupsService;
     }
 
     @PostMapping("/group")
     public ResponseEntity<Group> addGroup(@RequestBody Group group) {
         return createGroupService.execute(group);
+    }
+
+    @PostMapping("/groups")
+    public ResponseEntity<List<Group>> addGroups(@RequestBody List<Group> groups) {
+        return createGroupsService.execute(groups);
     }
 
     @GetMapping("/group/{id}")
@@ -42,6 +53,11 @@ public class GroupController {
     @GetMapping("/groups")
     public ResponseEntity<List<Group>> getAllGroups() {
         return getGroupsService.execute(null);
+    }
+
+    @GetMapping("/group/search")
+    public ResponseEntity<List<Group>> searchGroupByName(@RequestParam String name) {
+        return searchGroupService.execute(name);
     }
 
     @PutMapping("/group/{id}")

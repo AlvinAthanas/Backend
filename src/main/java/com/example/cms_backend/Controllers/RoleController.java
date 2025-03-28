@@ -16,17 +16,20 @@ public class RoleController {
     private final UpdateRoleService updateRoleService;
     private final GetRoleService getRoleService;
     private final GetRolesService getRolesService;
+    private final SearchRoleService searchRoleService;
 
     public RoleController(CreateRoleService createRoleService,
                           DeleteRoleService deleteRoleService,
                           UpdateRoleService updateRoleService,
                           GetRoleService getRoleService,
-                          GetRolesService getRolesService) {
+                          GetRolesService getRolesService,
+                          SearchRoleService searchRoleService) {
         this.createRoleService = createRoleService;
         this.deleteRoleService = deleteRoleService;
         this.updateRoleService = updateRoleService;
         this.getRoleService = getRoleService;
         this.getRolesService = getRolesService;
+        this.searchRoleService = searchRoleService;
     }
 
     @PostMapping("/role")
@@ -44,6 +47,11 @@ public class RoleController {
         return getRolesService.execute(null);
     }
 
+    @GetMapping("/role/search")
+    public ResponseEntity<List<Role>> searchRoleByName(@RequestParam String name){
+        return searchRoleService.execute(name);
+    }
+
     @PutMapping("/role/{id}")
     public ResponseEntity<Role> updateRole(@PathVariable Long id, @RequestBody Role role){
         return updateRoleService.execute(new UpdateRoleCommand(id, role));
@@ -53,5 +61,6 @@ public class RoleController {
     public ResponseEntity<Void> deleteRole(@PathVariable Long id){
         return deleteRoleService.execute(id);
     }
+
 
 }

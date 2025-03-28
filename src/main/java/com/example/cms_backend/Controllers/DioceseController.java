@@ -18,22 +18,33 @@ public class DioceseController {
     private final UpdateDioceseService updateDioceseService;
     private final GetDioceseService getDioceseService;
     private final GetDiocesesService  getDiocesesService;
+    private final SearchDioceseService searchDioceseService;
+    private final CreateDiocesesService createDiocesesService;
 
     public DioceseController(CreateDioceseService createDioceseService,
                              DeleteDioceseService deleteDioceseService,
                              UpdateDioceseService updateDioceseService,
                              GetDioceseService getDioceseService,
-                             GetDiocesesService getDiocesesService) {
+                             GetDiocesesService getDiocesesService,
+                             SearchDioceseService searchDioceseService,
+                             CreateDiocesesService createDiocesesService) {
         this.createDioceseService = createDioceseService;
         this.deleteDioceseService = deleteDioceseService;
         this.updateDioceseService = updateDioceseService;
         this.getDioceseService = getDioceseService;
         this.getDiocesesService = getDiocesesService;
+        this.searchDioceseService = searchDioceseService;
+        this.createDiocesesService = createDiocesesService;
     }
 
     @PostMapping("/diocese")
     public ResponseEntity<Diocese> createDiocese(@RequestBody Diocese diocese) {
         return createDioceseService.execute(diocese);
+    }
+
+    @PostMapping("/dioceses")
+    public ResponseEntity<List<Diocese>> createDioceses(@RequestBody List<Diocese> dioceses) {
+        return createDiocesesService.execute(dioceses);
     }
 
     @GetMapping("/diocese/{id}")
@@ -44,6 +55,11 @@ public class DioceseController {
     @GetMapping("/dioceses")
     public ResponseEntity<List<Diocese>> getDioceses() {
         return getDiocesesService.execute(null);
+    }
+
+    @GetMapping("/diocese/search")
+    public ResponseEntity<List<Diocese>> searchDioceseByName(String name) {
+        return searchDioceseService.execute(name);
     }
 
     @PutMapping("/diocese/{id}")

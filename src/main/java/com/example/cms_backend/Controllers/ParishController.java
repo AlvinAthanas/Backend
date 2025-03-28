@@ -15,17 +15,20 @@ public class ParishController {
     private final UpdateParishService updateParishService;
     private final GetParishService getParishService;
     private final GetParishesService  getParishesService;
+    private final SearchParishService searchParishService;
 
     public ParishController(CreateParishService createParishService,
                             DeleteParishService deleteParishService,
                             UpdateParishService updateParishService,
                             GetParishService getParishService,
-                            GetParishesService getParishesService) {
+                            GetParishesService getParishesService,
+                            SearchParishService searchParishService) {
         this.createParishService = createParishService;
         this.deleteParishService = deleteParishService;
         this.updateParishService = updateParishService;
         this.getParishService = getParishService;
         this.getParishesService = getParishesService;
+        this.searchParishService = searchParishService;
     }
 
     @PostMapping("/parish")
@@ -41,6 +44,11 @@ public class ParishController {
     @GetMapping("/parishes")
     public ResponseEntity<List<Parish>> getParishes(){
         return getParishesService.execute(null);
+    }
+
+    @GetMapping("/parish/search")
+    public ResponseEntity<List<Parish>> getParishesSearch(@RequestParam String name){
+        return searchParishService.execute(name);
     }
 
     @PutMapping("/parish/{id}")

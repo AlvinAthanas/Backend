@@ -1,6 +1,7 @@
 package com.example.cms_backend.Model.Entities;
 
 import com.example.cms_backend.Model.Enums.Gender;
+import com.example.cms_backend.Model.Enums.MaritialStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -23,7 +24,8 @@ public class User {
     private LocalDate birthDate;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private String maritalStatus;
+    @Enumerated(EnumType.STRING)
+    private MaritialStatus maritalStatus;
     @Column(name = "parish_id")
     private Long parishId;
 
@@ -80,7 +82,7 @@ public class User {
                 String phone,
                 String address,
                 LocalDate birthDate,
-                String maritalStatus,
+                MaritialStatus maritalStatus,
                 Gender gender) {
         this.name = name;
         this.email = email;
@@ -152,16 +154,13 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    public String getMaritalStatus() {
+    public MaritialStatus getMaritalStatus() {
         return maritalStatus;
     }
 
-    public void setMaritalStatus(String maritialStatus) {
-        this.maritalStatus = maritialStatus;
+    public void setMaritalStatus(MaritialStatus maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
-
-
-
 
     public List<Feedback> getFeedbacks() {
         return feedbacks;
