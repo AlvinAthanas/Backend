@@ -5,6 +5,7 @@ import com.example.cms_backend.Model.UpdateCommands.UpdateUserCommand;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Services.UserServices.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class UserController {
         this.createUsersService = createUsersService;
     }
 
+//    @PreAuthorize("hasRole('basicuser')")
     @PostMapping("/user")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user){
         return  createUserService.execute(user);

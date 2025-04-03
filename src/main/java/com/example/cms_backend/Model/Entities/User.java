@@ -69,9 +69,6 @@ public class User {
     @JoinColumn(name = "user_id")
     List<FinancialTransaction> transactionsRecorded;
 
-
-
-
     public User() {
 
     }
@@ -83,7 +80,8 @@ public class User {
                 String address,
                 LocalDate birthDate,
                 MaritialStatus maritalStatus,
-                Gender gender) {
+                Gender gender,
+                Long parishId) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -92,6 +90,7 @@ public class User {
         this.birthDate = birthDate;
         this.maritalStatus = maritalStatus;
         this.gender = gender;
+        this.parishId = parishId;
         groups = new HashSet<>();
         roles = new HashSet<>();
     }

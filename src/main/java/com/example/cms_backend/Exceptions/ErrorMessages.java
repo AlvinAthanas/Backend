@@ -14,7 +14,8 @@ public enum ErrorMessages {
     ATTENDANCE_NOT_FOUND("Attendance not found"),
     FULL_NAME_IS_REQUIRED("Full name is required"),
     INVALID_PHONE_NUMBER("Invalid phone number"),
-    INVALID_EMAIL("Invalid email"),;
+    INVALID_EMAIL("Invalid email"),
+    EMAIL_ALREADY_EXISTS("Email already exists"),;
 
     private String message;
 
