@@ -1,5 +1,6 @@
 package com.example.cms_backend.Security;
 
+import com.example.cms_backend.Security.Jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,6 +40,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(HttpMethod.POST, "/user").permitAll();
+                    authorize.requestMatchers("/login").permitAll();
 //                    authorize.requestMatchers(HttpMethod.GET, "/users").permitAll();
                     authorize.anyRequest().authenticated();
 //                    authorize.requestMatchers("/open").permitAll();
@@ -48,10 +50,12 @@ public class SecurityConfiguration {
 //                    authorize.requestMatchers(HttpMethod.GET, "/special").hasAuthority("special");
 //                    authorize.requestMatchers(HttpMethod.GET, "/basic").hasAnyAuthority("special", "basic");
                 })
-                .addFilterBefore(
-                      new BasicAuthenticationFilter(authenticationManager(httpSecurity)),
-                        UsernamePasswordAuthenticationFilter.class
-                        )
+                .addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public JwtAuthenticationFilter authenticationJwtFilter()  {
+        return new JwtAuthenticationFilter();
     }
 }
