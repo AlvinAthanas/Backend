@@ -15,7 +15,8 @@ public enum ErrorMessages {
     FULL_NAME_IS_REQUIRED("Full name is required"),
     INVALID_PHONE_NUMBER("Invalid phone number"),
     INVALID_EMAIL("Invalid email"),
-    EMAIL_ALREADY_EXISTS("Email already exists"),;
+    EMAIL_ALREADY_EXISTS("Email already exists"),
+    INVALID_TOKEN("Please Login again"),;
 
     private String message;
 

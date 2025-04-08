@@ -1,10 +1,12 @@
 package com.example.cms_backend.Security;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "http://localhost") // Allow frontend requests
 public class SecurityController {
     @GetMapping("/open")
     public String open() {

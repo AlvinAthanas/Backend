@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,18 +38,18 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configure(httpSecurity)) // Ensure CORS is enabled
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for API calls
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(HttpMethod.POST, "/user").permitAll();
                     authorize.requestMatchers("/login").permitAll();
-//                    authorize.requestMatchers(HttpMethod.GET, "/users").permitAll();
                     authorize.anyRequest().authenticated();
 //                    authorize.requestMatchers("/open").permitAll();
 //                    authorize.requestMatchers("/closed").authenticated();
 //                    authorize.requestMatchers(HttpMethod.POST, "/user").authenticated();
 //
 //                    authorize.requestMatchers(HttpMethod.GET, "/special").hasAuthority("special");
-//                    authorize.requestMatchers(HttpMethod.GET, "/basic").hasAnyAuthority("special", "basic");
+//                    authorize.requestMatchers(HttpMethod.GET, "/basic").hasAnyAuthority("special", "bas
                 })
                 .addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
