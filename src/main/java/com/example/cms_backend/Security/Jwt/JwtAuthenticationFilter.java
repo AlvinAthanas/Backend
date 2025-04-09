@@ -17,6 +17,14 @@ import java.security.Security;
 import java.util.Collections;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.equals("/user") || path.equals("/login"); // Skip JWT filter for these endpoints
+    }
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -48,13 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else {
-            // Instead of throwing an exception, set response status & return JSON error
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Unauthorized. Please login.\"}");
-            return;        }
-
+        }
         filterChain.doFilter(request, response);
     }
 }

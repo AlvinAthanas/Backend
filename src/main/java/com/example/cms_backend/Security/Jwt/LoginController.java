@@ -22,7 +22,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserLoginDTO loginDTO) {
-//        this token is different from JWT
+        //this token is different from JWT
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 loginDTO.getEmail(),
                 loginDTO.getPassword()

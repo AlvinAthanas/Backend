@@ -3,6 +3,7 @@ package com.example.cms_backend.Model.Entities;
 import com.example.cms_backend.Model.Enums.Gender;
 import com.example.cms_backend.Model.Enums.MaritialStatus;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -12,10 +13,10 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private String email;
     private String password;
@@ -28,6 +29,8 @@ public class User {
     private MaritialStatus maritalStatus;
     @Column(name = "parish_id")
     private Long parishId;
+    @Column(name = "authority_id")
+    private int authorityId;
 
     @ManyToMany
     @JoinTable(
@@ -44,6 +47,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    @ManyToMany
+    @JoinTable(
+            name = "member_authority",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    private Set<Authority> authorities;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
@@ -93,6 +104,7 @@ public class User {
         this.parishId = parishId;
         groups = new HashSet<>();
         roles = new HashSet<>();
+        authorities = new HashSet<>();
     }
 
     public Long getId() {
@@ -240,5 +252,21 @@ public class User {
 
     public void setParishId(Long parishId) {
         this.parishId = parishId;
+    }
+
+    public int getAuthorityId() {
+        return authorityId;
+    }
+
+    public void setAuthorityId(int authorityId) {
+        this.authorityId = authorityId;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 }
