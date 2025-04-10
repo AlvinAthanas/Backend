@@ -12,6 +12,7 @@ import java.util.Set;
 @Data
 public class Authority {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
 

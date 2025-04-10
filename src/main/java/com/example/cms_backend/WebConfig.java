@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
         configuration.setAllowedOrigins(Collections.singletonList("http://localhost")); // Replace with your frontend URL
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true); // If you're using cookies or credentials
+//        configuration.setAllowCredentials(true); // If you're using cookies or credentials
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

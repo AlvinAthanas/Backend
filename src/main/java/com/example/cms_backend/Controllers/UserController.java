@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost") // Allow frontend requests
 public class UserController {
     private final CreateUserService createUserService;
     private final GetUserService getUserService;
@@ -43,6 +43,7 @@ public class UserController {
         return  createUserService.execute(user);
     }
 
+    @PreAuthorize("hasRole('COMMITTEE_CHAIRPERSON')")
     @PostMapping("/users")
     public ResponseEntity<List<UserDTO>> createUsers(@RequestBody List<User> users){
         return createUsersService.execute(users);

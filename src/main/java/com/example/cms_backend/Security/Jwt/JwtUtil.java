@@ -10,11 +10,15 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 public class JwtUtil {
+
+    private static final String SECRET_KEY = "mySecretKeyWhichHasToBeVeryMuchLongEnoughForThisToWork"; // Use a more secure key
+    private static final long EXPIRATION_TIME = 300_000; // Expiration time (5 minutes)
+
     public static String generateToken(User user) {
         return Jwts
                 .builder()
                 .subject(user.getUsername())
-                .expiration(new Date(System.currentTimeMillis()+300_000))
+                .expiration(new Date(System.currentTimeMillis()+EXPIRATION_TIME))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -40,7 +44,7 @@ public class JwtUtil {
     }
 
     private static SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64URL.decode("mySecretKeyWhichHasToBeVeryMuchLongEnoughForThisToWork");
+        byte[] keyBytes = Decoders.BASE64URL.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

@@ -29,8 +29,6 @@ public class User {
     private MaritialStatus maritalStatus;
     @Column(name = "parish_id")
     private Long parishId;
-    @Column(name = "authority_id")
-    private int authorityId;
 
     @ManyToMany
     @JoinTable(
@@ -38,7 +36,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
-    private Set<Group>  groups;
+    private Set<Group>  groups = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -46,7 +44,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -54,7 +52,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id")
     )
-    private Set<Authority> authorities;
+    private Set<Authority> authorities = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
@@ -102,9 +100,7 @@ public class User {
         this.maritalStatus = maritalStatus;
         this.gender = gender;
         this.parishId = parishId;
-        groups = new HashSet<>();
-        roles = new HashSet<>();
-        authorities = new HashSet<>();
+
     }
 
     public Long getId() {
@@ -254,13 +250,7 @@ public class User {
         this.parishId = parishId;
     }
 
-    public int getAuthorityId() {
-        return authorityId;
-    }
 
-    public void setAuthorityId(int authorityId) {
-        this.authorityId = authorityId;
-    }
 
     public Set<Authority> getAuthorities() {
         return authorities;
