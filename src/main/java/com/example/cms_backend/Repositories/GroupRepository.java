@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    public List<Group> findByNameContaining(String name);
+    List<Group> findByNameContaining(String name);
+    Long countByDescription(String description);
 }

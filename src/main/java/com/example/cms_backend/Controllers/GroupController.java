@@ -4,6 +4,7 @@ import com.example.cms_backend.Model.Entities.Group;
 import com.example.cms_backend.Model.UpdateCommands.UpdateGroupCommand;
 import com.example.cms_backend.Services.GroupServices.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class GroupController {
     private final GetGroupsService getGroupsService;
     private final SearchGroupService searchGroupService;
     private final CreateGroupsService createGroupsService;
+    private final CountGroupsService countGroupsService;
 
     public GroupController(CreateGroupService createGroupService,
                            UpdateGroupService updateGroupService,
@@ -25,7 +27,8 @@ public class GroupController {
                            GetGroupService getGroupService,
                            GetGroupsService getGroupsService,
                            SearchGroupService searchGroupService,
-                           CreateGroupsService createGroupsService) {
+                           CreateGroupsService createGroupsService,
+                           CountGroupsService countGroupsService) {
         this.createGroupService = createGroupService;
         this.updateGroupService = updateGroupService;
         this.deleteGroupService = deleteGroupService;
@@ -33,6 +36,7 @@ public class GroupController {
         this.getGroupsService = getGroupsService;
         this.searchGroupService = searchGroupService;
         this.createGroupsService = createGroupsService;
+        this.countGroupsService = countGroupsService;
     }
 
     @PostMapping("/group")
@@ -68,5 +72,17 @@ public class GroupController {
     @DeleteMapping("/group/{id}")
     public ResponseEntity<Void> deleteGroup(@PathVariable Long id) {
         return deleteGroupService.execute(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
+    @GetMapping("/group/count")
+    public ResponseEntity<Long> countGroup(@RequestParam String description) {
+        return countGroupsService.execute(description);
+    }
+
+    @PostMapping("/group/community")
+    public ResponseEntity<Group> addCommunity(@RequestBody Group group) {
+        group.setDescription("community");
+        return createGroupService.execute(group);
     }
 }

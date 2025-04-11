@@ -20,6 +20,7 @@ public class UserController {
     private final GetUsersService getUsersService;
     private final SearchUserService searchUserService;
     private final CreateUsersService createUsersService;
+    private final CountUsersService countUsersService;
 
     public UserController(CreateUserService createUserService,
                           GetUserService getUserService,
@@ -27,7 +28,8 @@ public class UserController {
                           DeleteUserService deleteUserService,
                           GetUsersService getUsersService,
                           SearchUserService searchUserService,
-                          CreateUsersService createUsersService) {
+                          CreateUsersService createUsersService,
+                          CountUsersService countUsersService) {
         this.createUserService = createUserService;
         this.getUserService = getUserService;
         this.updateUserService = updateUserService;
@@ -35,6 +37,7 @@ public class UserController {
         this.getUsersService = getUsersService;
         this.searchUserService = searchUserService;
         this.createUsersService = createUsersService;
+        this.countUsersService = countUsersService;
     }
 
 //    @PreAuthorize("hasRole('basicuser')")
@@ -74,5 +77,13 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> searchUser(@RequestParam String name){
         return searchUserService.execute(name);
     }
+
+    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
+    @GetMapping("/user/count")
+    public ResponseEntity<Long> countUser(){
+        return countUsersService.execute(null);
+    }
+
+
 
 }

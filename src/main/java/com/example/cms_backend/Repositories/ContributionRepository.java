@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ContributionRepository extends JpaRepository<Contribution, Long> {
-    public List<Contribution> findContributionsByTypeContaining(String type);
+    List<Contribution> findContributionsByTypeContaining(String type);
+
 }

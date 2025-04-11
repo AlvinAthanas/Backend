@@ -53,4 +53,11 @@ public class EventController {
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         return deleteEventService.execute(id);
     }
+
+    @PostMapping("/event/mass")
+    public ResponseEntity<Event> createMassEvent(@RequestBody Event event) {
+        event.setDescription("Mass");
+        event.setLocation("Church");
+        return createEventService.execute(event);
+    }
 }
