@@ -1,5 +1,6 @@
 package com.example.cms_backend.Security;
 
+import com.example.cms_backend.Repositories.UserRepository;
 import com.example.cms_backend.Security.Jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
+
+    private final UserRepository userRepository;
+
+    public SecurityConfiguration(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
@@ -50,6 +57,6 @@ public class SecurityConfiguration {
 
     @Bean
     public JwtAuthenticationFilter authenticationJwtFilter()  {
-        return new JwtAuthenticationFilter();
+        return new JwtAuthenticationFilter(userRepository);
     }
 }

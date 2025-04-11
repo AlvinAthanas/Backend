@@ -54,6 +54,7 @@ public class UserController {
         return  getUserService.execute(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers(){
         return getUsersService.execute(null);

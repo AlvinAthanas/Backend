@@ -4,21 +4,30 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class JwtUtil {
 
     private static final String SECRET_KEY = "mySecretKeyWhichHasToBeVeryMuchLongEnoughForThisToWork"; // Use a more secure key
     private static final long EXPIRATION_TIME = 300_000; // Expiration time (5 minutes)
 
-    public static String generateToken(User user) {
-        return Jwts
-                .builder()
-                .subject(user.getUsername())
-                .expiration(new Date(System.currentTimeMillis()+EXPIRATION_TIME))
+    public static String generateToken(UserDetails userDetails) {
+        // Extract roles and authorities
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        return Jwts.builder()
+                .subject(userDetails.getUsername())
+                .claim("roles", roles) // Add roles and authorities
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey())
                 .compact();
     }
