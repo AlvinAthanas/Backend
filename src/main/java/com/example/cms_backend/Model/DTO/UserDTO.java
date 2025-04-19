@@ -15,7 +15,8 @@ public class UserDTO {
     private String email;
     private String phone;
     private String address;
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -23,7 +24,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.phone = user.getPhone();
         this.address = user.getAddress();
-        this.gender = user.getGender().toString();
+        this.gender = user.getGender();
     }
 
 }
