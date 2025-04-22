@@ -16,7 +16,9 @@ public enum ErrorMessages {
     INVALID_PHONE_NUMBER("Invalid phone number"),
     INVALID_EMAIL("Invalid email"),
     EMAIL_ALREADY_EXISTS("Email already exists"),
-    INVALID_TOKEN("Please Login again"),;
+    INVALID_TOKEN("Please Login again"),
+    EMAIL_REQUIRED("Email is required"),
+    BELOW_AGE_LIMIT("User must be at least 10 years old."),;
 
     private String message;
 

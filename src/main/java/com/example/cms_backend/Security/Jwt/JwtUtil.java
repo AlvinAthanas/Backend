@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class JwtUtil {
 
     private static final String SECRET_KEY = "mySecretKeyWhichHasToBeVeryMuchLongEnoughForThisToWork"; // Use a more secure key
-    private static final long EXPIRATION_TIME = 300_000; // Expiration time (5 minutes)
+    private static final long EXPIRATION_TIME = 3_600_000; // Expiration time (5 minutes)
 
     public static String generateToken(UserDetails userDetails) {
         // Extract roles and authorities

@@ -4,6 +4,8 @@ import com.example.cms_backend.Exceptions.ErrorMessages;
 import com.example.cms_backend.Exceptions.UserNotValidException;
 import com.example.cms_backend.Model.Entities.User;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.regex.Pattern;
 
 public class UserValidator {
@@ -28,6 +30,16 @@ public class UserValidator {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
         if (!Pattern.matches(emailRegex, user.getEmail())) {
             throw new UserNotValidException(ErrorMessages.INVALID_EMAIL.getMessage());
+        }
+
+        // ✅ Age validation
+        if (user.getBirthDate() == null) {
+            throw new UserNotValidException(ErrorMessages.EMAIL_REQUIRED.getMessage());
+        }
+
+        int age = Period.between(user.getBirthDate(), LocalDate.now()).getYears();
+        if (age < 10) {
+            throw new UserNotValidException(ErrorMessages.BELOW_AGE_LIMIT.getMessage());
         }
 
 
