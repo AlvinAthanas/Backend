@@ -1,6 +1,8 @@
 package com.example.cms_backend.Roles_Authorities;
 
 import com.example.cms_backend.Abstractions.Command;
+import com.example.cms_backend.Exceptions.RoleNotFoundException;
+import com.example.cms_backend.Exceptions.UserNotFoundException;
 import com.example.cms_backend.Model.Entities.Role;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Model.Enums.Roles;
@@ -40,15 +42,22 @@ public class UserRoles implements Command<AssignRoleCommand,String> {
     public ResponseEntity<String> execute(AssignRoleCommand command) {
         Optional<Role> assignedRole = roleRepository.findByName(command.getRoleName());
         Optional<User> userOptional = userRepository.findById(command.getId());
-        if (assignedRole.isPresent() && userOptional.isPresent()) {
-            Role role = assignedRole.get();
-            User user = userOptional.get();
-            if (user.getRoles() == null) {
-                user.setRoles(new HashSet<>());
+        if (assignedRole.isPresent()) {
+            if (userOptional.isPresent()) {
+                Role role = assignedRole.get();
+                User user = userOptional.get();
+                if (user.getRoles() == null) {
+                    user.setRoles(new HashSet<>());
+                }
+                user.getRoles().add(role);
+                userRepository.save(user);
+                return ResponseEntity.status(HttpStatus.CREATED).body("Role assigned: " + command.getRoleName());
+            } else {
+                throw new UserNotFoundException();
             }
-            user.getRoles().add(role);
-        }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Role assigned: " + command.getRoleName());
+        } else {
+            throw new RoleNotFoundException();
+        }
     }
 }
