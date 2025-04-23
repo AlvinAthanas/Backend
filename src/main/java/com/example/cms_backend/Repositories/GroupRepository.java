@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findByNameContaining(String name);
+    List<Group> findByDescription(String description);
     Long countByDescription(String description);
+
 }

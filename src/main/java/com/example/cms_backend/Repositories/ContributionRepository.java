@@ -24,4 +24,8 @@ public interface ContributionRepository extends JpaRepository<Contribution, Long
             @Param("month") Integer month,
             @Param("year") Integer year
     );
+
+    // Total amount of contributions
+    @Query("SELECT SUM(c.amount) FROM Contribution c")
+    Long getTotalAmount();
 }

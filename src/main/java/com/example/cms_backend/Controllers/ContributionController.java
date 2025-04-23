@@ -17,19 +17,22 @@ public class ContributionController {
     private final GetContributionService getContributionService;
     private final GetContributionsService getContributionsService;
     private final GetFilteredContributionsService filteredContributionsService;
+    private final GetTotalAmountService getTotalAmountService;
 
     public ContributionController(CreateContributionService createContributionService,
                                   UpdateContributionService updateContributionService,
                                   DeleteContributionService deleteContributionService,
                                   GetContributionService getContributionService,
                                   GetContributionsService getContributionsService,
-                                  GetFilteredContributionsService filteredContributionsService) {
+                                  GetFilteredContributionsService filteredContributionsService,
+                                  GetTotalAmountService getTotalAmountService) {
         this.createContributionService = createContributionService;
         this.updateContributionService = updateContributionService;
         this.deleteContributionService = deleteContributionService;
         this.getContributionService = getContributionService;
         this.getContributionsService = getContributionsService;
         this.filteredContributionsService = filteredContributionsService;
+        this.getTotalAmountService = getTotalAmountService;
     }
 
     @PostMapping("/contribution")
@@ -64,5 +67,10 @@ public class ContributionController {
             @RequestParam(required = false) Integer year) {
         ContributionFilterDTO filterDTO = new ContributionFilterDTO(type, month, year);
         return filteredContributionsService.execute(filterDTO);
+    }
+
+    @GetMapping("/contributions/totalAmount")
+    public ResponseEntity<Long> getTotalAmount() {
+        return getTotalAmountService.execute(null);
     }
 }

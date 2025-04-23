@@ -20,6 +20,7 @@ public class GroupController {
     private final SearchGroupService searchGroupService;
     private final CreateGroupsService createGroupsService;
     private final CountGroupsService countGroupsService;
+    private final GetGroupsByDescriptionService getGroupsByDescriptionService;
 
     public GroupController(CreateGroupService createGroupService,
                            UpdateGroupService updateGroupService,
@@ -28,7 +29,8 @@ public class GroupController {
                            GetGroupsService getGroupsService,
                            SearchGroupService searchGroupService,
                            CreateGroupsService createGroupsService,
-                           CountGroupsService countGroupsService) {
+                           CountGroupsService countGroupsService,
+                           GetGroupsByDescriptionService getGroupsByDescriptionService) {
         this.createGroupService = createGroupService;
         this.updateGroupService = updateGroupService;
         this.deleteGroupService = deleteGroupService;
@@ -37,6 +39,7 @@ public class GroupController {
         this.searchGroupService = searchGroupService;
         this.createGroupsService = createGroupsService;
         this.countGroupsService = countGroupsService;
+        this.getGroupsByDescriptionService = getGroupsByDescriptionService;
     }
 
     @PostMapping("/group")
@@ -85,4 +88,10 @@ public class GroupController {
         group.setDescription("community");
         return createGroupService.execute(group);
     }
+
+    @GetMapping("/groups/communities")
+    public ResponseEntity<List<Group>> getAllCommunities() {
+        return getGroupsByDescriptionService.execute(null);
+    }
+
 }
