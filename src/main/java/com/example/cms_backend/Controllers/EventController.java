@@ -7,6 +7,10 @@ import com.example.cms_backend.Services.FeedbackServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -65,8 +69,17 @@ public class EventController {
     public ResponseEntity<Event> createMassEvent(@RequestBody Event event) {
         event.setDescription("Mass");
         event.setLocation("Church");
+
+        // Example: Set a dummy date with only the time relevant
+        LocalTime timeOnly = event.getDateTime().toLocalTime();
+        LocalDateTime dummyDateTime = LocalDate.now().with(DayOfWeek.SUNDAY).atTime(timeOnly); // set to this week's Sunday
+        event.setDateTime(dummyDateTime);
+
+
+        System.out.println("Saved Event: " + event);
         return createEventService.execute(event);
     }
+
 
     @GetMapping("/event/schedules")
     public ResponseEntity<List<Event>> getMassEvents(@RequestParam String description) {

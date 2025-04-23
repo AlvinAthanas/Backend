@@ -5,9 +5,8 @@ import com.example.cms_backend.Exceptions.ErrorMessages;
 import com.example.cms_backend.Exceptions.UserNotValidException;
 import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Model.Entities.User;
-import com.example.cms_backend.Repositories.RoleRepository;
 import com.example.cms_backend.Repositories.UserRepository;
-import com.example.cms_backend.Roles_Authorities.UserRoles;
+import com.example.cms_backend.Services.UserRoleServices.AssignRolesService;
 import com.example.cms_backend.Validators.UserValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +17,14 @@ import org.springframework.stereotype.Service;
 public class CreateUserService implements Command<User, UserDTO>{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private UserRoles userRoles;
+    private AssignRolesService assignRolesService;
 
     public CreateUserService(UserRepository userRepository,
                              PasswordEncoder passwordEncoder,
-                             UserRoles userRoles) {
+                             AssignRolesService assignRolesService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userRoles = userRoles;
+        this.assignRolesService = assignRolesService;
     }
 
     @Override
@@ -36,7 +35,7 @@ public class CreateUserService implements Command<User, UserDTO>{
             throw new UserNotValidException(ErrorMessages.EMAIL_ALREADY_EXISTS.getMessage());
         }
         UserValidator.validateUser(user);
-        userRoles.AssignDefaultRole(user);
+        assignRolesService.AssignDefaultRole(user);
         System.out.println("User roles before save: " + user.getRoles());
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(new UserDTO(user));

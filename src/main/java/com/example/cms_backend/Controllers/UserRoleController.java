@@ -1,21 +1,33 @@
 package com.example.cms_backend.Controllers;
 
-import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Model.UpdateCommands.AssignRoleCommand;
-import com.example.cms_backend.Roles_Authorities.UserRoles;
+import com.example.cms_backend.Services.UserRoleServices.AssignRolesService;
+import com.example.cms_backend.Services.UserRoleServices.GetUserRolesService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Set;
+
 @RestController
 public class UserRoleController {
-    private final UserRoles userRoles;
+    private final AssignRolesService userRoles;
+    private final GetUserRolesService getUserRoles;
 
-    public UserRoleController(UserRoles userRoles) {
-        this.userRoles = userRoles;
+    public UserRoleController(AssignRolesService assignRolesService,
+                              GetUserRolesService getUserRolesService) {
+        this.userRoles = assignRolesService;
+        this.getUserRoles = getUserRolesService;
     }
 
     @PostMapping("/user/role/{id}")
     public ResponseEntity<String> assignRole(@PathVariable Long id, @RequestParam String roleName){
         return userRoles.execute(new AssignRoleCommand(id, roleName));
     }
+
+    @GetMapping("/user/{id}/roles")
+    public ResponseEntity<Set<String>> getUserRoles(@PathVariable Long id) {
+        return getUserRoles.execute(id);
+    }
+
 }

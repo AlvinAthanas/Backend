@@ -1,5 +1,6 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.DTO.ContributionFilterDTO;
 import com.example.cms_backend.Model.Entities.Contribution;
 import com.example.cms_backend.Model.UpdateCommands.UpdateContributionCommand;
 import com.example.cms_backend.Services.ContributionServices.*;
@@ -15,17 +16,20 @@ public class ContributionController {
     private final DeleteContributionService deleteContributionService;
     private final GetContributionService getContributionService;
     private final GetContributionsService getContributionsService;
+    private final GetFilteredContributionsService filteredContributionsService;
 
     public ContributionController(CreateContributionService createContributionService,
                                   UpdateContributionService updateContributionService,
                                   DeleteContributionService deleteContributionService,
                                   GetContributionService getContributionService,
-                                  GetContributionsService getContributionsService) {
+                                  GetContributionsService getContributionsService,
+                                  GetFilteredContributionsService filteredContributionsService) {
         this.createContributionService = createContributionService;
         this.updateContributionService = updateContributionService;
         this.deleteContributionService = deleteContributionService;
         this.getContributionService = getContributionService;
         this.getContributionsService = getContributionsService;
+        this.filteredContributionsService = filteredContributionsService;
     }
 
     @PostMapping("/contribution")
@@ -51,5 +55,14 @@ public class ContributionController {
     @DeleteMapping("/contribution/{id}")
     public ResponseEntity<Void> deleteContribution(@PathVariable Long id) {
         return deleteContributionService.execute(id);
+    }
+
+    @GetMapping("/contributions/filter")
+    public ResponseEntity<List<Contribution>> getFilteredContributions(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer year) {
+        ContributionFilterDTO filterDTO = new ContributionFilterDTO(type, month, year);
+        return filteredContributionsService.execute(filterDTO);
     }
 }

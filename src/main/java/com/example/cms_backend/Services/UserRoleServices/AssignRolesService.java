@@ -1,4 +1,4 @@
-package com.example.cms_backend.Roles_Authorities;
+package com.example.cms_backend.Services.UserRoleServices;
 
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.RoleNotFoundException;
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Optional;
 @Service
-public class UserRoles implements Command<AssignRoleCommand,String> {
+public class AssignRolesService implements Command<AssignRoleCommand,String> {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
 
 
-    public UserRoles(RoleRepository roleRepository,
-                     UserRepository userRepository) {
+    public AssignRolesService(RoleRepository roleRepository,
+                              UserRepository userRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
     }
