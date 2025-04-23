@@ -18,13 +18,20 @@ public class EventController {
     private final DeleteEventService deleteEventService;
     private final UpdateEventService updateEventService;
     private final GetEventService getEventService;
+    private final GetMassSchedulesService getMassSchedulesService;
 
-    public EventController(CreateEventService createEventService, GetEventsService getEventsService, DeleteEventService deleteEventService, UpdateEventService updateEventService, GetEventService getEventService) {
+    public EventController(CreateEventService createEventService,
+                           GetEventsService getEventsService,
+                           DeleteEventService deleteEventService,
+                           UpdateEventService updateEventService,
+                           GetEventService getEventService,
+                           GetMassSchedulesService getMassSchedulesService) {
         this.createEventService = createEventService;
         this.getEventsService = getEventsService;
         this.deleteEventService = deleteEventService;
         this.updateEventService = updateEventService;
         this.getEventService = getEventService;
+        this.getMassSchedulesService = getMassSchedulesService;
     }
 
 
@@ -54,10 +61,15 @@ public class EventController {
         return deleteEventService.execute(id);
     }
 
-    @PostMapping("/event/mass")
+    @PostMapping("/event/schedule")
     public ResponseEntity<Event> createMassEvent(@RequestBody Event event) {
         event.setDescription("Mass");
         event.setLocation("Church");
         return createEventService.execute(event);
+    }
+
+    @GetMapping("/event/schedules")
+    public ResponseEntity<List<Event>> getMassEvents(@RequestParam String description) {
+        return getMassSchedulesService.execute(description);
     }
 }

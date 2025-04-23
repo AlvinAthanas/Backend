@@ -15,8 +15,8 @@ public class UserValidator {
     }
 
     public static void validateUser(User user){
-        String fullname = user.getName();
-        String[]  nameParts = fullname.trim().split("\\s+");
+        String fullName = user.getName();
+        String[]  nameParts = fullName.trim().split("\\s+");
         if(nameParts.length != 3){
             throw new UserNotValidException(ErrorMessages.FULL_NAME_IS_REQUIRED.getMessage());
         }
