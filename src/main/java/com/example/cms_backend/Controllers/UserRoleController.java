@@ -1,8 +1,10 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.UpdateCommands.AssignRoleCommand;
+import com.example.cms_backend.Model.UpdateCommands.UpdateUserRolesCommand;
 import com.example.cms_backend.Services.UserRoleServices.AssignRolesService;
 import com.example.cms_backend.Services.UserRoleServices.GetUserRolesService;
+import com.example.cms_backend.Services.UserRoleServices.UpdateUserRolesService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +15,14 @@ import java.util.Set;
 public class UserRoleController {
     private final AssignRolesService userRoles;
     private final GetUserRolesService getUserRoles;
+    private final UpdateUserRolesService updateUserRoles;
 
     public UserRoleController(AssignRolesService assignRolesService,
-                              GetUserRolesService getUserRolesService) {
+                              GetUserRolesService getUserRolesService,
+                              UpdateUserRolesService updateUserRolesService) {
         this.userRoles = assignRolesService;
         this.getUserRoles = getUserRolesService;
+        this.updateUserRoles = updateUserRolesService;
     }
 
     @PostMapping("/user/role/{id}")
@@ -29,5 +34,11 @@ public class UserRoleController {
     public ResponseEntity<Set<String>> getUserRoles(@PathVariable Long id) {
         return getUserRoles.execute(id);
     }
+
+    @PutMapping("/user/{id}/roles")
+    public ResponseEntity<String> updateUserRoles(@PathVariable Long id, @RequestBody Set<String> roleNames) {
+        return updateUserRoles.execute(new UpdateUserRolesCommand(id, roleNames));
+    }
+
 
 }

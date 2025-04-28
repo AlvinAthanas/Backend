@@ -43,6 +43,11 @@ public class UserController {
 //    @PreAuthorize("hasRole('basicuser')")
     @PostMapping("/user")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user){
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            // Password was not provided → set a default password
+            String defaultPassword = user.getEmail();
+            user.setPassword(defaultPassword);
+        }
         return  createUserService.execute(user);
     }
 
