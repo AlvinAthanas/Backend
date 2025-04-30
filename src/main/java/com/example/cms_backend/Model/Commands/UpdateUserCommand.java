@@ -1,4 +1,4 @@
-package com.example.cms_backend.Model.UpdateCommands;
+package com.example.cms_backend.Model.Commands;
 
 import com.example.cms_backend.Model.Entities.User;
 

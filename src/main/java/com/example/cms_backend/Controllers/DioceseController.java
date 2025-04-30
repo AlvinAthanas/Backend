@@ -1,9 +1,7 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Entities.Diocese;
-import com.example.cms_backend.Model.Entities.Event;
-import com.example.cms_backend.Model.UpdateCommands.UpdateDioceseCommand;
-import com.example.cms_backend.Model.UpdateCommands.UpdateEventCommand;
+import com.example.cms_backend.Model.Commands.UpdateDioceseCommand;
 import com.example.cms_backend.Services.DioceseServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,7 +1,7 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.DTO.UserDTO;
-import com.example.cms_backend.Model.UpdateCommands.UpdateUserCommand;
+import com.example.cms_backend.Model.Commands.UpdateUserCommand;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Services.UserServices.*;
 import org.springframework.http.ResponseEntity;

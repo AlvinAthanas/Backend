@@ -1,4 +1,4 @@
-package com.example.cms_backend.Model.UpdateCommands;
+package com.example.cms_backend.Model.Commands;
 
 import lombok.Getter;
 

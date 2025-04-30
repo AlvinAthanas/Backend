@@ -1,7 +1,7 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Entities.Parish;
-import com.example.cms_backend.Model.UpdateCommands.UpdateParishCommand;
+import com.example.cms_backend.Model.Commands.UpdateParishCommand;
 import com.example.cms_backend.Services.ParishServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

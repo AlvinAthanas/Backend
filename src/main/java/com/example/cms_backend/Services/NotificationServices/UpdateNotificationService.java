@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.NotificationServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.NotificationNotFoundException;
 import com.example.cms_backend.Model.Entities.Notification;
-import com.example.cms_backend.Model.UpdateCommands.UpdateNotificationCommand;
+import com.example.cms_backend.Model.Commands.UpdateNotificationCommand;
 import com.example.cms_backend.Repositories.NotificationRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.AttendanceServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.AttendanceNotFoundException;
 import com.example.cms_backend.Model.Entities.Attendance;
-import com.example.cms_backend.Model.UpdateCommands.UpdateAttendanceCommand;
+import com.example.cms_backend.Model.Commands.UpdateAttendanceCommand;
 import com.example.cms_backend.Repositories.AttendanceRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,8 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.Commands.SearchGroupNameByDescriptionCommand;
 import com.example.cms_backend.Model.Entities.Group;
-import com.example.cms_backend.Model.UpdateCommands.UpdateGroupCommand;
+import com.example.cms_backend.Model.Commands.UpdateGroupCommand;
 import com.example.cms_backend.Services.GroupServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +22,7 @@ public class GroupController {
     private final CreateGroupsService createGroupsService;
     private final CountGroupsService countGroupsService;
     private final GetGroupsByDescriptionService getGroupsByDescriptionService;
+    private final SearchGroupNameByDescriptionService searchGroupNameByDescriptionService;
 
     public GroupController(CreateGroupService createGroupService,
                            UpdateGroupService updateGroupService,
@@ -30,7 +32,8 @@ public class GroupController {
                            SearchGroupService searchGroupService,
                            CreateGroupsService createGroupsService,
                            CountGroupsService countGroupsService,
-                           GetGroupsByDescriptionService getGroupsByDescriptionService) {
+                           GetGroupsByDescriptionService getGroupsByDescriptionService,
+                           SearchGroupNameByDescriptionService searchGroupNameByDescriptionService) {
         this.createGroupService = createGroupService;
         this.updateGroupService = updateGroupService;
         this.deleteGroupService = deleteGroupService;
@@ -40,6 +43,7 @@ public class GroupController {
         this.createGroupsService = createGroupsService;
         this.countGroupsService = countGroupsService;
         this.getGroupsByDescriptionService = getGroupsByDescriptionService;
+        this.searchGroupNameByDescriptionService = searchGroupNameByDescriptionService;
     }
 
     @PostMapping("/group")
@@ -92,6 +96,14 @@ public class GroupController {
     @GetMapping("/groups/communities")
     public ResponseEntity<List<Group>> getAllCommunities() {
         return getGroupsByDescriptionService.execute(null);
+    }
+
+    @GetMapping("/groupsNameByDescription/search")
+    public ResponseEntity<List<Group>> searchGroupNameByDescription(
+            @RequestParam String name,
+            @RequestParam String description
+    ) {
+        return searchGroupNameByDescriptionService.execute(new SearchGroupNameByDescriptionCommand(name, description));
     }
 
 }

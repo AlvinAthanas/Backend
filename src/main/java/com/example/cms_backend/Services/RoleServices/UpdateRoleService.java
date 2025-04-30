@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.RoleServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.RoleNotFoundException;
 import com.example.cms_backend.Model.Entities.Role;
-import com.example.cms_backend.Model.UpdateCommands.UpdateRoleCommand;
+import com.example.cms_backend.Model.Commands.UpdateRoleCommand;
 import com.example.cms_backend.Repositories.RoleRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

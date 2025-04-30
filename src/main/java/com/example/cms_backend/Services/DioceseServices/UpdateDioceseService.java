@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.DioceseServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.DioceseNotFoundException;
 import com.example.cms_backend.Model.Entities.Diocese;
-import com.example.cms_backend.Model.UpdateCommands.UpdateDioceseCommand;
+import com.example.cms_backend.Model.Commands.UpdateDioceseCommand;
 import com.example.cms_backend.Repositories.DioceseRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,8 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Entities.Event;
-import com.example.cms_backend.Model.UpdateCommands.UpdateEventCommand;
+import com.example.cms_backend.Model.Commands.UpdateEventCommand;
 import com.example.cms_backend.Services.EventServices.*;
-import com.example.cms_backend.Services.FeedbackServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

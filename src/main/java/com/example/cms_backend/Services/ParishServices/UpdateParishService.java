@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.ParishServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.ParishNotFoundException;
 import com.example.cms_backend.Model.Entities.Parish;
-import com.example.cms_backend.Model.UpdateCommands.UpdateParishCommand;
+import com.example.cms_backend.Model.Commands.UpdateParishCommand;
 import com.example.cms_backend.Repositories.ParishRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

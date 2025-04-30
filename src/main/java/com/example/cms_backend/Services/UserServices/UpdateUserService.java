@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.UserServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.UserNotFoundException;
 import com.example.cms_backend.Model.DTO.UserDTO;
-import com.example.cms_backend.Model.UpdateCommands.UpdateUserCommand;
+import com.example.cms_backend.Model.Commands.UpdateUserCommand;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Repositories.UserRepository;
 import com.example.cms_backend.Validators.UserValidator;

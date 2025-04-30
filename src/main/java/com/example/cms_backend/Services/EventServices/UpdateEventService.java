@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.EventServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.EventNotFoundException;
 import com.example.cms_backend.Model.Entities.Event;
-import com.example.cms_backend.Model.UpdateCommands.UpdateEventCommand;
+import com.example.cms_backend.Model.Commands.UpdateEventCommand;
 import com.example.cms_backend.Repositories.EventRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

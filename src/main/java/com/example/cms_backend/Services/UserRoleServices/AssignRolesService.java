@@ -6,7 +6,7 @@ import com.example.cms_backend.Exceptions.UserNotFoundException;
 import com.example.cms_backend.Model.Entities.Role;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Model.Enums.Roles;
-import com.example.cms_backend.Model.UpdateCommands.AssignRoleCommand;
+import com.example.cms_backend.Model.Commands.AssignRoleCommand;
 import com.example.cms_backend.Repositories.RoleRepository;
 import com.example.cms_backend.Repositories.UserRepository;
 import org.springframework.http.HttpStatus;

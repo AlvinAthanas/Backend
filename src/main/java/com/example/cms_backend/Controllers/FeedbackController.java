@@ -1,9 +1,8 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Entities.Feedback;
-import com.example.cms_backend.Model.UpdateCommands.UpdateFeedbackCommand;
+import com.example.cms_backend.Model.Commands.UpdateFeedbackCommand;
 import com.example.cms_backend.Services.FeedbackServices.*;
-import com.example.cms_backend.Services.GroupServices.DeleteGroupService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

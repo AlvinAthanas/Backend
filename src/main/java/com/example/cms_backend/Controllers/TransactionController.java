@@ -2,7 +2,7 @@ package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.DTO.TransactionDTO;
 import com.example.cms_backend.Model.Entities.FinancialTransaction;
-import com.example.cms_backend.Model.UpdateCommands.UpdateTransactionCommand;
+import com.example.cms_backend.Model.Commands.UpdateTransactionCommand;
 import com.example.cms_backend.Services.TransactionServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

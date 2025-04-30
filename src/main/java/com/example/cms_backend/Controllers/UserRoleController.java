@@ -1,14 +1,13 @@
 package com.example.cms_backend.Controllers;
 
-import com.example.cms_backend.Model.UpdateCommands.AssignRoleCommand;
-import com.example.cms_backend.Model.UpdateCommands.UpdateUserRolesCommand;
+import com.example.cms_backend.Model.Commands.AssignRoleCommand;
+import com.example.cms_backend.Model.Commands.UpdateUserRolesCommand;
 import com.example.cms_backend.Services.UserRoleServices.AssignRolesService;
 import com.example.cms_backend.Services.UserRoleServices.GetUserRolesService;
 import com.example.cms_backend.Services.UserRoleServices.UpdateUserRolesService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.Set;
 
 @RestController

@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.GroupServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.GroupNotFoundException;
 import com.example.cms_backend.Model.Entities.Group;
-import com.example.cms_backend.Model.UpdateCommands.UpdateGroupCommand;
+import com.example.cms_backend.Model.Commands.UpdateGroupCommand;
 import com.example.cms_backend.Repositories.GroupRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

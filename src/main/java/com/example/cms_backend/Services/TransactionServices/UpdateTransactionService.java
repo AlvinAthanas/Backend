@@ -4,7 +4,7 @@ import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.TransactionNotFoundException;
 import com.example.cms_backend.Model.DTO.TransactionDTO;
 import com.example.cms_backend.Model.Entities.FinancialTransaction;
-import com.example.cms_backend.Model.UpdateCommands.UpdateTransactionCommand;
+import com.example.cms_backend.Model.Commands.UpdateTransactionCommand;
 import com.example.cms_backend.Repositories.FinancialTransactionRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

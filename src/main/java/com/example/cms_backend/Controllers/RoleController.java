@@ -1,7 +1,7 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Entities.Role;
-import com.example.cms_backend.Model.UpdateCommands.UpdateRoleCommand;
+import com.example.cms_backend.Model.Commands.UpdateRoleCommand;
 import com.example.cms_backend.Services.RoleServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

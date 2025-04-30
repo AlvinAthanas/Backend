@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.FeedbackServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.FeedbackNotFoundException;
 import com.example.cms_backend.Model.Entities.Feedback;
-import com.example.cms_backend.Model.UpdateCommands.UpdateFeedbackCommand;
+import com.example.cms_backend.Model.Commands.UpdateFeedbackCommand;
 import com.example.cms_backend.Repositories.FeedbackRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

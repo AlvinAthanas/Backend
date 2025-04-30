@@ -3,7 +3,7 @@ package com.example.cms_backend.Services.ContributionServices;
 import com.example.cms_backend.Abstractions.Command;
 import com.example.cms_backend.Exceptions.ContributionNotFoundException;
 import com.example.cms_backend.Model.Entities.Contribution;
-import com.example.cms_backend.Model.UpdateCommands.UpdateContributionCommand;
+import com.example.cms_backend.Model.Commands.UpdateContributionCommand;
 import com.example.cms_backend.Repositories.ContributionRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

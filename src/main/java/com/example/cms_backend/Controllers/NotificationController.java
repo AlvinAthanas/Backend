@@ -1,7 +1,7 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Entities.Notification;
-import com.example.cms_backend.Model.UpdateCommands.UpdateNotificationCommand;
+import com.example.cms_backend.Model.Commands.UpdateNotificationCommand;
 import com.example.cms_backend.Services.NotificationServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

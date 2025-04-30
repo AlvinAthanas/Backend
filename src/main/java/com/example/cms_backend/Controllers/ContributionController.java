@@ -2,7 +2,7 @@ package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.DTO.ContributionFilterDTO;
 import com.example.cms_backend.Model.Entities.Contribution;
-import com.example.cms_backend.Model.UpdateCommands.UpdateContributionCommand;
+import com.example.cms_backend.Model.Commands.UpdateContributionCommand;
 import com.example.cms_backend.Services.ContributionServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

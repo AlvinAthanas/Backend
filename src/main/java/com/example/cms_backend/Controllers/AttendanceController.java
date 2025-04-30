@@ -1,7 +1,7 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Entities.Attendance;
-import com.example.cms_backend.Model.UpdateCommands.UpdateAttendanceCommand;
+import com.example.cms_backend.Model.Commands.UpdateAttendanceCommand;
 import com.example.cms_backend.Services.AttendanceServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
