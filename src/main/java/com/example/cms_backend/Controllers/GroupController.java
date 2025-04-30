@@ -1,9 +1,12 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.Commands.AssignGroupCommand;
+import com.example.cms_backend.Model.Commands.AssignRoleCommand;
 import com.example.cms_backend.Model.Commands.SearchGroupNameByDescriptionCommand;
 import com.example.cms_backend.Model.Entities.Group;
 import com.example.cms_backend.Model.Commands.UpdateGroupCommand;
 import com.example.cms_backend.Services.GroupServices.*;
+import com.example.cms_backend.Services.UserGroupServices.AssignMemberToGroupService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ public class GroupController {
     private final CountGroupsService countGroupsService;
     private final GetGroupsByDescriptionService getGroupsByDescriptionService;
     private final SearchGroupNameByDescriptionService searchGroupNameByDescriptionService;
+    private final AssignMemberToGroupService assignMemberToGroupService;
 
     public GroupController(CreateGroupService createGroupService,
                            UpdateGroupService updateGroupService,
@@ -33,7 +37,8 @@ public class GroupController {
                            CreateGroupsService createGroupsService,
                            CountGroupsService countGroupsService,
                            GetGroupsByDescriptionService getGroupsByDescriptionService,
-                           SearchGroupNameByDescriptionService searchGroupNameByDescriptionService) {
+                           SearchGroupNameByDescriptionService searchGroupNameByDescriptionService,
+                           AssignMemberToGroupService assignMemberToGroupService) {
         this.createGroupService = createGroupService;
         this.updateGroupService = updateGroupService;
         this.deleteGroupService = deleteGroupService;
@@ -44,6 +49,7 @@ public class GroupController {
         this.countGroupsService = countGroupsService;
         this.getGroupsByDescriptionService = getGroupsByDescriptionService;
         this.searchGroupNameByDescriptionService = searchGroupNameByDescriptionService;
+        this.assignMemberToGroupService = assignMemberToGroupService;
     }
 
     @PostMapping("/group")
@@ -104,6 +110,11 @@ public class GroupController {
             @RequestParam String description
     ) {
         return searchGroupNameByDescriptionService.execute(new SearchGroupNameByDescriptionCommand(name, description));
+    }
+
+    @PostMapping("/group/assignMember")
+    public ResponseEntity<String> assignMember(@RequestBody AssignGroupCommand command) {
+        return assignMemberToGroupService.execute(new AssignGroupCommand(command.getUserId(), command.getGroupId()));
     }
 
 }

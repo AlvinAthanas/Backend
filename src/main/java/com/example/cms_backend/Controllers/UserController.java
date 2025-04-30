@@ -1,5 +1,6 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.Commands.GetUserCommand;
 import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Model.Commands.UpdateUserCommand;
 import com.example.cms_backend.Model.Entities.User;
@@ -57,10 +58,12 @@ public class UserController {
         return createUsersService.execute(users);
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable Long id){
-        return  getUserService.execute(id);
+    @GetMapping("/user")
+    public ResponseEntity<UserDTO> getUser(@RequestParam(required = false) Long id,
+                                           @RequestParam(required = false) String email) {
+        return getUserService.execute(new GetUserCommand(id, email));
     }
+
 
 //    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
     @GetMapping("/users")
