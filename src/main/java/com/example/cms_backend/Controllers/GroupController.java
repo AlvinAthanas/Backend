@@ -26,7 +26,6 @@ public class GroupController {
     private final CountGroupsService countGroupsService;
     private final GetGroupsByDescriptionService getGroupsByDescriptionService;
     private final SearchGroupNameByDescriptionService searchGroupNameByDescriptionService;
-    private final AssignMemberToGroupService assignMemberToGroupService;
 
     public GroupController(CreateGroupService createGroupService,
                            UpdateGroupService updateGroupService,
@@ -37,8 +36,7 @@ public class GroupController {
                            CreateGroupsService createGroupsService,
                            CountGroupsService countGroupsService,
                            GetGroupsByDescriptionService getGroupsByDescriptionService,
-                           SearchGroupNameByDescriptionService searchGroupNameByDescriptionService,
-                           AssignMemberToGroupService assignMemberToGroupService) {
+                           SearchGroupNameByDescriptionService searchGroupNameByDescriptionService) {
         this.createGroupService = createGroupService;
         this.updateGroupService = updateGroupService;
         this.deleteGroupService = deleteGroupService;
@@ -49,7 +47,6 @@ public class GroupController {
         this.countGroupsService = countGroupsService;
         this.getGroupsByDescriptionService = getGroupsByDescriptionService;
         this.searchGroupNameByDescriptionService = searchGroupNameByDescriptionService;
-        this.assignMemberToGroupService = assignMemberToGroupService;
     }
 
     @PostMapping("/group")
@@ -112,9 +109,5 @@ public class GroupController {
         return searchGroupNameByDescriptionService.execute(new SearchGroupNameByDescriptionCommand(name, description));
     }
 
-    @PostMapping("/group/assignMember")
-    public ResponseEntity<String> assignMember(@RequestBody AssignGroupCommand command) {
-        return assignMemberToGroupService.execute(new AssignGroupCommand(command.getUserId(), command.getGroupId()));
-    }
 
 }

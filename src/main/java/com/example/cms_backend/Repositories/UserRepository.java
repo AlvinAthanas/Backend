@@ -17,4 +17,27 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles LEFT JOIN FETCH u.authorities WHERE u.email = :email")
     Optional<User> findByEmail(@Param("email") String email);
+
+    @Query("""
+    SELECT u FROM User u
+    JOIN u.groups g
+    WHERE (:description IS NULL OR g.description = :description)
+      AND (:name IS NULL OR g.name = :name)
+""")
+    List<User> findUsersByGroupDescriptionAndName(
+            @Param("description") String description,
+            @Param("name") String name
+    );
+
+    @Query("""
+    SELECT COUNT(u) FROM User u
+    JOIN u.groups g
+    WHERE (:description IS NULL OR g.description = :description)
+      AND (:name IS NULL OR g.name = :name)
+""")
+    Long countUsersByGroupDescriptionAndName(
+            @Param("description") String description,
+            @Param("name") String name
+    );
+
 }
