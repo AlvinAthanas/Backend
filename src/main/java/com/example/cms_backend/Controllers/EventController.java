@@ -1,5 +1,6 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.Commands.GetEventsQuery;
 import com.example.cms_backend.Model.Entities.Event;
 import com.example.cms_backend.Model.Commands.UpdateEventCommand;
 import com.example.cms_backend.Services.EventServices.*;
@@ -50,9 +51,10 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public ResponseEntity<List<Event>> getEvents() {
-        return getEventsService.execute(null);
+    public ResponseEntity<List<Event>> getEvents(@RequestParam(required = false) Long parishId) {
+        return getEventsService.execute(new GetEventsQuery(parishId));
     }
+
 
     @PutMapping("/event/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {

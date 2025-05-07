@@ -1,6 +1,7 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.GetUserCommand;
+import com.example.cms_backend.Model.DTO.UpdateUserDTO;
 import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Model.Commands.UpdateUserCommand;
 import com.example.cms_backend.Model.Entities.User;
@@ -72,9 +73,10 @@ public class UserController {
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody User user){
-        return updateUserService.execute(new UpdateUserCommand(id, user));
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO dto) {
+        return updateUserService.execute(new UpdateUserCommand(id, dto));
     }
+
 
     @DeleteMapping("/user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){

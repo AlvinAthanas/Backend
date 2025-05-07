@@ -17,6 +17,7 @@ public class UserDTO {
     private String address;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    private Long parishId;
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -25,6 +26,7 @@ public class UserDTO {
         this.phone = user.getPhone();
         this.address = user.getAddress();
         this.gender = user.getGender();
+        this.parishId = user.getParishId();
     }
 
 }

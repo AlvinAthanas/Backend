@@ -1,21 +1,23 @@
 package com.example.cms_backend.Model.Commands;
 
+import com.example.cms_backend.Model.DTO.UpdateUserDTO;
 import com.example.cms_backend.Model.Entities.User;
 
 public class UpdateUserCommand {
     private Long id;
-    private User user;
+    private UpdateUserDTO updateUserDTO;
 
-    public UpdateUserCommand(Long id, User user) {
+    public UpdateUserCommand(Long id, UpdateUserDTO dto) {
         this.id = id;
-        this.user = user;
+        this.updateUserDTO = dto;
     }
 
     public Long getId() {
         return id;
     }
 
-    public User getUser() {
-        return user;
+    public UpdateUserDTO getUpdateUserDTO() {
+        return updateUserDTO;
     }
 }
+
