@@ -20,6 +20,7 @@ public enum ErrorMessages {
     EMAIL_REQUIRED("Email is required"),
     BELOW_AGE_LIMIT("User must be at least 10 years old."),
     PASSWORD_INCORRECT("Incorrect current password"),
+    PROJECT_NOT_FOUND("Project not found"),
     ;
 
     private String message;
