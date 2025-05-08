@@ -42,6 +42,13 @@ public class UpdateUserService implements Command<UpdateUserCommand, UserDTO> {
         user.setAddress(dto.getAddress());
         user.setGender(dto.getGender());
         user.setParishId(dto.getParishId());
+        if (!user.getEmail().equals(dto.getEmail())) {
+            // email was changed — check if the new one already exists
+            if (userRepository.existsByEmail(dto.getEmail())) {
+                throw new UserNotValidException(ErrorMessages.EMAIL_ALREADY_EXISTS.getMessage());
+            }
+            user.setEmail(dto.getEmail());
+        }
 
         UserValidator.validateUser(user);
         userRepository.save(user);

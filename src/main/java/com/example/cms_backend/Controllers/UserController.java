@@ -1,6 +1,8 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.Commands.ChangePasswordCommand;
 import com.example.cms_backend.Model.Commands.GetUserCommand;
+import com.example.cms_backend.Model.DTO.ChangePasswordDTO;
 import com.example.cms_backend.Model.DTO.UpdateUserDTO;
 import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Model.Commands.UpdateUserCommand;
@@ -23,6 +25,7 @@ public class UserController {
     private final SearchUserService searchUserService;
     private final CreateUsersService createUsersService;
     private final CountUsersService countUsersService;
+    private final ChangePasswordService changePasswordService;
 
     public UserController(CreateUserService createUserService,
                           GetUserService getUserService,
@@ -31,7 +34,8 @@ public class UserController {
                           GetUsersService getUsersService,
                           SearchUserService searchUserService,
                           CreateUsersService createUsersService,
-                          CountUsersService countUsersService) {
+                          CountUsersService countUsersService,
+                          ChangePasswordService changePasswordService) {
         this.createUserService = createUserService;
         this.getUserService = getUserService;
         this.updateUserService = updateUserService;
@@ -40,6 +44,7 @@ public class UserController {
         this.searchUserService = searchUserService;
         this.createUsersService = createUsersService;
         this.countUsersService = countUsersService;
+        this.changePasswordService = changePasswordService;
     }
 
 //    @PreAuthorize("hasRole('basicuser')")
@@ -76,6 +81,12 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO dto) {
         return updateUserService.execute(new UpdateUserCommand(id, dto));
     }
+
+    @PutMapping("/user/{id}/change-password")
+    public ResponseEntity<Void> changePassword(@PathVariable Long id, @RequestBody ChangePasswordDTO dto) {
+        return changePasswordService.execute(new ChangePasswordCommand(id, dto));
+    }
+
 
 
     @DeleteMapping("/user/{id}")
