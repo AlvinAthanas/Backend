@@ -56,4 +56,9 @@ public class JwtUtil {
         byte[] keyBytes = Decoders.BASE64URL.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+    public static String extractUsername(String token) {
+        return getClaims(token).getSubject();
+    }
+
 }

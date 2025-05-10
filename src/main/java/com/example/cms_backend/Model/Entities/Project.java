@@ -22,20 +22,21 @@ public class Project {
     private Double budget;
 
     @Lob
-    @Column(name = "featured_image")
+    @Column(name = "featured_image", columnDefinition = "LONGBLOB")
     private byte[] featuredImage;
 
+
     @Column(name = "parish_id")
-    Long parentId;
+    Long parishId;
 
     public Project() {
     }
 
-    public Project(String name, String description, Double budget, byte[] featuredImage, Long parentId) {
+    public Project(String name, String description, Double budget, byte[] featuredImage, Long parishId) {
         this.name = name;
         this.description = description;
         this.budget = budget;
         this.featuredImage = featuredImage;
-        this.parentId = parentId;
+        this.parishId = parishId;
     }
 }

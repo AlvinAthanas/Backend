@@ -23,11 +23,21 @@ public class UpdateProjectService implements Command<UpdateProjectCommand, Proje
     public ResponseEntity<Project> execute(UpdateProjectCommand command) {
         Optional<Project> projectOptional = projectRepository.findById(command.getId());
         if (projectOptional.isPresent()) {
-            Project project = command.getProject();
-            project.setId(command.getId());
-            projectRepository.save(project);
-            return ResponseEntity.ok().body(project);
+            Project existing = projectOptional.get();
+            Project update = command.getProject();
+
+            existing.setName(update.getName());
+            existing.setDescription(update.getDescription());
+
+            // Only update image if a new one was provided
+            if (update.getFeaturedImage() != null && update.getFeaturedImage().length > 0) {
+                existing.setFeaturedImage(update.getFeaturedImage());
+            }
+
+            projectRepository.save(existing);
+            return ResponseEntity.ok(existing);
         }
         throw new ProjectNotFoundException();
     }
+
 }
