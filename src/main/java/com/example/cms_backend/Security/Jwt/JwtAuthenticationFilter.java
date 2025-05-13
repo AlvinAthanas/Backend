@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             grantedAuthorities.addAll(user.getAuthorities().stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-                    .collect(Collectors.toList()));
+                    .toList());
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, grantedAuthorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);

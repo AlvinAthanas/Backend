@@ -3,7 +3,6 @@ package com.example.cms_backend.Model.Entities;
 import com.example.cms_backend.Model.Enums.Gender;
 import com.example.cms_backend.Model.Enums.MaritialStatus;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -53,6 +52,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "authority_id")
     )
     private Set<Authority> authorities = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_parish",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "parish_id")
+    )
+    private Set<Parish> favoriteParishes = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
@@ -260,5 +267,11 @@ public class User {
         this.authorities = authorities;
     }
 
+    public Set<Parish> getFavoriteParishes() {
+        return favoriteParishes;
+    }
 
+    public void setFavoriteParishes(Set<Parish> parishes) {
+        this.favoriteParishes = parishes;
+    }
 }

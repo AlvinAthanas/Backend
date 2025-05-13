@@ -36,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         grantedAuthorities.addAll(
                 user.getAuthorities().stream()
                         .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-                        .collect(Collectors.toList())
+                        .toList()
         );
 
         System.out.println("Granted Authorities: " + grantedAuthorities);

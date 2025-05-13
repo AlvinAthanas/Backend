@@ -1,10 +1,12 @@
 package com.example.cms_backend.Model.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,12 +18,17 @@ public class Parish {
     private Long id;
 
     private String name;
+    @Column(name = "parish_priest")
+    private String parishPriest;
     private String location;
     private String contactInfo;
+    @Column(name = "featured_image")
+    private String imageUrl;
 
     //PARISHES and DIOCESE
     @Column(name = "diocese_id") //TODO: set nullable to false
     private Long dioceseId;
+
 
     //PARISH AND USERS
     @OneToMany(cascade = CascadeType.ALL)
@@ -54,6 +61,15 @@ public class Parish {
         this.name = name;
         this.location = location;
         this.contactInfo = contactInfo;
+        this.dioceseId = dioceseId;
+    }
+
+    public Parish(String name, String parishPriest, String location, String contactInfo,String imageUrl, Long dioceseId) {
+        this.name = name;
+        this.parishPriest = parishPriest;
+        this.location = location;
+        this.contactInfo = contactInfo;
+        this.imageUrl = imageUrl;
         this.dioceseId = dioceseId;
     }
 
