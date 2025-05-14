@@ -3,12 +3,14 @@ package com.example.cms_backend.Controllers;
 import com.example.cms_backend.Model.Commands.CreateProjectCommand;
 import com.example.cms_backend.Model.Commands.GetProjectsCommand;
 import com.example.cms_backend.Model.Commands.UpdateProjectCommand;
+import com.example.cms_backend.Model.DTO.UpdateProjectDTO;
 import com.example.cms_backend.Model.Entities.Project;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Repositories.UserRepository;
 import com.example.cms_backend.Services.JwtServices.JwtService;
 import com.example.cms_backend.Services.ProjectServices.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -77,23 +79,26 @@ public class ProjectController {
 
 
 
-    @PutMapping("/project/{id}")
+    @PutMapping(value = "/project/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Project> updateProject(
             @PathVariable Long id,
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam(required = false) MultipartFile featuredImage
+            @RequestPart("project") UpdateProjectDTO projectDTO,
+            @RequestPart(value = "featuredImage", required = false) MultipartFile featuredImage
     ) throws IOException {
         Project project = new Project();
         project.setId(id);
-        project.setName(name);
-        project.setDescription(description);
+        project.setName(projectDTO.getName());
+        project.setDescription(projectDTO.getDescription());
+        project.setBudget(projectDTO.getBudget());
+        project.setCollected(projectDTO.getCollected());
+
         if (featuredImage != null && !featuredImage.isEmpty()) {
             project.setFeaturedImage(featuredImage.getBytes());
         }
 
         return updateProjectService.execute(new UpdateProjectCommand(id, project));
     }
+
 
 
     @DeleteMapping("/project/{id}")
