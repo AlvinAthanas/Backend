@@ -20,6 +20,7 @@ public class Project {
     private String description;
 
     private Double budget;
+    private Double collected;
 
     @Lob
     @Column(name = "featured_image", columnDefinition = "LONGBLOB")
@@ -32,11 +33,12 @@ public class Project {
     public Project() {
     }
 
-    public Project(String name, String description, Double budget, byte[] featuredImage, Long parishId) {
+    public Project(String name, String description, Double budget, byte[] featuredImage, Long parishId, Double collected) {
         this.name = name;
         this.description = description;
         this.budget = budget;
         this.featuredImage = featuredImage;
         this.parishId = parishId;
+        this.collected = collected;
     }
 }

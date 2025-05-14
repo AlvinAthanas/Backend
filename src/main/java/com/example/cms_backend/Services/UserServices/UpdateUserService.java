@@ -41,7 +41,7 @@ public class UpdateUserService implements Command<UpdateUserCommand, UserDTO> {
         user.setPhone(dto.getPhone());
         user.setAddress(dto.getAddress());
         user.setGender(dto.getGender());
-        user.setParishId(dto.getParishId());
+//        user.setParishId(dto.getParishId());
         if (!user.getEmail().equals(dto.getEmail())) {
             // email was changed — check if the new one already exists
             if (userRepository.existsByEmail(dto.getEmail())) {
