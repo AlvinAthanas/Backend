@@ -28,6 +28,8 @@ public class UpdateProjectService implements Command<UpdateProjectCommand, Proje
 
             existing.setName(update.getName());
             existing.setDescription(update.getDescription());
+            existing.setBudget(update.getBudget());
+            existing.setCollected(update.getCollected());
 
             // Only update image if a new one was provided
             if (update.getFeaturedImage() != null && update.getFeaturedImage().length > 0) {
