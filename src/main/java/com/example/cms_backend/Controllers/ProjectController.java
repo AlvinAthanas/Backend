@@ -3,6 +3,7 @@ package com.example.cms_backend.Controllers;
 import com.example.cms_backend.Model.Commands.CreateProjectCommand;
 import com.example.cms_backend.Model.Commands.GetProjectsCommand;
 import com.example.cms_backend.Model.Commands.UpdateProjectCommand;
+import com.example.cms_backend.Model.DTO.CreateProjectDTO;
 import com.example.cms_backend.Model.DTO.UpdateProjectDTO;
 import com.example.cms_backend.Model.Entities.Project;
 import com.example.cms_backend.Model.Entities.User;
@@ -48,19 +49,15 @@ public class ProjectController {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
     }
-    @PostMapping("/project")
+    @PostMapping(value = "/project", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Project> addProject(
-            @RequestParam("name") String name,
-            @RequestParam("description") String description,
+            @RequestPart("project") CreateProjectDTO projectDTO,
             @RequestPart(value = "featuredImage", required = false) MultipartFile featuredImage,
             HttpServletRequest request) {
-        Project project = new Project();
-        project.setName(name);
-        project.setDescription(description);
 
-        // Pass the project and request to the service
-        return createProjectService.execute(new CreateProjectCommand(project, featuredImage, request));
+        return createProjectService.execute(new CreateProjectCommand(projectDTO, featuredImage, request));
     }
+
 
 
 

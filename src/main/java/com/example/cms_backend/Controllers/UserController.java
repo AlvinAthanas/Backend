@@ -2,6 +2,7 @@ package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.ChangePasswordCommand;
 import com.example.cms_backend.Model.Commands.GetUserCommand;
+import com.example.cms_backend.Model.Commands.UploadProfilePictureCommand;
 import com.example.cms_backend.Model.DTO.ChangePasswordDTO;
 import com.example.cms_backend.Model.DTO.UpdateUserDTO;
 import com.example.cms_backend.Model.DTO.UserDTO;
@@ -11,8 +12,22 @@ import com.example.cms_backend.Services.UserServices.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.springframework.web.multipart.MultipartFile;
+
+
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost") // Allow frontend requests
@@ -26,6 +41,7 @@ public class UserController {
     private final CreateUsersService createUsersService;
     private final CountUsersService countUsersService;
     private final ChangePasswordService changePasswordService;
+    private final UploadProfilePictureService uploadProfilePictureService;
 
     public UserController(CreateUserService createUserService,
                           GetUserService getUserService,
@@ -35,7 +51,8 @@ public class UserController {
                           SearchUserService searchUserService,
                           CreateUsersService createUsersService,
                           CountUsersService countUsersService,
-                          ChangePasswordService changePasswordService) {
+                          ChangePasswordService changePasswordService,
+                          UploadProfilePictureService uploadProfilePictureService) {
         this.createUserService = createUserService;
         this.getUserService = getUserService;
         this.updateUserService = updateUserService;
@@ -45,6 +62,7 @@ public class UserController {
         this.createUsersService = createUsersService;
         this.countUsersService = countUsersService;
         this.changePasswordService = changePasswordService;
+        this.uploadProfilePictureService = uploadProfilePictureService;
     }
 
 //    @PreAuthorize("hasRole('basicuser')")
@@ -106,5 +124,40 @@ public class UserController {
     }
 
 
+    private final String imageDir = "uploads/profile_pictures"; // or wherever you store images
+
+    @GetMapping("/user/profile-picture/{filename:.+}")
+    public ResponseEntity<Resource> getProfilePicture(@PathVariable String filename) {
+        try {
+            Path filePath = Paths.get(imageDir).resolve(filename).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("/user/{id}/upload-profile-picture")
+    public ResponseEntity<Void> uploadProfilePicture(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file) {
+
+        UploadProfilePictureCommand command = new UploadProfilePictureCommand(id, file);
+        return uploadProfilePictureService.execute(command);
+    }
 
 }

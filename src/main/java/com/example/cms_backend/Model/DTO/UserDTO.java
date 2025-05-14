@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Base64;
+
 @Getter
 @Setter
 public class UserDTO {
@@ -18,6 +20,7 @@ public class UserDTO {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private Long parishId;
+    private String profilePicture; // Base64 string
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -27,6 +30,11 @@ public class UserDTO {
         this.address = user.getAddress();
         this.gender = user.getGender();
         this.parishId = user.getParishId();
+        this.profilePicture = encodeImageToBase64(user.getProfilePicture());
     }
 
+    private String encodeImageToBase64(byte[] imageData) {
+        if (imageData == null) return null;
+        return Base64.getEncoder().encodeToString(imageData);
+    }
 }
