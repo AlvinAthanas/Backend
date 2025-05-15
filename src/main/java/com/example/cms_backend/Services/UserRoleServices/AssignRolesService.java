@@ -34,6 +34,11 @@ public class AssignRolesService implements Command<AssignRoleCommand,String> {
                 user.setRoles(new HashSet<>());
             }
             user.getRoles().add(defaultRole.get());
+
+            Optional<Role> commiteeChairperson = roleRepository.findByName(Roles.COMMITTEE_CHAIRPERSON.toString());
+            if (commiteeChairperson.isPresent()) {
+                user.getRoles().add(commiteeChairperson.get());
+            }
         }
     }
 
