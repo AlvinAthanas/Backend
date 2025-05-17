@@ -8,6 +8,7 @@ import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Model.Commands.UpdateUserRolesCommand;
 import com.example.cms_backend.Repositories.RoleRepository;
 import com.example.cms_backend.Repositories.UserRepository;
+import com.example.cms_backend.Services.UserAuthorityServices.RoleBasedAuthorityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,14 @@ import java.util.Set;
 public class UpdateUserRolesService implements Command<UpdateUserRolesCommand, String> {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final RoleBasedAuthorityService roleBasedAuthorityService;
 
-    public UpdateUserRolesService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UpdateUserRolesService(UserRepository userRepository, 
+                                 RoleRepository roleRepository,
+                                 RoleBasedAuthorityService roleBasedAuthorityService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.roleBasedAuthorityService = roleBasedAuthorityService;
     }
 
     @Override
@@ -44,7 +49,9 @@ public class UpdateUserRolesService implements Command<UpdateUserRolesCommand, S
         user.setRoles(newRoles); // 💥 Completely replace old roles
         userRepository.save(user);
 
+        // Update authorities based on the new roles
+        roleBasedAuthorityService.updateAuthoritiesBasedOnRoles(user);
+
         return ResponseEntity.ok("Roles updated successfully!");
     }
 }
-

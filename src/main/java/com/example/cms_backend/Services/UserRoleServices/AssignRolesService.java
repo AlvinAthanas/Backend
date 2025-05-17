@@ -9,6 +9,7 @@ import com.example.cms_backend.Model.Enums.Roles;
 import com.example.cms_backend.Model.Commands.AssignRoleCommand;
 import com.example.cms_backend.Repositories.RoleRepository;
 import com.example.cms_backend.Repositories.UserRepository;
+import com.example.cms_backend.Services.UserAuthorityServices.RoleBasedAuthorityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,15 @@ import java.util.Optional;
 public class AssignRolesService implements Command<AssignRoleCommand,String> {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final RoleBasedAuthorityService roleBasedAuthorityService;
 
 
     public AssignRolesService(RoleRepository roleRepository,
-                              UserRepository userRepository) {
+                              UserRepository userRepository,
+                              RoleBasedAuthorityService roleBasedAuthorityService) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.roleBasedAuthorityService = roleBasedAuthorityService;
     }
 
     public void AssignDefaultRole(User user) {
@@ -39,6 +43,9 @@ public class AssignRolesService implements Command<AssignRoleCommand,String> {
             if (commiteeChairperson.isPresent()) {
                 user.getRoles().add(commiteeChairperson.get());
             }
+
+            // Update authorities based on the assigned roles
+            roleBasedAuthorityService.updateAuthoritiesBasedOnRoles(user);
         }
     }
 
@@ -56,6 +63,10 @@ public class AssignRolesService implements Command<AssignRoleCommand,String> {
                 }
                 user.getRoles().add(role);
                 userRepository.save(user);
+
+                // Update authorities based on the assigned roles
+                roleBasedAuthorityService.updateAuthoritiesBasedOnRoles(user);
+
                 return ResponseEntity.status(HttpStatus.CREATED).body("Role assigned: " + command.getRoleName());
             } else {
                 throw new UserNotFoundException();

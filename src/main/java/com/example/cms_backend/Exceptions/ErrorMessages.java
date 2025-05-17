@@ -21,6 +21,7 @@ public enum ErrorMessages {
     BELOW_AGE_LIMIT("User must be at least 10 years old."),
     PASSWORD_INCORRECT("Incorrect current password"),
     PROJECT_NOT_FOUND("Project not found"),
+    AUTHORITY_NOT_FOUND("Authority not found"),
     ;
 
     private String message;

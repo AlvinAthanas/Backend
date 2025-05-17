@@ -1,5 +1,8 @@
 package com.example.cms_backend.Model.Enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Roles {
     PARISHIONER("PARISHIONER"),
     COMMITTEE_CHAIRPERSON("COMMITTEE_CHAIRPERSON"),
@@ -11,16 +14,12 @@ public enum Roles {
     COMMUNITY_TREASURER("COMMUNITY_TREASURER"),
     PARISH_MEMBER("PARISH_MEMBER");
 
+    // Getter for the role name
     private final String roleName;
 
     // Constructor to set the roleName
     Roles(String roleName) {
         this.roleName = roleName;
-    }
-
-    // Getter for the role name
-    public String getRoleName() {
-        return roleName;
     }
 
     // Optional: Override toString() to return the custom role name
