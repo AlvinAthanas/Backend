@@ -78,4 +78,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(ex.getMessage()));
     }
 
+    @ExceptionHandler(DuplicateAuthorityException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateAuthorityException(DuplicateAuthorityException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AuthorityRuleNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorityRuleNotFoundException(AuthorityRuleNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(DuplicateRoleAuthorityRuleException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateRoleAuthorityRuleException(DuplicateRoleAuthorityRuleException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
+    }
 }
