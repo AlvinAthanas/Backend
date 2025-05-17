@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -98,7 +99,7 @@ public class RoleBasedAuthorityServiceTest {
         com.example.cms_backend.Model.Commands.UpdateUserAuthoritiesCommand command = commandCaptor.getValue();
         assertEquals(1L, command.getId());
 
-        // Should have all READ authorities
+        // Should have all READ authorities plus WRITE_SACRAMENTS
         Set<String> expectedAuthorities = new HashSet<>();
         expectedAuthorities.add(Authority.READ_MEMBERS.name());
         expectedAuthorities.add(Authority.READ_CONTRIBUTIONS.name());
@@ -107,6 +108,7 @@ public class RoleBasedAuthorityServiceTest {
         expectedAuthorities.add(Authority.READ_COMMUNITIES.name());
         expectedAuthorities.add(Authority.READ_PROJECTS.name());
         expectedAuthorities.add(Authority.READ_SACRAMENTS.name());
+        expectedAuthorities.add(Authority.WRITE_SACRAMENTS.name());
 
         assertEquals(expectedAuthorities.size(), command.getAuthorityNames().size());
         for (String authority : expectedAuthorities) {
@@ -168,5 +170,71 @@ public class RoleBasedAuthorityServiceTest {
         for (String authority : expectedAuthorities) {
             assertTrue(command.getAuthorityNames().contains(authority), "Authority " + authority + " should be present");
         }
+    }
+
+    @Test
+    public void testUpdateAuthoritiesBasedOnRoles_WithOverrideDefaultFalse() {
+        // Arrange
+        User user = new User();
+        user.setId(1L);
+
+        // Create a role
+        Role catechistRole = new Role(Roles.CATECHIST.toString());
+        Set<Role> roles = new HashSet<>();
+        roles.add(catechistRole);
+        user.setRoles(roles);
+
+        // Create a custom rule for CATECHIST with overrideDefault=false
+        RoleAuthorityRule catechistRule = new RoleAuthorityRule(Roles.CATECHIST.toString());
+        catechistRule.setOverrideDefault(false); // This is the key setting for this test
+
+        // Add a granted authority
+        Set<String> grantedAuthorities = new HashSet<>();
+        grantedAuthorities.add(Authority.WRITE_MEMBERS.name());
+        catechistRule.setGrantedAuthorities(grantedAuthorities);
+
+        // Add a denied authority
+        Set<String> deniedAuthorities = new HashSet<>();
+        deniedAuthorities.add(Authority.READ_CONTRIBUTIONS.name());
+        catechistRule.setDeniedAuthorities(deniedAuthorities);
+
+        // Mock the repository to return the custom rule
+        when(roleAuthorityRuleRepository.findByRoleName(Roles.CATECHIST.toString()))
+                .thenReturn(Optional.of(catechistRule));
+
+        // Act
+        roleBasedAuthorityService.updateAuthoritiesBasedOnRoles(user);
+
+        // Assert
+        ArgumentCaptor<com.example.cms_backend.Model.Commands.UpdateUserAuthoritiesCommand> commandCaptor = 
+                ArgumentCaptor.forClass(com.example.cms_backend.Model.Commands.UpdateUserAuthoritiesCommand.class);
+        verify(updateUserAuthoritiesService).execute(commandCaptor.capture());
+
+        com.example.cms_backend.Model.Commands.UpdateUserAuthoritiesCommand command = commandCaptor.getValue();
+        assertEquals(1L, command.getId());
+
+        // Should have all READ authorities except READ_CONTRIBUTIONS, plus WRITE_MEMBERS and WRITE_SACRAMENTS
+        Set<String> expectedAuthorities = new HashSet<>();
+        expectedAuthorities.add(Authority.READ_MEMBERS.name());
+        expectedAuthorities.add(Authority.READ_SCHEDULES.name());
+        expectedAuthorities.add(Authority.READ_EVENTS.name());
+        expectedAuthorities.add(Authority.READ_COMMUNITIES.name());
+        expectedAuthorities.add(Authority.READ_PROJECTS.name());
+        expectedAuthorities.add(Authority.READ_SACRAMENTS.name());
+        expectedAuthorities.add(Authority.WRITE_MEMBERS.name());
+        expectedAuthorities.add(Authority.WRITE_SACRAMENTS.name());
+
+        // Verify that all expected authorities are present
+        for (String authority : expectedAuthorities) {
+            assertTrue(command.getAuthorityNames().contains(authority), 
+                    "Authority " + authority + " should be present");
+        }
+
+        // Verify that the denied authority is not present
+        assertFalse(command.getAuthorityNames().contains(Authority.READ_CONTRIBUTIONS.name()), 
+                "Authority READ_CONTRIBUTIONS should not be present");
+
+        // Verify that the total number of authorities is correct
+        assertEquals(expectedAuthorities.size(), command.getAuthorityNames().size());
     }
 }

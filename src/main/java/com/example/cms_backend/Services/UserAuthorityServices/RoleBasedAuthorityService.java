@@ -54,50 +54,55 @@ public class RoleBasedAuthorityService {
      * @return The names of the authorities the user should have
      */
     private Set<String> determineAuthoritiesFromRoles(Set<String> roleNames) {
-        // Check if there are any custom rules for the roles
-        Set<String> customAuthorities = new HashSet<>();
-        boolean hasCustomRules = false;
+        Set<String> finalAuthorities = new HashSet<>();
+        Set<String> rolesWithCustomRules = new HashSet<>();
 
-        // Process each role to check for custom rules
+        // First, process roles with custom rules
         for (String roleName : roleNames) {
             Optional<RoleAuthorityRule> ruleOpt = roleAuthorityRuleRepository.findByRoleName(roleName);
             if (ruleOpt.isPresent()) {
-                hasCustomRules = true;
                 RoleAuthorityRule rule = ruleOpt.get();
+                rolesWithCustomRules.add(roleName);
 
                 // Apply the custom rule
                 Set<String> roleAuthorities = new HashSet<>();
                 applyCustomRule(rule, roleAuthorities);
 
                 // Combine with existing authorities
-                customAuthorities.addAll(roleAuthorities);
+                finalAuthorities.addAll(roleAuthorities);
             }
         }
 
-        // If there are custom rules, return the custom authorities
-        if (hasCustomRules) {
-            return customAuthorities;
+        // If all roles have custom rules, return the combined authorities
+        if (rolesWithCustomRules.size() == roleNames.size()) {
+            return finalAuthorities;
         }
 
-        // Otherwise, apply the default rules
+        // Process roles without custom rules using default rules
+        Set<String> rolesWithoutCustomRules = new HashSet<>(roleNames);
+        rolesWithoutCustomRules.removeAll(rolesWithCustomRules);
 
-        // If a user has only a PARISH_MEMBER role, they should have no authorities
-        if (roleNames.size() == 1 && roleNames.contains(Roles.PARISH_MEMBER.toString())) {
-            return new HashSet<>();
+        // Process each role without a custom rule
+        for (String roleName : rolesWithoutCustomRules) {
+            if (roleName.equals(Roles.PARISH_MEMBER.toString())) {
+                // PARISH_MEMBER has no authorities
+                continue;
+            } else if (hasCommitteeRolesOrParishioner(Set.of(roleName))) {
+                // Committee roles or PARISHIONER have all authorities
+                finalAuthorities.addAll(getAllAuthorities());
+            } else if (roleName.equals(Roles.CATECHIST.toString())) {
+                // CATECHIST has READ authorities plus WRITE_SACRAMENTS
+                finalAuthorities.addAll(getCatechistAuthorities());
+            } else if (isCommunityLeaderRole(roleName)) {
+                // COMMUNITY leader roles have READ authorities plus WRITE_COMMUNITIES
+                finalAuthorities.addAll(getCommunityLeaderAuthorities());
+            } else if (hasCommunityRolesOrCatechist(Set.of(roleName))) {
+                // Other community roles have only READ authorities
+                finalAuthorities.addAll(getReadAuthorities());
+            }
         }
 
-        // If a user has committee roles or PARISHIONER, they should have all authorities
-        if (hasCommitteeRolesOrParishioner(roleNames)) {
-            return getAllAuthorities();
-        }
-
-        // If user has community roles or CATECHIST, they should have only READ authorities
-        if (hasCommunityRolesOrCatechist(roleNames)) {
-            return getReadAuthorities();
-        }
-
-        // Default: no authorities
-        return new HashSet<>();
+        return finalAuthorities;
     }
 
     /**
@@ -140,6 +145,10 @@ public class RoleBasedAuthorityService {
             return new HashSet<>();
         } else if (hasCommitteeRolesOrParishioner(roleNames)) {
             return getAllAuthorities();
+        } else if (roleName.equals(Roles.CATECHIST.toString())) {
+            return getCatechistAuthorities();
+        } else if (isCommunityLeaderRole(roleName)) {
+            return getCommunityLeaderAuthorities();
         } else if (hasCommunityRolesOrCatechist(roleNames)) {
             return getReadAuthorities();
         } else {
@@ -218,5 +227,38 @@ public class RoleBasedAuthorityService {
         return Stream.of(Authority.values())
                 .map(Enum::name)
                 .collect(Collectors.toSet());
+    }
+
+    /**
+     * Gets the authorities for CATECHIST role.
+     * Includes all READ authorities plus WRITE_SACRAMENTS.
+     * @return A set of authority names for CATECHIST
+     */
+    private Set<String> getCatechistAuthorities() {
+        Set<String> authorities = getReadAuthorities();
+        authorities.add(Authority.WRITE_SACRAMENTS.name());
+        return authorities;
+    }
+
+    /**
+     * Gets the authorities for COMMUNITY leader roles.
+     * Includes all READ authorities plus WRITE_COMMUNITIES.
+     * @return A set of authority names for COMMUNITY leaders
+     */
+    private Set<String> getCommunityLeaderAuthorities() {
+        Set<String> authorities = getReadAuthorities();
+        authorities.add(Authority.WRITE_COMMUNITIES.name());
+        return authorities;
+    }
+
+    /**
+     * Checks if the role is a community leader role.
+     * @param roleName The name of the role
+     * @return True if the role is a community leader role, false otherwise
+     */
+    private boolean isCommunityLeaderRole(String roleName) {
+        return roleName.equals(Roles.COMMUNITY_CHAIRPERSON.toString()) ||
+               roleName.equals(Roles.COMMUNITY_SECRETARY.toString()) ||
+               roleName.equals(Roles.COMMUNITY_TREASURER.toString());
     }
 }

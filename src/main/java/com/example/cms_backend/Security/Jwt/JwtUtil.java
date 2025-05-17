@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "mySecretKeyWhichHasToBeVeryMuchLongEnoughForThisToWork"; // Use a more secure key
+    private static final String SECRET_KEY = "a-string-secret-at-least-256-bits-long"; // Updated to meet 256-bit requirement
     private static final long EXPIRATION_TIME = 3_600_000; // Expiration time (5 minutes)
 
     public static String generateToken(UserDetails userDetails) {
@@ -53,7 +53,8 @@ public class JwtUtil {
     }
 
     private static SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64URL.decode(SECRET_KEY);
+        // Use the raw key bytes instead of trying to decode from Base64URL
+        byte[] keyBytes = SECRET_KEY.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
