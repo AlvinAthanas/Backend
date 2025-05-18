@@ -25,7 +25,19 @@ public interface ContributionRepository extends JpaRepository<Contribution, Long
             @Param("year") Integer year
     );
 
+    // Find contributions by userId
+    List<Contribution> findByUserId(Long userId);
+
+    List<Contribution> findContributionByParishId(Long parishId);
+
+    // Find contributions by userId and parishId
+    List<Contribution> findByUserIdAndParishId(Long userId, Long parishId);
+
     // Total amount of contributions
     @Query("SELECT SUM(c.amount) FROM Contribution c")
     Long getTotalAmount();
+
+    // Total amount of contributions filtered by parishId
+    @Query("SELECT SUM(c.amount) FROM Contribution c WHERE c.parishId = :parishId")
+    Long getTotalAmountByParishId(@Param("parishId") Long parishId);
 }

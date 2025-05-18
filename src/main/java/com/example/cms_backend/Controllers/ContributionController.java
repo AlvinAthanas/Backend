@@ -4,6 +4,7 @@ import com.example.cms_backend.Model.DTO.ContributionFilterDTO;
 import com.example.cms_backend.Model.Entities.Contribution;
 import com.example.cms_backend.Model.Commands.UpdateContributionCommand;
 import com.example.cms_backend.Services.ContributionServices.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,8 @@ public class ContributionController {
     }
 
     @PostMapping("/contribution")
-    public ResponseEntity<Contribution> addContribution(@RequestBody Contribution contribution) {
-        return createContributionService.execute(contribution);
+    public ResponseEntity<Contribution> addContribution(@RequestBody Contribution contribution, HttpServletRequest request) {
+        return createContributionService.execute(contribution, request);
     }
 
     @GetMapping("/contribution/{id}")
@@ -46,13 +47,13 @@ public class ContributionController {
     }
 
     @GetMapping("/contributions")
-    public ResponseEntity<List<Contribution>> getContributions() {
-        return getContributionsService.execute(null);
+    public ResponseEntity<List<Contribution>> getContributions(HttpServletRequest request) {
+        return getContributionsService.execute(null, request);
     }
 
     @PutMapping("/contribution/{id}")
-    public ResponseEntity<Contribution> updateContribution(@PathVariable Long id, @RequestBody Contribution contribution) {
-        return updateContributionService.execute(new UpdateContributionCommand(id,contribution));
+    public ResponseEntity<Contribution> updateContribution(@PathVariable Long id, @RequestBody Contribution contribution, HttpServletRequest request) {
+        return updateContributionService.execute(new UpdateContributionCommand(id,contribution), request);
     }
 
     @DeleteMapping("/contribution/{id}")
@@ -64,13 +65,14 @@ public class ContributionController {
     public ResponseEntity<List<Contribution>> getFilteredContributions(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) Integer month,
-            @RequestParam(required = false) Integer year) {
+            @RequestParam(required = false) Integer year,
+            HttpServletRequest request) {
         ContributionFilterDTO filterDTO = new ContributionFilterDTO(type, month, year);
-        return filteredContributionsService.execute(filterDTO);
+        return filteredContributionsService.execute(filterDTO, request);
     }
 
     @GetMapping("/contributions/totalAmount")
-    public ResponseEntity<Long> getTotalAmount() {
-        return getTotalAmountService.execute(null);
+    public ResponseEntity<Long> getTotalAmount(HttpServletRequest request) {
+        return getTotalAmountService.execute(null, request);
     }
 }

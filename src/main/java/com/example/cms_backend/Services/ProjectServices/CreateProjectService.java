@@ -1,6 +1,7 @@
 package com.example.cms_backend.Services.ProjectServices;
 
 import com.example.cms_backend.Abstractions.Command;
+import com.example.cms_backend.Exceptions.UserNotFoundException;
 import com.example.cms_backend.Model.Commands.CreateProjectCommand;
 import com.example.cms_backend.Model.DTO.CreateProjectDTO;
 import com.example.cms_backend.Model.Entities.Project;
@@ -8,6 +9,7 @@ import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Repositories.ProjectRepository;
 import com.example.cms_backend.Repositories.UserRepository;
 import com.example.cms_backend.Security.Jwt.JwtUtil;
+import com.example.cms_backend.Utils.LoggedInUserUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +34,9 @@ public class CreateProjectService implements Command<CreateProjectCommand, Proje
             MultipartFile featuredImage = command.getFeaturedImage();
             HttpServletRequest request = command.getRequest();
 
-            String token = extractTokenFromRequest(request);
-            String email = JwtUtil.extractUsername(token);
 
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+            User user = userRepository.findByEmail(LoggedInUserUtil.loggedInUserEmail(request))
+                    .orElseThrow(UserNotFoundException::new);
 
             Project project = new Project();
             project.setName(dto.getName());
@@ -58,12 +58,5 @@ public class CreateProjectService implements Command<CreateProjectCommand, Proje
     }
 
 
-    private String extractTokenFromRequest(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
-        if (header != null && header.startsWith("Bearer ")) {
-            return header.substring(7);
-        }
-        throw new RuntimeException("Invalid Authorization header");
-    }
 }
 

@@ -89,7 +89,7 @@ public class UserController {
     }
 
 
-//    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
+    @PreAuthorize("hasAuthority('READ_MEMBERS')")
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers(){
         return getUsersService.execute(null);
