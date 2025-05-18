@@ -9,6 +9,7 @@ import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Model.Commands.UpdateUserCommand;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Services.UserServices.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -67,19 +68,19 @@ public class UserController {
 
 //    @PreAuthorize("hasRole('basicuser')")
     @PostMapping("/user")
-    public ResponseEntity<UserDTO> createUser(@RequestBody User user){
+    public ResponseEntity<UserDTO> createUser(@RequestBody User user, HttpServletRequest request){
         if (user.getPassword() == null || user.getPassword().isBlank()) {
             // Password was not provided → set a default password
             String defaultPassword = user.getEmail();
             user.setPassword(defaultPassword);
         }
-        return  createUserService.execute(user);
+        return  createUserService.execute(user, request);
     }
 
     @PreAuthorize("hasRole('COMMITTEE_CHAIRPERSON')")
     @PostMapping("/users")
-    public ResponseEntity<List<UserDTO>> createUsers(@RequestBody List<User> users){
-        return createUsersService.execute(users);
+    public ResponseEntity<List<UserDTO>> createUsers(@RequestBody List<User> users, HttpServletRequest request){
+        return createUsersService.execute(users, request);
     }
 
     @GetMapping("/user")
@@ -91,8 +92,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('READ_MEMBERS')")
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllUsers(){
-        return getUsersService.execute(null);
+    public ResponseEntity<List<UserDTO>> getAllUsers(HttpServletRequest request){
+        return getUsersService.execute(null, request);
     }
 
     @PutMapping("/user/{id}")
@@ -113,14 +114,14 @@ public class UserController {
     }
 
     @GetMapping("/user/search")
-    public ResponseEntity<List<UserDTO>> searchUser(@RequestParam String name){
-        return searchUserService.execute(name);
+    public ResponseEntity<List<UserDTO>> searchUser(@RequestParam String name, HttpServletRequest request){
+        return searchUserService.execute(name, request);
     }
 
 //    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
     @GetMapping("/user/count")
-    public ResponseEntity<Long> countUser(){
-        return countUsersService.execute(null);
+    public ResponseEntity<Long> countUser(HttpServletRequest request){
+        return countUsersService.execute(null, request);
     }
 
 
