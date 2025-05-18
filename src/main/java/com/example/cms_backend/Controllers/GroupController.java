@@ -7,6 +7,7 @@ import com.example.cms_backend.Model.Entities.Group;
 import com.example.cms_backend.Model.Commands.UpdateGroupCommand;
 import com.example.cms_backend.Services.GroupServices.*;
 import com.example.cms_backend.Services.UserGroupServices.AssignMemberToGroupService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -50,13 +51,13 @@ public class GroupController {
     }
 
     @PostMapping("/group")
-    public ResponseEntity<Group> addGroup(@RequestBody Group group) {
-        return createGroupService.execute(group);
+    public ResponseEntity<Group> addGroup(@RequestBody Group group, HttpServletRequest request) {
+        return createGroupService.execute(group, request);
     }
 
     @PostMapping("/groups")
-    public ResponseEntity<List<Group>> addGroups(@RequestBody List<Group> groups) {
-        return createGroupsService.execute(groups);
+    public ResponseEntity<List<Group>> addGroups(@RequestBody List<Group> groups, HttpServletRequest request) {
+        return createGroupsService.execute(groups, request);
     }
 
     @GetMapping("/group/{id}")
@@ -65,18 +66,18 @@ public class GroupController {
     }
 
     @GetMapping("/groups")
-    public ResponseEntity<List<Group>> getAllGroups() {
-        return getGroupsService.execute(null);
+    public ResponseEntity<List<Group>> getAllGroups(HttpServletRequest request) {
+        return getGroupsService.execute(null, request);
     }
 
     @GetMapping("/group/search")
-    public ResponseEntity<List<Group>> searchGroupByName(@RequestParam String name) {
-        return searchGroupService.execute(name);
+    public ResponseEntity<List<Group>> searchGroupByName(@RequestParam String name, HttpServletRequest request) {
+        return searchGroupService.execute(name, request);
     }
 
     @PutMapping("/group/{id}")
-    public ResponseEntity<Group> updateGroup(@PathVariable Long id, @RequestBody Group group) {
-        return updateGroupService.execute(new UpdateGroupCommand(id, group));
+    public ResponseEntity<Group> updateGroup(@PathVariable Long id, @RequestBody Group group, HttpServletRequest request) {
+        return updateGroupService.execute(new UpdateGroupCommand(id, group), request);
     }
 
     @DeleteMapping("/group/{id}")
@@ -86,27 +87,28 @@ public class GroupController {
 
     @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
     @GetMapping("/group/count")
-    public ResponseEntity<Long> countGroup(@RequestParam String description) {
-        return countGroupsService.execute(description);
+    public ResponseEntity<Long> countGroup(@RequestParam String description, HttpServletRequest request) {
+        return countGroupsService.execute(description, request);
     }
 
     @PostMapping("/group/community")
-    public ResponseEntity<Group> addCommunity(@RequestBody Group group) {
+    public ResponseEntity<Group> addCommunity(@RequestBody Group group, HttpServletRequest request) {
         group.setDescription("community");
-        return createGroupService.execute(group);
+        return createGroupService.execute(group, request);
     }
 
     @GetMapping("/groups/communities")
-    public ResponseEntity<List<Group>> getAllCommunities() {
-        return getGroupsByDescriptionService.execute(null);
+    public ResponseEntity<List<Group>> getAllCommunities(HttpServletRequest request) {
+        return getGroupsByDescriptionService.execute(null, request);
     }
 
     @GetMapping("/groupsNameByDescription/search")
     public ResponseEntity<List<Group>> searchGroupNameByDescription(
             @RequestParam String name,
-            @RequestParam String description
+            @RequestParam String description,
+            HttpServletRequest request
     ) {
-        return searchGroupNameByDescriptionService.execute(new SearchGroupNameByDescriptionCommand(name, description));
+        return searchGroupNameByDescriptionService.execute(new SearchGroupNameByDescriptionCommand(name, description), request);
     }
 
 
