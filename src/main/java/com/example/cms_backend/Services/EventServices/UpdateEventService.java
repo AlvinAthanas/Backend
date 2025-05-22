@@ -22,10 +22,21 @@ public class UpdateEventService implements Command<UpdateEventCommand, Event> {
     public ResponseEntity<Event> execute(UpdateEventCommand command) {
         Optional<Event> eventOptional = eventRepository.findById(command.getId());
         if (eventOptional.isPresent()) {
-            Event event = command.getEvent();
-            event.setId(command.getId());
-            eventRepository.save(event);
-            return ResponseEntity.ok().body(event);
+            Event existingEvent = eventOptional.get();
+            Event updatedEvent = command.getEvent();
+
+            // Update fields selectively to preserve data not included in the update
+            existingEvent.setName(updatedEvent.getName());
+            existingEvent.setDescription(updatedEvent.getDescription());
+            existingEvent.setLocation(updatedEvent.getLocation());
+            existingEvent.setDateTime(updatedEvent.getDateTime());
+
+            // Don't update parishId and userId to preserve ownership
+            // existingEvent.setParishId(updatedEvent.getParishId());
+            // existingEvent.setUserId(updatedEvent.getUserId());
+
+            eventRepository.save(existingEvent);
+            return ResponseEntity.ok().body(existingEvent);
         }
         throw new EventNotFoundException();
     }

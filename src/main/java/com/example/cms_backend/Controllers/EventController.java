@@ -4,6 +4,7 @@ import com.example.cms_backend.Model.Commands.GetEventsQuery;
 import com.example.cms_backend.Model.Entities.Event;
 import com.example.cms_backend.Model.Commands.UpdateEventCommand;
 import com.example.cms_backend.Services.EventServices.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,8 +42,8 @@ public class EventController {
 
 
     @PostMapping("/event")
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        return createEventService.execute(event);
+    public ResponseEntity<Event> createEvent(@RequestBody Event event, HttpServletRequest request) {
+        return createEventService.execute(event, request);
     }
 
     @GetMapping("/event/{id}")
@@ -51,8 +52,8 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public ResponseEntity<List<Event>> getEvents(@RequestParam(required = false) Long parishId) {
-        return getEventsService.execute(new GetEventsQuery(parishId));
+    public ResponseEntity<List<Event>> getEvents(@RequestParam(required = false) Long parishId, HttpServletRequest request) {
+        return getEventsService.execute(new GetEventsQuery(parishId), request);
     }
 
 
@@ -67,7 +68,7 @@ public class EventController {
     }
 
     @PostMapping("/event/schedule")
-    public ResponseEntity<Event> createMassEvent(@RequestBody Event event) {
+    public ResponseEntity<Event> createMassEvent(@RequestBody Event event, HttpServletRequest request) {
         event.setDescription("Mass");
         event.setLocation("Church");
 
@@ -78,12 +79,12 @@ public class EventController {
 
 
         System.out.println("Saved Event: " + event);
-        return createEventService.execute(event);
+        return createEventService.execute(event, request);
     }
 
 
     @GetMapping("/event/schedules")
-    public ResponseEntity<List<Event>> getMassEvents(@RequestParam String description) {
-        return getMassSchedulesService.execute(description);
+    public ResponseEntity<List<Event>> getMassEvents(@RequestParam String description, HttpServletRequest request) {
+        return getMassSchedulesService.execute(description, request);
     }
 }

@@ -43,7 +43,7 @@ public class SearchUserService implements Query<String, List<UserDTO>> {
                         // Filter users by parishId
                         users = users.stream()
                                 .filter(user -> parishId.equals(user.getParishId()))
-                                .collect(Collectors.toList());
+                                .toList();
                     }
                 }
             }
