@@ -13,4 +13,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByDescriptionContaining(String description);
 
     List<Event> findByParishId(Long parishId);
+
+    List<Event> findByParishIdAndDescription(Long parishId, String description);
+
 }

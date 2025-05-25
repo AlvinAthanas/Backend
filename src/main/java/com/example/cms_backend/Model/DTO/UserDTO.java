@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Base64;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -31,6 +32,18 @@ public class UserDTO {
         this.gender = user.getGender();
         this.parishId = user.getParishId();
         this.profilePicture = encodeImageToBase64(user.getProfilePicture());
+    }
+
+    public UserDTO(Optional<User> user) {
+        if (user.isEmpty()) return;
+        this.id = user.get().getId();
+        this.name = user.get().getName();
+        this.email = user.get().getEmail();
+        this.phone = user.get().getPhone();
+        this.address = user.get().getAddress();
+        this.gender = user.get().getGender();
+        this.parishId = user.get().getParishId();
+        this.profilePicture = encodeImageToBase64(user.get().getProfilePicture());
     }
 
     private String encodeImageToBase64(byte[] imageData) {
