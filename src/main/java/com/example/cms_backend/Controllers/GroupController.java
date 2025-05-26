@@ -85,7 +85,7 @@ public class GroupController {
         return deleteGroupService.execute(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
+    @PreAuthorize("hasAuthority('READ_COMMUNITIES')")
     @GetMapping("/group/count")
     public ResponseEntity<Long> countGroup(@RequestParam String description, HttpServletRequest request) {
         return countGroupsService.execute(description, request);
