@@ -6,6 +6,7 @@ import com.example.cms_backend.Model.Commands.UpdateParishCommand;
 import com.example.cms_backend.Services.ParishServices.*;
 import com.example.cms_backend.Services.UserFavParishesServices.AddOrRemoveFavoriteParishService;
 import com.example.cms_backend.Services.UserFavParishesServices.GetAllFavoriteParishes;
+import org.hibernate.annotations.Cache;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

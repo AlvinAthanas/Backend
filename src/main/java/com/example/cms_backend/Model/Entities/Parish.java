@@ -32,27 +32,33 @@ public class Parish {
 
     //PARISH AND USERS
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "parish_id")
     private List<User> users;
 
     //PARISH AND GROUPS
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "parish_id")
     private List<Group> groups;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "parish_id")
     private List<Contribution> contributions;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "parish_id")
     private List<FinancialTransaction> transactions;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "parish_id")
     private List<Event> events;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "parish_id")
     private List<Project> projects;
 

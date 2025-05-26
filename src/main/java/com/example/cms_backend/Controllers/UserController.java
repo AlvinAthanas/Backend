@@ -8,6 +8,7 @@ import com.example.cms_backend.Model.DTO.UpdateUserDTO;
 import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Model.Commands.UpdateUserCommand;
 import com.example.cms_backend.Model.Entities.User;
+import com.example.cms_backend.Services.AdminServices.CreateAdminUserService;
 import com.example.cms_backend.Services.UserServices.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +18,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost") // Allow frontend requests
@@ -43,6 +40,7 @@ public class UserController {
     private final CountUsersService countUsersService;
     private final ChangePasswordService changePasswordService;
     private final UploadProfilePictureService uploadProfilePictureService;
+    private final CreateAdminUserService createAdminUserService;
 
     public UserController(CreateUserService createUserService,
                           GetUserService getUserService,
@@ -53,7 +51,8 @@ public class UserController {
                           CreateUsersService createUsersService,
                           CountUsersService countUsersService,
                           ChangePasswordService changePasswordService,
-                          UploadProfilePictureService uploadProfilePictureService) {
+                          UploadProfilePictureService uploadProfilePictureService,
+                          CreateAdminUserService createAdminUserService) {
         this.createUserService = createUserService;
         this.getUserService = getUserService;
         this.updateUserService = updateUserService;
@@ -64,6 +63,7 @@ public class UserController {
         this.countUsersService = countUsersService;
         this.changePasswordService = changePasswordService;
         this.uploadProfilePictureService = uploadProfilePictureService;
+        this.createAdminUserService = createAdminUserService;
     }
 
 //    @PreAuthorize("hasRole('basicuser')")
@@ -160,5 +160,11 @@ public class UserController {
         UploadProfilePictureCommand command = new UploadProfilePictureCommand(id, file);
         return uploadProfilePictureService.execute(command);
     }
+
+    @PostMapping("/admin/register")
+    public ResponseEntity<UserDTO> createAdmin(@RequestBody User user) {
+        return createAdminUserService.execute(user);
+    }
+
 
 }

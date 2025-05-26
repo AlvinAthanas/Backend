@@ -40,4 +40,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("name") String name
     );
 
+    List<User> findAllByParishId(Long parishId);
+
+
 }

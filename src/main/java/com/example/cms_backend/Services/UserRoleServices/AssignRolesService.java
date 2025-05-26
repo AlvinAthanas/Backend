@@ -49,6 +49,27 @@ public class AssignRolesService implements Command<AssignRoleCommand,String> {
         }
     }
 
+    public void assignAdminRole(User user) {
+        Optional<Role> parishionerRole = roleRepository.findByName(Roles.PARISHIONER.toString());
+
+        if (parishionerRole.isPresent()) {
+            if (user.getRoles() == null) {
+                user.setRoles(new HashSet<>());
+            }
+
+            user.getRoles().add(parishionerRole.get());
+
+            // Update authorities based on the assigned roles
+            roleBasedAuthorityService.updateAuthoritiesBasedOnRoles(user);
+
+            // Save user with updated roles
+            userRepository.save(user);
+        } else {
+            throw new RoleNotFoundException();
+        }
+    }
+
+
 
     @Override
     public ResponseEntity<String> execute(AssignRoleCommand command) {

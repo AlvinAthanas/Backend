@@ -5,6 +5,7 @@ import com.example.cms_backend.Exceptions.ParishNotFoundException;
 import com.example.cms_backend.Model.Entities.Parish;
 import com.example.cms_backend.Model.Commands.UpdateParishCommand;
 import com.example.cms_backend.Repositories.ParishRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class UpdateParishService implements Command<UpdateParishCommand, Parish>
     }
 
     @Override
+    @CacheEvict(value = "parishesCache", allEntries = true)
     public ResponseEntity<Parish> execute(UpdateParishCommand command) {
         Optional<Parish> parishOptional = parishRepository.findById(command.getId());
         if (parishOptional.isPresent()) {

@@ -1,5 +1,6 @@
 package com.example.cms_backend.Model.Entities;
 
+import com.example.cms_backend.Model.Enums.AdminVerificationStatus;
 import com.example.cms_backend.Model.Enums.Gender;
 import com.example.cms_backend.Model.Enums.MaritialStatus;
 import jakarta.persistence.Lob;
@@ -33,6 +34,11 @@ public class User {
     private MaritialStatus maritalStatus;
     @Column(name = "parish_id")
     private Long parishId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "admin_verification_status")
+    private AdminVerificationStatus adminVerificationStatus = AdminVerificationStatus.NOT_VERIFIED;
+
 
     @Lob
     @Column(name = "profile_picture", columnDefinition = "LONGBLOB")
