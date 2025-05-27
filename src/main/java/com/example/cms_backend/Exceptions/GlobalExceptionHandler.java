@@ -102,4 +102,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInvalidKeyException(InvalidKeyException ex){
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ex.getMessage()));
     }
+
+    @ExceptionHandler(KandaNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleKandaNotFoundException(KandaNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(ex.getMessage()));
+    }
 }

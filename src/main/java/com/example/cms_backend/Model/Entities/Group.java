@@ -2,11 +2,15 @@ package com.example.cms_backend.Model.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "group_tb")
 public class Group {
 
@@ -16,8 +20,11 @@ public class Group {
 
     private String name;
     private String description;
+    @Column(name = "kanda_id")
+    private Long kandaId;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
     List<Notification>  notifications;
 
     @ManyToMany(mappedBy = "groups")
@@ -38,53 +45,5 @@ public class Group {
     public Group() {
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-
-    public List<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
-
-    public Long getParishId() {
-        return parishId;
-    }
-
-    public void setParishId(Long parishId) {
-        this.parishId = parishId;
-    }
 }

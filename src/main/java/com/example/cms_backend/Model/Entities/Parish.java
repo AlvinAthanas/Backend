@@ -62,6 +62,11 @@ public class Parish {
     @JoinColumn(name = "parish_id")
     private List<Project> projects;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinColumn(name = "parish_id")
+    private List<Kanda> kanda;
+
     public Parish(Long id, String name, String location, String contactInfo, Long dioceseId) {
         this.id = id;
         this.name = name;

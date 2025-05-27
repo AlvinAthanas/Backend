@@ -12,6 +12,7 @@ public enum ErrorMessages {
     DIOCESE_NOT_FOUND("DIOCESE not found"),
     CONTRIBUTION_NOT_FOUND("Contribution not found"),
     ATTENDANCE_NOT_FOUND("Attendance not found"),
+    KANDA_NOT_FOUND("Kanda not found"),
     FULL_NAME_IS_REQUIRED("Full name is required"),
     INVALID_PHONE_NUMBER("Invalid phone number"),
     INVALID_EMAIL("Invalid email"),
