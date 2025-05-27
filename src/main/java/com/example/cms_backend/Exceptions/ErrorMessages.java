@@ -22,6 +22,9 @@ public enum ErrorMessages {
     PASSWORD_INCORRECT("Incorrect current password"),
     PROJECT_NOT_FOUND("Project not found"),
     AUTHORITY_NOT_FOUND("Authority not found"),
+    ONLY_FOR_ADMINS("This portal is only for admin-level users"),
+    ACCOUNT_NOT_VERIFIED("Account not verified, Please verify your account first"),
+    NO_ADMIN_IN_PARISH("Your parish does not yet have a verified PARISHIONER. Admin access is not allowed.")
     ;
 
     private String message;

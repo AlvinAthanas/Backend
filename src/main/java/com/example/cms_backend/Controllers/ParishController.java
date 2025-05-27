@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost") // Allow frontend requests
 public class ParishController {
     private final CreateParishService createParishService;
     private final DeleteParishService deleteParishService;

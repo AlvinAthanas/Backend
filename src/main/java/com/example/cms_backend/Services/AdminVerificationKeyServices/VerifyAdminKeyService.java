@@ -1,6 +1,7 @@
 package com.example.cms_backend.Services.AdminVerificationKeyServices;
 
 import com.example.cms_backend.Abstractions.Command;
+import com.example.cms_backend.Exceptions.InvalidKeyException;
 import com.example.cms_backend.Exceptions.UserNotFoundException;
 import com.example.cms_backend.Model.Commands.VerifyAdminKeyCommand;
 import com.example.cms_backend.Model.Entities.AdminVerificationKey;
@@ -35,19 +36,19 @@ public class VerifyAdminKeyService implements Command<VerifyAdminKeyCommand, Str
         Optional<AdminVerificationKey> optionalKey = keyRepo.findByKey(command.getKey().trim());
 
         if (optionalKey.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid verification key.");
+            throw new InvalidKeyException("The key you entered is not valid. Please try again.");
         }
 
         AdminVerificationKey key = optionalKey.get();
 
         // Check if key is already used
         if (key.isUsed()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This key has already been used.");
+            throw new InvalidKeyException("This key has already been used. Please try again.");
         }
 
         // Check if the key belongs to this user
         if (!key.getUser().getId().equals(user.getId())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This key does not belong to this user.");
+            throw new InvalidKeyException("This key does not belong to another user. Please try again.");
         }
 
         // All checks passed, verify user

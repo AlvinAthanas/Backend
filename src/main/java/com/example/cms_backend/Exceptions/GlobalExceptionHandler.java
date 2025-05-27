@@ -92,4 +92,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDuplicateRoleAuthorityRuleException(DuplicateRoleAuthorityRuleException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
     }
+
+    @ExceptionHandler(AdminNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleAdminNotValidException(AdminNotValidException ex){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidKeyException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidKeyException(InvalidKeyException ex){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ex.getMessage()));
+    }
 }

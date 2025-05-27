@@ -1,11 +1,14 @@
 package com.example.cms_backend.Services.LoginServices;
 
 import com.example.cms_backend.Abstractions.Command;
+import com.example.cms_backend.Exceptions.AdminNotValidException;
+import com.example.cms_backend.Exceptions.ErrorMessages;
 import com.example.cms_backend.Exceptions.UserNotFoundException;
 import com.example.cms_backend.Model.Commands.LoginResponse;
 import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Model.Enums.AdminVerificationStatus;
+import com.example.cms_backend.Model.Enums.Roles;
 import com.example.cms_backend.Repositories.UserRepository;
 import com.example.cms_backend.Security.Jwt.JwtUtil;
 import com.example.cms_backend.Security.Jwt.UserLoginDTO;
@@ -48,7 +51,7 @@ public class AdminLoginService implements Command<UserLoginDTO, LoginResponse> {
                 .allMatch(role -> role.getName().equalsIgnoreCase("PARISH_MEMBER"));
 
         if (isOnlyMember) {
-            throw new RuntimeException("This portal is only for admin-level users.");
+            throw new AdminNotValidException(ErrorMessages.ONLY_FOR_ADMINS.getMessage());
         }
 
         // If user is a Parishioner, ensure they're verified
@@ -56,7 +59,7 @@ public class AdminLoginService implements Command<UserLoginDTO, LoginResponse> {
                 .anyMatch(role -> role.getName().equalsIgnoreCase("PARISHIONER"));
 
         if (isParishioner && user.getAdminVerificationStatus() != AdminVerificationStatus.VERIFIED) {
-            throw new RuntimeException("PARISHIONER account is not yet verified.");
+            throw new AdminNotValidException(ErrorMessages.ACCOUNT_NOT_VERIFIED.getMessage());
         }
 
         // If user is not a Parishioner, ensure parish has a verified Parishioner
@@ -66,11 +69,11 @@ public class AdminLoginService implements Command<UserLoginDTO, LoginResponse> {
                     .anyMatch(u ->
                             u.getAdminVerificationStatus() == AdminVerificationStatus.VERIFIED &&
                                     u.getRoles().stream()
-                                            .anyMatch(role -> role.getName().equalsIgnoreCase("PARISHIONER"))
+                                            .anyMatch(role -> role.getName().equalsIgnoreCase(Roles.PARISHIONER.toString()))
                     );
 
             if (!parishHasVerifiedParishioner) {
-                throw new RuntimeException("Your parish does not yet have a verified PARISHIONER. Admin access is not allowed.");
+                throw new AdminNotValidException(ErrorMessages.NO_ADMIN_IN_PARISH.getMessage());
             }
         }
 
