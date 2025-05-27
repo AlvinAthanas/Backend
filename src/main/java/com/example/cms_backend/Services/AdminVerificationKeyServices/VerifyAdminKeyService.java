@@ -59,7 +59,7 @@ public class VerifyAdminKeyService implements Command<VerifyAdminKeyCommand, Str
         key.setUsed(true);
         keyRepo.save(key);
 
-        return ResponseEntity.ok("Admin verified successfully.");
+        return ResponseEntity.ok("You were verified successfully.");
     }
 
 }

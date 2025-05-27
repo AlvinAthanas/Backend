@@ -52,7 +52,7 @@ public class CreateAdminUserService implements Command<User, UserDTO> {
         // ✅ Step 2: Get all users in this parish
         List<User> usersInParish = userRepository.findAllByParishId(user.getParishId());
 
-// ✅ Step 3: Check if any VERIFIED PARISHIONER exists in this parish
+        // ✅ Step 3: Check if any VERIFIED PARISHIONER exists in this parish
         boolean verifiedParishionerExists = usersInParish.stream()
                 .filter(u -> u.getAdminVerificationStatus() == AdminVerificationStatus.VERIFIED)
                 .filter(u -> u.getRoles() != null)
