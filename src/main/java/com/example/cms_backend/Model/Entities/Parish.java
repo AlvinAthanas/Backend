@@ -24,6 +24,22 @@ public class Parish {
     private String contactInfo;
     @Column(name = "featured_image")
     private String imageUrl;
+    @Column(name = "parish_phone_number")
+    private String parishPhoneNumber;
+    private String email;
+    private String history;
+    private String street;
+    private String city;
+    private String region;
+    @Column(name = "post_office_box")
+    private String poBox;
+    @Column(name = "facebook")
+    private String facebookLink;
+    @Column(name = "twitter")
+    private String twitterLink;
+    @Column(name = "instagram")
+    private String instagramLink;
+
 
     //PARISHES and DIOCESE
     @Column(name = "diocese_id") //TODO: set nullable to false
@@ -66,6 +82,11 @@ public class Parish {
     @JsonIgnore
     @JoinColumn(name = "parish_id")
     private List<Kanda> kanda;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinColumn(name = "parish_id")
+    private List<Notification> notifications;
 
     public Parish(Long id, String name, String location, String contactInfo, Long dioceseId) {
         this.id = id;

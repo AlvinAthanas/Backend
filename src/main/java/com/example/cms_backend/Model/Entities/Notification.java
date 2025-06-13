@@ -18,6 +18,7 @@ public class Notification {
     private String title;
     private String message;
     private LocalDate date;
+    private Boolean isGlobal;
 
     @Column(name = "user_id")
     private Long userId;
@@ -28,13 +29,17 @@ public class Notification {
     @Column(name = "kanda_id")
     private Long kandaId;
 
+    @Column(name = "parish_id")
+    private Long parishId;
+
     public Notification() {
     }
 
-    public Notification(String title, String message, LocalDate date) {
+    public Notification(String title, String message, LocalDate date, Boolean isGlobal) {
         this.title = title;
         this.message = message;
         this.date = date;
+        this.isGlobal = isGlobal;
     }
 
 }

@@ -1,11 +1,13 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.FavParishCommand;
+import com.example.cms_backend.Model.Commands.GetParishCommand;
 import com.example.cms_backend.Model.Entities.Parish;
 import com.example.cms_backend.Model.Commands.UpdateParishCommand;
 import com.example.cms_backend.Services.ParishServices.*;
 import com.example.cms_backend.Services.UserFavParishesServices.AddOrRemoveFavoriteParishService;
 import com.example.cms_backend.Services.UserFavParishesServices.GetAllFavoriteParishes;
+import jakarta.servlet.http.HttpServletRequest;
 import org.hibernate.annotations.Cache;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,8 +71,13 @@ public class ParishController {
 
 
     @GetMapping("/parish/{id}")
-    public ResponseEntity<Parish> getParish(@PathVariable Long id){
-        return getParishService.execute(id);
+    public ResponseEntity<Parish> getUserParish(HttpServletRequest request, @PathVariable(required = false) Long id) {
+        return getParishService.execute(new GetParishCommand(id, request));
+    }
+
+    @GetMapping("/parish")
+    public ResponseEntity<Parish> getUserParish(HttpServletRequest request) {
+        return getParishService.execute(new GetParishCommand(null, request));
     }
 
     @GetMapping("/parishes")

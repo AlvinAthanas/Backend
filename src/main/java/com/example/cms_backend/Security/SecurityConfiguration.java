@@ -44,12 +44,6 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.POST, "/user").permitAll();
                     authorize.requestMatchers("/login").permitAll();
                     authorize.anyRequest().permitAll();
-//                    authorize.requestMatchers("/open").permitAll();
-//                    authorize.requestMatchers("/closed").authenticated();
-//                    authorize.requestMatchers(HttpMethod.POST, "/user").authenticated();
-//
-//                    authorize.requestMatchers(HttpMethod.GET, "/special").hasAuthority("special");
-//                    authorize.requestMatchers(HttpMethod.GET, "/basic").hasAnyAuthority("special", "bas
                 })
                 .addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();

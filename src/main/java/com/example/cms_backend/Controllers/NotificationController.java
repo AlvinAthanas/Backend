@@ -3,6 +3,7 @@ package com.example.cms_backend.Controllers;
 import com.example.cms_backend.Model.Entities.Notification;
 import com.example.cms_backend.Model.Commands.UpdateNotificationCommand;
 import com.example.cms_backend.Services.NotificationServices.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +36,8 @@ public class NotificationController {
     }
 
     @GetMapping("/notifications")
-    public ResponseEntity<List<Notification>> getNotifications() {
-        return getNotificationsService.execute(null);
+    public ResponseEntity<List<Notification>> getNotifications(HttpServletRequest request) {
+        return getNotificationsService.execute(request);
     }
 
     @PutMapping("/notification/{id}")
