@@ -14,12 +14,15 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<Notification> findByTitleContaining(String keyword);
 
     @Query("SELECT n FROM Notification n WHERE " +
-            "(n.isGlobal = true AND n.parishId = :userParishId) OR " +
-            "n.kandaId IN :kandaIds OR " +
-            "n.groupId IN :groupIds")
-    List<Notification> findRelevantNotifications(@Param("groupIds") Set<Long> groupIds,
-                                                 @Param("kandaIds") Set<Long> kandaIds,
-                                                 @Param("userParishId") Long userParishId);
+            "(n.groupId IS NOT NULL AND n.groupId IN :groupIds) OR " +
+            "(n.groupId IS NULL AND n.kandaId IS NOT NULL AND n.kandaId IN :kandaIds) OR " +
+            "(n.groupId IS NULL AND n.kandaId IS NULL AND n.parishId = :parishId) OR " +
+            "(n.isGlobal = true AND n.parishId = :parishId)")
+    List<Notification> findScopedNotifications(@Param("groupIds") Set<Long> groupIds,
+                                               @Param("kandaIds") Set<Long> kandaIds,
+                                               @Param("parishId") Long parishId);
+
+
 
 
 }

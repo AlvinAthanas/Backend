@@ -1,5 +1,6 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.Commands.CreateNotificationCommand;
 import com.example.cms_backend.Model.Entities.Notification;
 import com.example.cms_backend.Model.Commands.UpdateNotificationCommand;
 import com.example.cms_backend.Services.NotificationServices.*;
@@ -26,8 +27,10 @@ public class NotificationController {
     }
 
     @PostMapping("/notification")
-    public ResponseEntity<Notification> createNotification(@RequestBody Notification notification) {
-        return createNotificationService.execute(notification);
+    public ResponseEntity<Notification> createNotification(@RequestBody Notification notification,
+                                                           HttpServletRequest request) {
+        CreateNotificationCommand command = new CreateNotificationCommand(notification, request);
+        return createNotificationService.execute(command);
     }
 
     @GetMapping("/notification/{id}")

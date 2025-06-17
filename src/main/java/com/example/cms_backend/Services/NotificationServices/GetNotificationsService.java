@@ -36,20 +36,18 @@ public class GetNotificationsService implements Query<HttpServletRequest, List<N
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isEmpty()) {
-            System.out.println("User Not Found");
             throw new UserNotFoundException();
         }
 
         User user = optionalUser.get();
+
         Set<Group> groups = user.getGroups();
+        Set<Long> groupIds = groups.stream().map(Group::getId).collect(Collectors.toSet());
+        Set<Long> kandaIds = groups.stream().map(Group::getKandaId).collect(Collectors.toSet());
+        Long parishId = user.getParishId(); // Assuming User has a parishId field
 
-        Long userId = user.getId();
-        Set<Long> userGroupIds = groups.stream().map(Group::getId).collect(Collectors.toSet());
-        Set<Long> userKandaIds = groups.stream().map(Group::getKandaId).collect(Collectors.toSet());
-
-        // Get relevant notifications
-        List<Notification> notifications = notificationRepository.findRelevantNotifications(
-                userGroupIds, userKandaIds, userId
+        List<Notification> notifications = notificationRepository.findScopedNotifications(
+                groupIds, kandaIds, parishId
         );
 
         return ResponseEntity.ok(notifications);
