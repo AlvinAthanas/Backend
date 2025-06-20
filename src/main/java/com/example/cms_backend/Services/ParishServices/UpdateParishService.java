@@ -29,10 +29,10 @@ public class UpdateParishService implements Command<UpdateParishCommand, Parish>
 
             // Update only non-null or desired fields
             existing.setName(updated.getName());
-            existing.setParishPriest(updated.getParishPriest());
-            existing.setLocation(updated.getLocation());
-            existing.setContactInfo(updated.getContactInfo());
-            existing.setImageUrl(updated.getImageUrl());
+
+
+
+
             existing.setParishPhoneNumber(updated.getParishPhoneNumber());
             existing.setEmail(updated.getEmail());
             existing.setHistory(updated.getHistory());
