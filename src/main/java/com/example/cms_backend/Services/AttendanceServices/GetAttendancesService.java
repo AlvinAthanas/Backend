@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GetAttendancesService implements Query<Void, List<Attendance>> {
+public class GetAttendancesService implements Query<Long, List<Attendance>> {
+
     private final AttendanceRepository attendanceRepository;
 
     public GetAttendancesService(AttendanceRepository attendanceRepository) {
@@ -17,8 +18,16 @@ public class GetAttendancesService implements Query<Void, List<Attendance>> {
     }
 
     @Override
-    public ResponseEntity<List<Attendance>> execute(Void input) {
-        List<Attendance> attendances = attendanceRepository.findAll();
+    public ResponseEntity<List<Attendance>> execute(Long userId) {
+        List<Attendance> attendances;
+
+        if (userId == null) {
+            attendances = attendanceRepository.findAll();
+        } else {
+            attendances = attendanceRepository.findByUserId(userId);
+        }
+
         return ResponseEntity.ok(attendances);
     }
 }
+

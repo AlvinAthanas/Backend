@@ -39,9 +39,11 @@ public class AttendanceController {
     }
 
     @GetMapping("/attendances")
-    public ResponseEntity<List<Attendance>> getAttendances() {
-        return  getAttendancesService.execute(null);
+    public ResponseEntity<List<Attendance>> getAttendances(
+            @RequestParam(value = "userId", required = false) Long userId) {
+        return getAttendancesService.execute(userId);
     }
+
 
     @PutMapping("/attendance/{id}")
     public ResponseEntity<Attendance>  updateAttendance(@PathVariable Long id, @RequestBody Attendance attendance) {

@@ -27,6 +27,10 @@ public class Group {
     @JoinColumn(name = "group_id")
     List<Notification>  notifications;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    List<JoinCommunityRequest>  joinCommunityRequests;
+
     @ManyToMany(mappedBy = "groups")
     @JsonIgnore
     private Set<User> users;

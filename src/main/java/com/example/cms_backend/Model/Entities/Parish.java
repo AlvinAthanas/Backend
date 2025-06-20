@@ -27,6 +27,7 @@ public class Parish {
     @Column(name = "parish_phone_number")
     private String parishPhoneNumber;
     private String email;
+    @Column(name = "history", length = 10000)
     private String history;
     private String street;
     private String city;

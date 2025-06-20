@@ -100,6 +100,10 @@ public class User {
     @JoinColumn(name = "user_id")
     List<FinancialTransaction> transactionsRecorded;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    List<JoinCommunityRequest> joinCommunityRequests;
+
     public User() {
 
     }

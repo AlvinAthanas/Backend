@@ -2,6 +2,8 @@ package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.FavParishCommand;
 import com.example.cms_backend.Model.Commands.GetParishCommand;
+import com.example.cms_backend.Model.Commands.SearchParishCommand;
+import com.example.cms_backend.Model.DTO.ParishWithCommunitiesDTO;
 import com.example.cms_backend.Model.Entities.Parish;
 import com.example.cms_backend.Model.Commands.UpdateParishCommand;
 import com.example.cms_backend.Services.ParishServices.*;
@@ -26,6 +28,7 @@ public class ParishController {
     private final CreateParishesService createParishesService;
     private final AddOrRemoveFavoriteParishService addOrRemoveFavoriteParishService;
     private final GetAllFavoriteParishes getAllFavoriteParishes;
+    private final SearchParishWithCommunitiesService searchParishWithCommunitiesService;
 
     public ParishController(CreateParishService createParishService,
                             DeleteParishService deleteParishService,
@@ -35,7 +38,8 @@ public class ParishController {
                             SearchParishService searchParishService,
                             CreateParishesService createParishesService,
                             AddOrRemoveFavoriteParishService addOrRemoveFavoriteParishService,
-                            GetAllFavoriteParishes getAllFavoriteParishes) {
+                            GetAllFavoriteParishes getAllFavoriteParishes,
+                            SearchParishWithCommunitiesService searchParishWithCommunitiesService) {
         this.createParishService = createParishService;
         this.deleteParishService = deleteParishService;
         this.updateParishService = updateParishService;
@@ -45,6 +49,7 @@ public class ParishController {
         this.createParishesService = createParishesService;
         this.addOrRemoveFavoriteParishService = addOrRemoveFavoriteParishService;
         this.getAllFavoriteParishes = getAllFavoriteParishes;
+        this.searchParishWithCommunitiesService = searchParishWithCommunitiesService;
     }
 
     @PostMapping("/parish")
@@ -88,6 +93,11 @@ public class ParishController {
     @GetMapping("/parish/search")
     public ResponseEntity<List<Parish>> getParishesSearch(@RequestParam String name){
         return searchParishService.execute(name);
+    }
+
+    @PostMapping("/parish/search")
+    public ResponseEntity<List<ParishWithCommunitiesDTO>> searchParish(@RequestBody SearchParishCommand command) {
+        return searchParishWithCommunitiesService.execute(command);
     }
 
     @PutMapping("/parish/{id}")
