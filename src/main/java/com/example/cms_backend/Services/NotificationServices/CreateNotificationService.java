@@ -32,6 +32,7 @@ public class CreateNotificationService implements Command<CreateNotificationComm
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
         // Set the logged-in user's parish ID to the notification
+        notification.setUserId(user.getId());
         notification.setParishId(user.getParishId());
 
         notificationRepository.save(notification);

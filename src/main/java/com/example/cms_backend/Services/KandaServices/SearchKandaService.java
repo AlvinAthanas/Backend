@@ -1,4 +1,52 @@
 package com.example.cms_backend.Services.KandaServices;
 
-public class SearchKandaService {
+import com.example.cms_backend.Abstractions.Query;
+import com.example.cms_backend.Model.Commands.SearchKandaCommand;
+import com.example.cms_backend.Model.Entities.Kanda;
+import com.example.cms_backend.Model.Entities.User;
+import com.example.cms_backend.Repositories.KandaRepository;
+import com.example.cms_backend.Repositories.UserRepository;
+import com.example.cms_backend.Services.UserServices.GetUsersService;
+import com.example.cms_backend.Utils.LoggedInUserUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class SearchKandaService implements Query<SearchKandaCommand, List<Kanda>> {
+
+    private final KandaRepository kandaRepository;
+    private final UserRepository userRepository;
+
+    public SearchKandaService(KandaRepository kandaRepository, UserRepository userRepository) {
+        this.kandaRepository = kandaRepository;
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public ResponseEntity<List<Kanda>> execute(SearchKandaCommand command) {
+        HttpServletRequest request = command.getRequest();
+        String email = LoggedInUserUtil.loggedInUserEmail(request);
+        if (email == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            return ResponseEntity.status(404).build();
+        }
+        Long parishId = user.get().getParishId();
+
+        List<Kanda> result;
+        if (command.getName() != null) {
+            result = kandaRepository.findByNameContainingIgnoreCaseAndParishId(command.getName(), parishId);
+        } else {
+            result = kandaRepository.findByParishId(parishId);
+        }
+
+        return ResponseEntity.ok(result);
+    }
 }
