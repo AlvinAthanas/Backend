@@ -1,15 +1,17 @@
 package com.example.cms_backend.Model.Commands;
 
-import lombok.Data;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 
 @Getter
 public class SearchGroupNameByDescriptionCommand {
-    private String groupName;
-    private String description;
+    private final String groupName;
+    private final String description;
+    private final HttpServletRequest request;
 
-    public SearchGroupNameByDescriptionCommand(String groupName, String description) {
+    public SearchGroupNameByDescriptionCommand(String groupName, String description, HttpServletRequest request) {
         this.groupName = groupName;
         this.description = description;
+        this.request = request;
     }
 }

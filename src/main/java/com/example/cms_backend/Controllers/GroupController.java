@@ -108,8 +108,11 @@ public class GroupController {
             @RequestParam String description,
             HttpServletRequest request
     ) {
-        return searchGroupNameByDescriptionService.execute(new SearchGroupNameByDescriptionCommand(name, description), request);
+        SearchGroupNameByDescriptionCommand command =
+                new SearchGroupNameByDescriptionCommand(name, description, request);
+        return searchGroupNameByDescriptionService.execute(command);
     }
+
 
 
 }

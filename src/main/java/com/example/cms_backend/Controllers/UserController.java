@@ -1,12 +1,9 @@
 package com.example.cms_backend.Controllers;
 
-import com.example.cms_backend.Model.Commands.ChangePasswordCommand;
-import com.example.cms_backend.Model.Commands.GetUserCommand;
-import com.example.cms_backend.Model.Commands.UploadProfilePictureCommand;
+import com.example.cms_backend.Model.Commands.*;
 import com.example.cms_backend.Model.DTO.ChangePasswordDTO;
 import com.example.cms_backend.Model.DTO.UpdateUserDTO;
 import com.example.cms_backend.Model.DTO.UserDTO;
-import com.example.cms_backend.Model.Commands.UpdateUserCommand;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Services.AdminServices.CreateAdminUserService;
 import com.example.cms_backend.Services.UserServices.*;
@@ -114,11 +111,13 @@ public class UserController {
     }
 
     @GetMapping("/user/search")
-    public ResponseEntity<List<UserDTO>> searchUser(@RequestParam String name, HttpServletRequest request){
-        return searchUserService.execute(name, request);
+    public ResponseEntity<List<UserDTO>> searchUser(@RequestParam String name, HttpServletRequest request) {
+        SearchUserCommand command = new SearchUserCommand(name, request);
+        return searchUserService.execute(command);
     }
 
-//    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
+
+    //    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
     @GetMapping("/user/count")
     public ResponseEntity<Long> countUser(HttpServletRequest request){
         return countUsersService.execute(null, request);

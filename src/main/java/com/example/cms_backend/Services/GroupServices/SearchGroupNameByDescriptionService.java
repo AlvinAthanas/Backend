@@ -27,31 +27,24 @@ public class SearchGroupNameByDescriptionService implements Query<SearchGroupNam
 
     @Override
     public ResponseEntity<List<Group>> execute(SearchGroupNameByDescriptionCommand command) {
-        return execute(command, null);
-    }
+        List<Group> groupsByDescription = groupRepository.findByNameContainingIgnoreCaseAndDescription(
+                command.getGroupName(), command.getDescription());
 
-    public ResponseEntity<List<Group>> execute(SearchGroupNameByDescriptionCommand command, HttpServletRequest request) {
-        List<Group> groupsByDescription = groupRepository.findByNameContainingIgnoreCaseAndDescription(command.getGroupName(), command.getDescription());
+        HttpServletRequest request = command.getRequest();
 
-        // Filter groups by parishId if request is provided
         if (request != null) {
             String email = LoggedInUserUtil.loggedInUserEmail(request);
             if (email != null) {
-                Optional<User> loggedInUserOptional = userRepository.findByEmail(email);
-                if (loggedInUserOptional.isPresent()) {
-                    User loggedInUser = loggedInUserOptional.get();
-                    Long parishId = loggedInUser.getParishId();
-
+                userRepository.findByEmail(email).ifPresent(user -> {
+                    Long parishId = user.getParishId();
                     if (parishId != null) {
-                        // Filter groups by parishId
-                        groupsByDescription = groupsByDescription.stream()
-                                .filter(group -> parishId.equals(group.getParishId()))
-                                .collect(Collectors.toList());
+                        groupsByDescription.removeIf(group -> !parishId.equals(group.getParishId()));
                     }
-                }
+                });
             }
         }
 
         return ResponseEntity.ok(groupsByDescription);
     }
 }
+

@@ -97,6 +97,10 @@ public class User {
     List<Notification>   notifications;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sender_id")
+    List<Notification> senderNotifications;
+
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     List<FinancialTransaction> transactionsRecorded;
 

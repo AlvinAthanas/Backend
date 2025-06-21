@@ -16,12 +16,16 @@ public class Notification {
     private Long id;
 
     private String title;
+    @Column(length = 2000)
     private String message;
     private LocalDate date;
     private Boolean isGlobal;
 
     @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "sender_id")
+    private Long senderId;
 
     @Column(name = "group_id")
     private Long groupId;

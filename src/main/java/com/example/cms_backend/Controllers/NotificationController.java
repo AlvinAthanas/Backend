@@ -17,13 +17,20 @@ public class NotificationController {
     private final UpdateNotificationService updateNotificationService;
     private final GetNotificationService getNotificationService;
     private final GetNotificationsService getNotificationsService;
+    private final GetParishNotificationsService getParishNotificationsService;
 
-    public NotificationController(CreateNotificationService createNotificationService, DeleteNotificationService deleteNotificationService, UpdateNotificationService updateNotificationService, GetNotificationService getNotificationService, GetNotificationsService getNotificationsService) {
+    public NotificationController(CreateNotificationService createNotificationService,
+                                  DeleteNotificationService deleteNotificationService,
+                                  UpdateNotificationService updateNotificationService,
+                                  GetNotificationService getNotificationService,
+                                  GetNotificationsService getNotificationsService,
+                                  GetParishNotificationsService getParishNotificationsService) {
         this.createNotificationService = createNotificationService;
         this.deleteNotificationService = deleteNotificationService;
         this.updateNotificationService = updateNotificationService;
         this.getNotificationService = getNotificationService;
         this.getNotificationsService = getNotificationsService;
+        this.getParishNotificationsService = getParishNotificationsService;
     }
 
     @PostMapping("/notification")
@@ -44,14 +51,24 @@ public class NotificationController {
     }
 
     @PutMapping("/notification/{id}")
-    public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification notification) {
-        return updateNotificationService.execute(new UpdateNotificationCommand(id, notification));
+    public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification notification, HttpServletRequest request) {
+        return updateNotificationService.execute(new UpdateNotificationCommand(id, notification, request));
     }
 
     @DeleteMapping("/notification/{id}")
     public ResponseEntity<Void> deleteNotification(@PathVariable Long id) {
         return deleteNotificationService.execute(id);
     }
+
+    /*
+    AUTHORIZED ENDPOINTS
+     */
+
+    @GetMapping("/notifications/parish")
+    public ResponseEntity<List<Notification>> getParishNotifications(HttpServletRequest request) {
+        return getParishNotificationsService.execute(request);
+    }
+
 }
 
 

@@ -1,6 +1,7 @@
 package com.example.cms_backend.Services.UserServices;
 
 import com.example.cms_backend.Abstractions.Query;
+import com.example.cms_backend.Model.Commands.SearchUserCommand;
 import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Repositories.UserRepository;
@@ -11,10 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class SearchUserService implements Query<String, List<UserDTO>> {
+public class SearchUserService implements Query<SearchUserCommand, List<UserDTO>> {
 
     private final UserRepository userRepository;
 
@@ -23,14 +23,10 @@ public class SearchUserService implements Query<String, List<UserDTO>> {
     }
 
     @Override
-    public ResponseEntity<List<UserDTO>> execute(String name) {
-        return execute(name, null);
-    }
+    public ResponseEntity<List<UserDTO>> execute(SearchUserCommand command) {
+        List<User> users = userRepository.findByNameContaining(command.getName());
 
-    public ResponseEntity<List<UserDTO>> execute(String name, HttpServletRequest request) {
-        List<User> users = userRepository.findByNameContaining(name);
-
-        // Filter users by parishId if request is provided
+        HttpServletRequest request = command.getRequest();
         if (request != null) {
             String email = LoggedInUserUtil.loggedInUserEmail(request);
             if (email != null) {
@@ -40,7 +36,6 @@ public class SearchUserService implements Query<String, List<UserDTO>> {
                     Long parishId = loggedInUser.getParishId();
 
                     if (parishId != null) {
-                        // Filter users by parishId
                         users = users.stream()
                                 .filter(user -> parishId.equals(user.getParishId()))
                                 .toList();

@@ -2,30 +2,26 @@ package com.example.cms_backend.Services.NotificationServices;
 
 import com.example.cms_backend.Abstractions.Query;
 import com.example.cms_backend.Exceptions.UserNotFoundException;
-import com.example.cms_backend.Model.Entities.Group;
 import com.example.cms_backend.Model.Entities.Notification;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Repositories.NotificationRepository;
 import com.example.cms_backend.Repositories.UserRepository;
-import com.example.cms_backend.Security.Jwt.JwtUtil;
 import com.example.cms_backend.Utils.LoggedInUserUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
-public class GetNotificationsService implements Query<HttpServletRequest, List<Notification>> {
+public class GetParishNotificationsService implements Query<HttpServletRequest, List<Notification>> {
+
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
 
-    public GetNotificationsService(NotificationRepository notificationRepository,
-                                   UserRepository userRepository) {
+    public GetParishNotificationsService(NotificationRepository notificationRepository,
+                                         UserRepository userRepository) {
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
     }
@@ -40,18 +36,13 @@ public class GetNotificationsService implements Query<HttpServletRequest, List<N
         }
 
         User user = optionalUser.get();
-
-        Set<Group> groups = user.getGroups();
-        Set<Long> groupIds = groups.stream().map(Group::getId).collect(Collectors.toSet());
-        Set<Long> kandaIds = groups.stream().map(Group::getKandaId).collect(Collectors.toSet());
         Long parishId = user.getParishId();
 
-        List<Notification> notifications = notificationRepository.findScopedNotifications(
-                groupIds, kandaIds, parishId, user.getId()
-        );
+        if (parishId == null) {
+            return ResponseEntity.badRequest().build(); // Or handle as per your logic
+        }
 
-        return ResponseEntity.ok(notifications);
+        List<Notification> parishNotifications = notificationRepository.findByParishId(parishId);
+        return ResponseEntity.ok(parishNotifications);
     }
-
-
 }
