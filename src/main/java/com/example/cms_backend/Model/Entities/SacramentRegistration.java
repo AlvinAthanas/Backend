@@ -1,9 +1,11 @@
 package com.example.cms_backend.Model.Entities;
 
+import com.example.cms_backend.Model.Enums.SacramentType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,40 +18,32 @@ public class SacramentRegistration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Link to the user who made the request
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "candidate_id", nullable = true)
+    private Long candidateId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sacrament_type", nullable = false)
+    private SacramentType sacramentType;
 
     @Column(nullable = false)
-    private String sacramentType; // e.g. Baptism, Confirmation, Marriage, etc.
+    private String status = "PENDING"; // PENDING, APPROVED, REJECTED
 
-    @Column(name = "preferred_date")
-    private LocalDateTime preferredDate;
+    @Column(name = "is_completed")
+    private boolean isCompleted;
 
-    @Column(columnDefinition = "TEXT")
-    private String notes;
+    @Column(name = "registration_date", nullable = true)
+    private LocalDate registrationDate = LocalDate.now();
 
-    @Column(nullable = false)
-    private String status = "PENDING"; // PENDING, APPROVED, REJECTED, etc.
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "completion_date")
+    private LocalDate completionDate;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(name = "parish_id")
+    private Long parishId;
 
-    // Optional: to support soft delete
-    @Column(name = "is_deleted")
-    private Boolean isDeleted = false;
-
-    public SacramentRegistration() {
-    }
-
-    public SacramentRegistration(Long userId, String sacramentType, LocalDateTime preferredDate, String notes) {
-        this.userId = userId;
-        this.sacramentType = sacramentType;
-        this.preferredDate = preferredDate;
-        this.notes = notes;
-    }
+    public SacramentRegistration() {}
 }
+
 
