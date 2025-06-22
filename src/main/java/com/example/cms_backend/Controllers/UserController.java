@@ -4,6 +4,7 @@ import com.example.cms_backend.Model.Commands.*;
 import com.example.cms_backend.Model.DTO.ChangePasswordDTO;
 import com.example.cms_backend.Model.DTO.UpdateUserDTO;
 import com.example.cms_backend.Model.DTO.UserDTO;
+import com.example.cms_backend.Model.DTO.UserLeaderDTO;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Services.AdminServices.CreateAdminUserService;
 import com.example.cms_backend.Services.UserServices.*;
@@ -38,6 +39,7 @@ public class UserController {
     private final ChangePasswordService changePasswordService;
     private final UploadProfilePictureService uploadProfilePictureService;
     private final CreateAdminUserService createAdminUserService;
+    private final GetUserLeadersService  getUserLeadersService;
 
     public UserController(CreateUserService createUserService,
                           GetUserService getUserService,
@@ -49,7 +51,8 @@ public class UserController {
                           CountUsersService countUsersService,
                           ChangePasswordService changePasswordService,
                           UploadProfilePictureService uploadProfilePictureService,
-                          CreateAdminUserService createAdminUserService) {
+                          CreateAdminUserService createAdminUserService,
+                          GetUserLeadersService getUserLeadersService) {
         this.createUserService = createUserService;
         this.getUserService = getUserService;
         this.updateUserService = updateUserService;
@@ -61,6 +64,7 @@ public class UserController {
         this.changePasswordService = changePasswordService;
         this.uploadProfilePictureService = uploadProfilePictureService;
         this.createAdminUserService = createAdminUserService;
+        this.getUserLeadersService = getUserLeadersService;
     }
 
 //    @PreAuthorize("hasRole('basicuser')")
@@ -165,5 +169,10 @@ public class UserController {
         return createAdminUserService.execute(user);
     }
 
+
+    @GetMapping("/user/leaders")
+    public ResponseEntity<List<UserLeaderDTO>> getUserLeaders(HttpServletRequest request) {
+        return getUserLeadersService.execute(request);
+    }
 
 }

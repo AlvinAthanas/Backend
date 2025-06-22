@@ -1,8 +1,10 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.Commands.CreateFeedbackCommand;
 import com.example.cms_backend.Model.Entities.Feedback;
 import com.example.cms_backend.Model.Commands.UpdateFeedbackCommand;
 import com.example.cms_backend.Services.FeedbackServices.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +31,10 @@ public class FeedbackController {
     }
 
     @PostMapping("/feedback")
-    public ResponseEntity<Feedback> createFeedback(@RequestBody Feedback feedback) {
-        return createFeedbackService.execute(feedback);
+    public ResponseEntity<Feedback> createFeedback(@RequestBody Feedback feedback, HttpServletRequest request) {
+        return createFeedbackService.execute(new CreateFeedbackCommand(feedback, request));
     }
+
 
     @GetMapping("/feedback/{id}")
     public ResponseEntity<Feedback> getFeedback(@PathVariable Long id) {
@@ -39,9 +42,10 @@ public class FeedbackController {
     }
 
     @GetMapping("/feedbacks")
-    public ResponseEntity<List<Feedback>> getFeedbacks() {
-        return getFeedbacksService.execute(null);
+    public ResponseEntity<List<Feedback>> getFeedbacks(HttpServletRequest request) {
+        return getFeedbacksService.execute(request);
     }
+
 
     @PutMapping("/feedback/{id}")
     public ResponseEntity<Feedback> updateFeedback(@PathVariable Long id, @RequestBody Feedback feedback) {

@@ -77,7 +77,7 @@ public class User {
     private Set<Parish> favoriteParishes = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "receiver_id")
     List<Feedback> feedbacks;
 
     @OneToMany(cascade = CascadeType.ALL)

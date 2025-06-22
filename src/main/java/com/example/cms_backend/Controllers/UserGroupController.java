@@ -1,6 +1,7 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.AssignGroupCommand;
+import com.example.cms_backend.Model.Commands.AssignMultipleUsersToGroupCommand;
 import com.example.cms_backend.Model.Commands.GroupNameDescriptionCommand;
 import com.example.cms_backend.Model.Commands.RemoveGroupCommand;
 import com.example.cms_backend.Model.DTO.GroupDTO;
@@ -19,6 +20,7 @@ public class UserGroupController {
     private final DeleteMemberFromGroupService deleteMemberFromGroupService;
     private final GetAllUserGroupsService getAllUserGroupsService;
     private final GetUserCommunityService getUserCommunityService;
+    private final AssignMultipleUsersToGroupService assignMultipleUsersToGroupService;
 
 
     public UserGroupController(GetMembersOfGroupService getMembersOfGroupService,
@@ -26,13 +28,15 @@ public class UserGroupController {
                                AssignMemberToGroupService assignMemberToGroupService,
                                DeleteMemberFromGroupService deleteMemberFromGroupService,
                                GetAllUserGroupsService getAllUserGroupsService,
-                               GetUserCommunityService getUserCommunityService) {
+                               GetUserCommunityService getUserCommunityService,
+                               AssignMultipleUsersToGroupService assignMultipleUsersToGroupService) {
         this.getMembersOfGroupService = getMembersOfGroupService;
         this.countMembersOfGroupWithDescriptionService = countMembersOfGroupWithDescriptionService;
         this.assignMemberToGroupService = assignMemberToGroupService;
         this.deleteMemberFromGroupService = deleteMemberFromGroupService;
         this.getAllUserGroupsService = getAllUserGroupsService;
         this.getUserCommunityService = getUserCommunityService;
+        this.assignMultipleUsersToGroupService = assignMultipleUsersToGroupService;
     }
 
     @GetMapping("/group/members")
@@ -56,6 +60,12 @@ public class UserGroupController {
     public ResponseEntity<String> assignMember(@RequestBody AssignGroupCommand command) {
         return assignMemberToGroupService.execute(new AssignGroupCommand(command.getUserId(), command.getGroupId()));
     }
+
+    @PostMapping("/group/assignMultipleMembers")
+    public ResponseEntity<String> assignMultipleMembers(@RequestBody AssignMultipleUsersToGroupCommand command) {
+        return assignMultipleUsersToGroupService.execute(command);
+    }
+
 
     @GetMapping("/user/{userId}/groups")
     public ResponseEntity<List<GroupDTO>> getUserGroups(@PathVariable Long userId) {

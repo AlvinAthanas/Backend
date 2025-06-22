@@ -1,13 +1,18 @@
 package com.example.cms_backend.Repositories;
 
+import com.example.cms_backend.Model.Entities.Role;
 import com.example.cms_backend.Model.Entities.User;
+import com.example.cms_backend.Model.Enums.Roles;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -41,6 +46,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     );
 
     List<User> findAllByParishId(Long parishId);
+
+
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE u.parishId = :parishId AND r.name IN :roleNames")
+    List<User> findByParishIdAndRoleNames(@Param("parishId") Long parishId, @Param("roleNames") Set<String> roleNames);
+
+    List<User> findByParishIdAndRolesIn(Long parishId, Set<Role> roles);
+
+
+
 
 
 }
