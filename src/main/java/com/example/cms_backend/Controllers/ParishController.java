@@ -1,22 +1,22 @@
 package com.example.cms_backend.Controllers;
 
-import com.example.cms_backend.Model.Commands.FavParishCommand;
-import com.example.cms_backend.Model.Commands.GetParishCommand;
-import com.example.cms_backend.Model.Commands.SearchParishCommand;
+import com.example.cms_backend.Model.Commands.*;
 import com.example.cms_backend.Model.DTO.ParishWithCommunitiesDTO;
 import com.example.cms_backend.Model.Entities.Parish;
-import com.example.cms_backend.Model.Commands.UpdateParishCommand;
 import com.example.cms_backend.Services.ParishServices.*;
 import com.example.cms_backend.Services.UserFavParishesServices.AddOrRemoveFavoriteParishService;
 import com.example.cms_backend.Services.UserFavParishesServices.GetAllFavoriteParishes;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost") // Allow frontend requests
 public class ParishController {
     private final CreateParishService createParishService;
@@ -29,28 +29,10 @@ public class ParishController {
     private final AddOrRemoveFavoriteParishService addOrRemoveFavoriteParishService;
     private final GetAllFavoriteParishes getAllFavoriteParishes;
     private final SearchParishWithCommunitiesService searchParishWithCommunitiesService;
+    private final UploadParishImageService uploadParishImageService;
 
-    public ParishController(CreateParishService createParishService,
-                            DeleteParishService deleteParishService,
-                            UpdateParishService updateParishService,
-                            GetParishService getParishService,
-                            GetParishesService getParishesService,
-                            SearchParishService searchParishService,
-                            CreateParishesService createParishesService,
-                            AddOrRemoveFavoriteParishService addOrRemoveFavoriteParishService,
-                            GetAllFavoriteParishes getAllFavoriteParishes,
-                            SearchParishWithCommunitiesService searchParishWithCommunitiesService) {
-        this.createParishService = createParishService;
-        this.deleteParishService = deleteParishService;
-        this.updateParishService = updateParishService;
-        this.getParishService = getParishService;
-        this.getParishesService = getParishesService;
-        this.searchParishService = searchParishService;
-        this.createParishesService = createParishesService;
-        this.addOrRemoveFavoriteParishService = addOrRemoveFavoriteParishService;
-        this.getAllFavoriteParishes = getAllFavoriteParishes;
-        this.searchParishWithCommunitiesService = searchParishWithCommunitiesService;
-    }
+
+
 
     @PostMapping("/parish")
     public ResponseEntity<Parish> createParish(@RequestBody Parish parish){
@@ -109,6 +91,14 @@ public class ParishController {
     public ResponseEntity<Void> deleteParish(@PathVariable Long id){
         return deleteParishService.execute(id);
     }
+
+
+    @PostMapping("/parish/{id}/upload-image")
+    public ResponseEntity<String> uploadParishImage(@PathVariable Long id,
+                                                    @RequestParam("imageFile") MultipartFile file) {
+        return uploadParishImageService.execute(new UploadParishImageCommand(id, file));
+    }
+
 
 
 }
