@@ -26,7 +26,6 @@ public class Kanda {
 
     // One kanda has many groups (communities)
     @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnore
     @JoinColumn(name = "kanda_id")
     private List<Group> groups = new ArrayList<>();
 

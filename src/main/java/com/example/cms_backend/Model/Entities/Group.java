@@ -1,5 +1,6 @@
 package com.example.cms_backend.Model.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -37,6 +38,12 @@ public class Group {
 
     @Column(name = "parish_id")
     private Long parishId;
+
+    @ManyToOne
+    @JoinColumn(name = "kanda_id", insertable = false, updatable = false)
+    @JsonBackReference
+    private Kanda kanda;
+
 
     public Group(String name, String description, Set<User> users) {
         this.name = name;
