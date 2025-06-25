@@ -36,7 +36,7 @@ public class UploadParishImageService implements Command<UploadParishImageComman
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
             Parish parish = optionalParish.get();
-            String relativePath = "/Church Project/Church-Management-System-repo/img/" + filename;
+            String relativePath = "/img/" + filename;
             parish.setImageUrl(relativePath);
             parishRepository.save(parish);
 
