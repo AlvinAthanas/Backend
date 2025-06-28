@@ -8,11 +8,14 @@ import com.example.cms_backend.Model.DTO.GroupDTO;
 import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Services.UserGroupServices.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost")
+@PreAuthorize("hasAnyRole('PARISHIONER','COMMITTEE_CHAIRPERSON','COMMUNITY_CHAIRPERSON','COMMUNITY_SECRETARY','COMMUNITY_TREASURER') or hasAuthority('WRITE_COMMUNITIES')")
 public class UserGroupController {
     private final GetMembersOfGroupService getMembersOfGroupService;
     private final CountMembersOfGroupWithDescriptionService countMembersOfGroupWithDescriptionService;
@@ -39,6 +42,7 @@ public class UserGroupController {
         this.assignMultipleUsersToGroupService = assignMultipleUsersToGroupService;
     }
 
+    @PreAuthorize("hasAuthority('READ_COMMUNITIES')")
     @GetMapping("/group/members")
     public ResponseEntity<List<UserDTO>> getGroupMembersByDescriptionAndName(
             @RequestParam(required = false) String description,
@@ -47,6 +51,7 @@ public class UserGroupController {
         return getMembersOfGroupService.execute(new GroupNameDescriptionCommand(description, name));
     }
 
+    @PreAuthorize("hasAuthority('READ_COMMUNITIES')")
     @GetMapping("/group/members/count")
     public ResponseEntity<Long> countGroupMembersByDescriptionAndName(
             @RequestParam(required = false) String description,
@@ -54,6 +59,7 @@ public class UserGroupController {
     ) {
         return countMembersOfGroupWithDescriptionService.execute(new GroupNameDescriptionCommand(description, name));
     }
+
 
 
     @PostMapping("/group/assignMember")
@@ -67,11 +73,13 @@ public class UserGroupController {
     }
 
 
+    @PreAuthorize("hasAuthority('READ_COMMUNITIES')")
     @GetMapping("/user/{userId}/groups")
     public ResponseEntity<List<GroupDTO>> getUserGroups(@PathVariable Long userId) {
         return getAllUserGroupsService.execute(userId);
     }
 
+    @PreAuthorize("hasAuthority('READ_COMMUNITIES')")
     @GetMapping("/user/{userId}/community")
     public ResponseEntity<GroupDTO> getUserCommunity(@PathVariable Long userId) {
         return getUserCommunityService.execute(userId);

@@ -4,11 +4,13 @@ import com.example.cms_backend.Model.Entities.Attendance;
 import com.example.cms_backend.Model.Commands.UpdateAttendanceCommand;
 import com.example.cms_backend.Services.AttendanceServices.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('COMMUNITY_CHAIRPERSON') or hasRole('COMMUNITY_SECRETARY') or hasRole('COMMUNITY_TREASURER') or hasRole('PARISHIONER')")
 public class AttendanceController {
     private final CreateAttendanceService createAttendanceService;
     private final UpdateAttendanceService updateAttendanceService;
@@ -38,6 +40,7 @@ public class AttendanceController {
         return getAttendanceService.execute(id);
     }
 
+    @PreAuthorize("hasRole('PARISH_MEMBER') or hasRole('COMMUNITY_CHAIRPERSON') or hasRole('COMMUNITY_SECRETARY') or hasRole('COMMUNITY_TREASURER')")
     @GetMapping("/attendances")
     public ResponseEntity<List<Attendance>> getAttendances(
             @RequestParam(value = "userId", required = false) Long userId) {

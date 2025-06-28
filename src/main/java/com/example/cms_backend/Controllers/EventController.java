@@ -1,10 +1,12 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.DTO.EventDTO;
 import com.example.cms_backend.Model.Entities.Event;
 import com.example.cms_backend.Model.Commands.UpdateEventCommand;
 import com.example.cms_backend.Services.EventServices.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
@@ -38,12 +40,12 @@ public class EventController {
         this.getMassSchedulesService = getMassSchedulesService;
     }
 
-
-
+    @PreAuthorize("hasAuthority('WRITE_EVENTS')")
     @PostMapping("/event")
     public ResponseEntity<Event> createEvent(@RequestBody Event event, HttpServletRequest request) {
         return createEventService.execute(event, request);
     }
+
 
     @GetMapping("/event/{id}")
     public ResponseEntity<Event> getEvent(@PathVariable Long id) {
@@ -51,22 +53,25 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public ResponseEntity<List<Event>> getEvents(HttpServletRequest request) {
+    public ResponseEntity<List<EventDTO>> getEvents(HttpServletRequest request) {
         return getEventsService.execute(request);
     }
 
 
 
+    @PreAuthorize("hasAuthority('WRITE_EVENTS')")
     @PutMapping("/event/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
         return updateEventService.execute(new UpdateEventCommand(id, event));
     }
 
+    @PreAuthorize("hasAuthority('WRITE_EVENTS')")
     @DeleteMapping("/event/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         return deleteEventService.execute(id);
     }
 
+    @PreAuthorize("hasAuthority('WRITE_EVENTS')")
     @PostMapping("/event/schedule")
     public ResponseEntity<Event> createMassEvent(@RequestBody Event event, HttpServletRequest request) {
         event.setDescription("Mass");

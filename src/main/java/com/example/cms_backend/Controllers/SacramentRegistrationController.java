@@ -9,11 +9,13 @@ import com.example.cms_backend.Model.Enums.SacramentType;
 import com.example.cms_backend.Services.SacramentRegistrationServices.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('CATECHIST') or hasAuthority('WRITE_SACRAMENTS')")
 public class SacramentRegistrationController {
 
     private final CreateSacramentRegistrationService createService;
@@ -48,11 +50,13 @@ public class SacramentRegistrationController {
     }
 
 
+    @PreAuthorize("hasAuthority('READ_SACRAMENTS')")
     @GetMapping("/sacrament/{id}")
     public ResponseEntity<SacramentRegistration> get(@PathVariable Long id) {
         return getService.execute(id);
     }
 
+    @PreAuthorize("hasAuthority('READ_SACRAMENTS')")
     @GetMapping("/sacraments")
     public ResponseEntity<List<SacramentRegistration>> list() {
         return listService.execute(null);
@@ -69,6 +73,7 @@ public class SacramentRegistrationController {
         return deleteService.execute(id);
     }
 
+    @PreAuthorize("hasAuthority('READ_SACRAMENTS')")
     @GetMapping("/sacrament/sessions")
     public ResponseEntity<List<SacramentSessionInfo>> getSessionsByParish(
             HttpServletRequest request,

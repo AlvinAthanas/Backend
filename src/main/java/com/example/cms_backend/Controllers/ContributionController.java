@@ -6,11 +6,13 @@ import com.example.cms_backend.Model.Commands.UpdateContributionCommand;
 import com.example.cms_backend.Services.ContributionServices.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('COMMITTEE_TREASURER') or hasRole('PARISHIONER')")
 public class ContributionController {
     private final CreateContributionService createContributionService;
     private final UpdateContributionService updateContributionService;
@@ -36,31 +38,36 @@ public class ContributionController {
         this.getTotalAmountService = getTotalAmountService;
     }
 
+    @PreAuthorize("hasAuthority('WRITE_CONTRIBUTIONS')")
     @PostMapping("/contribution")
     public ResponseEntity<Contribution> addContribution(@RequestBody Contribution contribution, HttpServletRequest request) {
         return createContributionService.execute(contribution, request);
     }
 
+
     @GetMapping("/contribution/{id}")
     public ResponseEntity<Contribution> getContribution(@PathVariable Long id) {
         return getContributionService.execute(id);
     }
-
+    @PreAuthorize("hasAuthority('READ_CONTRIBUTIONS')")
     @GetMapping("/contributions")
     public ResponseEntity<List<Contribution>> getContributions(HttpServletRequest request) {
         return getContributionsService.execute(null, request);
     }
 
+    @PreAuthorize("hasAuthority('WRITE_CONTRIBUTIONS')")
     @PutMapping("/contribution/{id}")
     public ResponseEntity<Contribution> updateContribution(@PathVariable Long id, @RequestBody Contribution contribution, HttpServletRequest request) {
         return updateContributionService.execute(new UpdateContributionCommand(id,contribution), request);
     }
 
+    @PreAuthorize("hasAuthority('WRITE_CONTRIBUTIONS')")
     @DeleteMapping("/contribution/{id}")
     public ResponseEntity<Void> deleteContribution(@PathVariable Long id) {
         return deleteContributionService.execute(id);
     }
-
+    
+    @PreAuthorize("hasAuthority('READ_CONTRIBUTIONS')")
     @GetMapping("/contributions/filter")
     public ResponseEntity<List<Contribution>> getFilteredContributions(
             @RequestParam(required = false) String type,

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface FinancialTransactionRepository extends JpaRepository<FinancialTransaction, Long> {
     public List<FinancialTransaction> findFinancialTransactionsByTypeContaining(String type);
+    List<FinancialTransaction> findAllByParishId(Long parishId);
 }

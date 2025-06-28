@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('PARISHIONER') or hasRole('COMMITTEE_CHAIRPERSON') or hasRole('COMMITTEE_SECRETARY')")
 public class GroupController {
 
     private final CreateGroupService createGroupService;
@@ -50,21 +51,25 @@ public class GroupController {
         this.searchGroupNameByDescriptionService = searchGroupNameByDescriptionService;
     }
 
+    @PreAuthorize("hasAuthority('WRITE_COMMUNITIES')")
     @PostMapping("/group")
     public ResponseEntity<Group> addGroup(@RequestBody Group group, HttpServletRequest request) {
         return createGroupService.execute(group, request);
     }
 
+    @PreAuthorize("hasAuthority('WRITE_COMMUNITIES')")
     @PostMapping("/groups")
     public ResponseEntity<List<Group>> addGroups(@RequestBody List<Group> groups, HttpServletRequest request) {
         return createGroupsService.execute(groups, request);
     }
+
 
     @GetMapping("/group/{id}")
     public ResponseEntity<Group> getGroup(@PathVariable Long id) {
         return getGroupService.execute(id);
     }
 
+    @PreAuthorize("hasAuthority('READ_COMMUNITIES')")
     @GetMapping("/groups")
     public ResponseEntity<List<Group>> getAllGroups(HttpServletRequest request) {
         return getGroupsService.execute(null, request);

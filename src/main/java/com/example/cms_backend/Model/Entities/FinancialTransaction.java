@@ -1,10 +1,16 @@
 package com.example.cms_backend.Model.Entities;
 
+import com.example.cms_backend.Model.Enums.PaymentMethod;
+import com.example.cms_backend.Model.Enums.TransactionCategory;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.time.LocalDate;
 
 @Entity
+@Data
+@AllArgsConstructor
 @Table(name = "financial_transaction")
 public class FinancialTransaction {
     @Id
@@ -12,11 +18,14 @@ public class FinancialTransaction {
     private Long id;
 
     private String type;
+    @Column(length = 2000)
     private String description;
     private Long amount;
     private LocalDate date;
-
-
+    @Enumerated(EnumType.STRING)
+    private TransactionCategory category;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
     @Column(name = "parish_id")
     private Long parishId;
 
@@ -34,59 +43,4 @@ public class FinancialTransaction {
     public FinancialTransaction() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Long getParishId() {
-        return parishId;
-    }
-
-    public void setParishId(Long parishId) {
-        this.parishId = parishId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 }

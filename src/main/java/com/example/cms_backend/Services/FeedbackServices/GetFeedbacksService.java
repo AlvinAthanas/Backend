@@ -30,7 +30,11 @@ public class GetFeedbacksService implements Query<HttpServletRequest, List<Feedb
                 () -> new RuntimeException("User not found")
         );
 
-        List<Feedback> feedbacks = feedbackRepository.findByReceiverIdIsNullOrReceiverId(user.getId());
+        Long parishId = user.getParishId();  // Assuming your User entity has a `parishId` field
+
+        List<Feedback> feedbacks = feedbackRepository.findByParishIdAndReceiverIdIsNullOrReceiverId(parishId, user.getId());
+
         return ResponseEntity.ok(feedbacks);
     }
+
 }

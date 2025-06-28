@@ -54,6 +54,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByParishIdAndRolesIn(Long parishId, Set<Role> roles);
 
 
+    @Query("SELECT COUNT(u) FROM User u JOIN u.groups g WHERE g.id = :groupId")
+    Long countUsersInGroup(@Param("groupId") Long groupId);
+
 
 
 

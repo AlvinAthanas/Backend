@@ -43,7 +43,18 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(HttpMethod.POST, "/user").permitAll();
                     authorize.requestMatchers("/login").permitAll();
-                    authorize.anyRequest().permitAll();
+                    authorize.requestMatchers("/admin/login").permitAll();
+                    authorize.requestMatchers("parish/search").permitAll();
+                    authorize.requestMatchers("/parishes").permitAll();
+                    authorize.requestMatchers("/group/search").permitAll();
+                    authorize.requestMatchers("/user/profile-picture/").permitAll();
+                    authorize.requestMatchers("/img/**").permitAll();
+                    authorize.requestMatchers(HttpMethod.POST, "/user/*/upload-profile-picture").permitAll();
+                    authorize.requestMatchers(HttpMethod.PUT, "/user/*").permitAll();
+                    authorize.requestMatchers("/user").permitAll();
+                    authorize.requestMatchers("/parish/favorite").permitAll();
+                    authorize.requestMatchers("/user/*/favorite-parishes").permitAll();
+                    authorize.anyRequest().authenticated();
                 })
                 .addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();

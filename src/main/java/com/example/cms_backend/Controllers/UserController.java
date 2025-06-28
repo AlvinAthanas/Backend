@@ -67,7 +67,8 @@ public class UserController {
         this.getUserLeadersService = getUserLeadersService;
     }
 
-//    @PreAuthorize("hasRole('basicuser')")
+    //TODO: Differentiate endpoints e.g updating user details and creating new user
+
     @PostMapping("/user")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user, HttpServletRequest request){
         if (user.getPassword() == null || user.getPassword().isBlank()) {
@@ -97,6 +98,7 @@ public class UserController {
         return getUsersService.execute(null, request);
     }
 
+//    @PreAuthorize("hasAuthority('WRITE_MEMBERS')")
     @PutMapping("/user/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO dto) {
         return updateUserService.execute(new UpdateUserCommand(id, dto));
@@ -108,7 +110,7 @@ public class UserController {
     }
 
 
-
+    @PreAuthorize("hasAuthority('WRITE_MEMBERS')")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         return deleteUserService.execute(id);
@@ -121,7 +123,7 @@ public class UserController {
     }
 
 
-    //    @PreAuthorize("hasRole('ROLE_PARISH_MEMBER')")
+    @PreAuthorize("hasAuthority('READ_MEMBERS')")
     @GetMapping("/user/count")
     public ResponseEntity<Long> countUser(HttpServletRequest request){
         return countUsersService.execute(null, request);

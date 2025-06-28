@@ -1,10 +1,12 @@
 package com.example.cms_backend.Services.EventServices;
 
 import com.example.cms_backend.Abstractions.Query;
+import com.example.cms_backend.Model.DTO.EventDTO;
 import com.example.cms_backend.Model.Entities.Event;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Repositories.EventRepository;
 import com.example.cms_backend.Repositories.UserRepository;
+import com.example.cms_backend.Utils.EventMapper;
 import com.example.cms_backend.Utils.LoggedInUserUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
-public class GetEventsService implements Query<Void, List<Event>> {
+public class GetEventsService implements Query<Void, List<EventDTO>> {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
@@ -25,16 +28,20 @@ public class GetEventsService implements Query<Void, List<Event>> {
     }
 
     @Override
-    public ResponseEntity<List<Event>> execute(Void input) {
-        return ResponseEntity.ok(eventRepository.findAll());
+    public ResponseEntity<List<EventDTO>> execute(Void input) {
+        List<Event> events = eventRepository.findAll();
+        List<EventDTO> eventDTOs = EventMapper.toDTOList(events, userRepository);
+        return ResponseEntity.ok(eventDTOs);
     }
 
-    public ResponseEntity<List<Event>> execute(HttpServletRequest request) {
+    public ResponseEntity<List<EventDTO>> execute(HttpServletRequest request) {
         Long parishId = getParishIdFromRequest(request);
         List<Event> events = (parishId != null)
                 ? eventRepository.findByParishId(parishId)
                 : eventRepository.findAll();
-        return ResponseEntity.ok(events);
+
+        List<EventDTO> eventDTOs = EventMapper.toDTOList(events, userRepository);
+        return ResponseEntity.ok(eventDTOs);
     }
 
     private Long getParishIdFromRequest(HttpServletRequest request) {
@@ -45,3 +52,4 @@ public class GetEventsService implements Query<Void, List<Event>> {
         return userOpt.map(User::getParishId).orElse(null);
     }
 }
+

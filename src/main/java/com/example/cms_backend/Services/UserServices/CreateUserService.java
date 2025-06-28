@@ -38,6 +38,7 @@ public class CreateUserService implements Command<User, UserDTO>{
 
     public ResponseEntity<UserDTO> execute(User user, HttpServletRequest request) {
         if (!userRepository.existsByEmail(user.getEmail())) {
+            System.out.println();
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         } else {
             throw new UserNotValidException(ErrorMessages.EMAIL_ALREADY_EXISTS.getMessage());

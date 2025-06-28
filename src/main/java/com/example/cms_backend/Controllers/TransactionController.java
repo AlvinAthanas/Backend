@@ -1,9 +1,11 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.Commands.TransactionCommand;
 import com.example.cms_backend.Model.DTO.TransactionDTO;
 import com.example.cms_backend.Model.Entities.FinancialTransaction;
 import com.example.cms_backend.Model.Commands.UpdateTransactionCommand;
 import com.example.cms_backend.Services.TransactionServices.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +39,8 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<TransactionDTO> createTransaction(@RequestBody FinancialTransaction transaction){
-        return createTransactionService.execute(transaction);
+    public ResponseEntity<TransactionDTO> createTransaction(@RequestBody FinancialTransaction transaction, HttpServletRequest request){
+        return createTransactionService.execute(new TransactionCommand(transaction, request));
     }
 
     @PostMapping("/transactions")
@@ -52,8 +54,8 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<List<FinancialTransaction>> getTransactions(){
-        return getTransactionsService.execute(null);
+    public ResponseEntity<List<FinancialTransaction>> getTransactions(HttpServletRequest request){
+        return getTransactionsService.execute(request);
     }
 
     @GetMapping("/transaction/search")

@@ -22,6 +22,7 @@ public class UserDTO {
     private Gender gender;
     private Long parishId;
     private String profilePicture; // Base64 string
+    private String password;
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -32,6 +33,7 @@ public class UserDTO {
         this.gender = user.getGender();
         this.parishId = user.getParishId();
         this.profilePicture = encodeImageToBase64(user.getProfilePicture());
+        this.password = user.getPassword();
     }
 
     public UserDTO(Optional<User> user) {

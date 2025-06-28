@@ -15,4 +15,7 @@ public interface GroupContributionSubmissionRepository extends JpaRepository<Gro
 
     List<GroupContributionSubmission> findByUserId(Long userId);
 
+    @Query("SELECT SUM(s.amount) FROM GroupContributionSubmission s WHERE s.requirementId = :requirementId AND s.userId = :userId")
+    Optional<Long> sumUserContribution(@Param("requirementId") Long requirementId, @Param("userId") Long userId);
+
 }

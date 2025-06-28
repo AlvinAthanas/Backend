@@ -2,6 +2,7 @@ package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.CreateGroupContributionRequirementCommand;
 import com.example.cms_backend.Model.Commands.SubmitGroupContributionCommand;
+import com.example.cms_backend.Model.DTO.GroupContributionDebtDTO;
 import com.example.cms_backend.Model.DTO.GroupContributionRequirementDTO;
 import com.example.cms_backend.Model.DTO.GroupContributionSubmissionDTO;
 import com.example.cms_backend.Model.DTO.GroupContributionSubmissionViewDTO;
@@ -10,6 +11,7 @@ import com.example.cms_backend.Utils.GroupContributionExcelExporter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
@@ -27,7 +29,11 @@ public class GroupContributionController {
     private final GetGroupContributionSubmissionsService getGroupContributionSubmissionsService;
     private final ExportGroupContributionPDFService exportGroupContributionPDFService;
     private final GetMyGroupContributionSubmissionsService getMyGroupContributionSubmissionsService;
+    private final GetUserGroupContributionDebtsService getUserGroupContributionDebtsService;
 
+    @PreAuthorize("hasRole('PARISHIONER') or hasRole('COMMITTEE_CHAIRPERSON') or hasRole('COMMITTEE_SECRETARY') " +
+            "or hasRole('COMMITTEE_TREASURER') or hasRole('COMMUNITY_CHAIRPERSON') or hasRole('COMMUNITY_SECRETARY')" +
+            "or hasRole('COMMUNITY_TREASURER') or hasAuthority('WRITE_COMMUNITIES') or hasAuthority('WRITE_CONTRIBUTIONS')")
     @PostMapping("/declare")
     public ResponseEntity<GroupContributionRequirementDTO> declareContribution(@RequestBody CreateGroupContributionRequirementCommand command) {
         return createRequirementService.execute(command);
@@ -41,7 +47,7 @@ public class GroupContributionController {
         return getGroupContributionDeclarationsService.execute(request, fulfilled);
     }
 
-
+    @PreAuthorize("hasRole('COMMUNITY_CHAIRPERSON') or hasRole('COMMUNITY_SECRETARY') or hasRole('COMMUNITY_TREASURER')")
     @PostMapping("/submit")
     public ResponseEntity<GroupContributionSubmissionDTO> submitContribution(
             @RequestBody SubmitGroupContributionCommand command
@@ -56,6 +62,7 @@ public class GroupContributionController {
         return getGroupContributionSubmissionsService.execute(requirementId);
     }
 
+    @PreAuthorize("hasAuthority('READ_COMMUNITIES')")
     @GetMapping("/declarations/export")
     public ResponseEntity<byte[]> exportGroupDeclarationsToExcel(
             HttpServletRequest request,
@@ -71,6 +78,7 @@ public class GroupContributionController {
                 .body(excelStream.readAllBytes());
     }
 
+    @PreAuthorize("hasAuthority('READ_COMMUNITIES')")
     @GetMapping("/declarations/export/pdf")
     public ResponseEntity<byte[]> exportDeclarationsPdf(
             HttpServletRequest request,
@@ -83,6 +91,11 @@ public class GroupContributionController {
     @GetMapping("/my-submissions")
     public ResponseEntity<List<GroupContributionSubmissionDTO>> getMySubmissions(HttpServletRequest request) {
         return getMyGroupContributionSubmissionsService.execute(request);
+    }
+
+    @GetMapping("/my-debts")
+    public ResponseEntity<List<GroupContributionDebtDTO>> getUserDebts(HttpServletRequest request) {
+        return getUserGroupContributionDebtsService.execute(request);
     }
 
 

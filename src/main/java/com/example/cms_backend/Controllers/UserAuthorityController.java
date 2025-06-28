@@ -24,6 +24,7 @@ public class UserAuthorityController {
         this.updateUserAuthorities = updateUserAuthoritiesService;
     }
 
+
     @PostMapping("/user/authority/{id}")
     public ResponseEntity<String> assignAuthority(@PathVariable Long id, @RequestParam String authorityName){
         return userAuthorities.execute(new AssignAuthorityCommand(id, authorityName));

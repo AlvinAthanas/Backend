@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,8 +33,8 @@ public class ParishController {
     private final UploadParishImageService uploadParishImageService;
 
 
-
-
+    
+    
     @PostMapping("/parish")
     public ResponseEntity<Parish> createParish(@RequestBody Parish parish){
         return createParishService.execute(parish);
@@ -82,6 +83,7 @@ public class ParishController {
         return searchParishWithCommunitiesService.execute(command);
     }
 
+    @PreAuthorize("hasAnyRole('PARISHIONER', 'COMMITTEE_CHAIRPERSON', 'COMMITTEE_SECRETARY', 'COMMITTEE_TREASURER')")
     @PutMapping("/parish/{id}")
     public ResponseEntity<Parish> updateParish(@PathVariable Long id, @RequestBody Parish parish){
         return updateParishService.execute(new UpdateParishCommand(id, parish));
@@ -93,6 +95,7 @@ public class ParishController {
     }
 
 
+    @PreAuthorize("hasAnyRole('PARISHIONER', 'COMMITTEE_CHAIRPERSON', 'COMMITTEE_SECRETARY', 'COMMITTEE_TREASURER')")
     @PostMapping("/parish/{id}/upload-image")
     public ResponseEntity<String> uploadParishImage(@PathVariable Long id,
                                                     @RequestParam("imageFile") MultipartFile file) {

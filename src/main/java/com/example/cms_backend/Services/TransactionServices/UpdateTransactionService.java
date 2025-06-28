@@ -24,8 +24,15 @@ public class UpdateTransactionService implements Command<UpdateTransactionComman
     public ResponseEntity<TransactionDTO> execute(UpdateTransactionCommand command) {
         Optional<FinancialTransaction> transactionOptional = transactionRepository.findById(command.getId());
         if (transactionOptional.isPresent()) {
-            FinancialTransaction transaction = command.getTransaction();
+
+            FinancialTransaction transaction = transactionOptional.get();
             transaction.setId(command.getId());
+            transaction.setType(command.getTransaction().getType());
+            transaction.setDescription(command.getTransaction().getDescription());
+            transaction.setAmount(command.getTransaction().getAmount());
+            transaction.setDate(command.getTransaction().getDate());
+            transaction.setCategory(command.getTransaction().getCategory());
+            transaction.setPaymentMethod(command.getTransaction().getPaymentMethod());
             transactionRepository.save(transaction);
             return ResponseEntity.ok(new TransactionDTO(transaction));
         }
