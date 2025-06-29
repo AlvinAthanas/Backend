@@ -54,6 +54,11 @@ public class SecurityConfiguration {
                     authorize.requestMatchers("/user").permitAll();
                     authorize.requestMatchers("/parish/favorite").permitAll();
                     authorize.requestMatchers("/user/*/favorite-parishes").permitAll();
+
+                    //TODO: Remove this next endpoint
+                    authorize.requestMatchers("/group/contributions/declarations").permitAll();
+                    authorize.requestMatchers("/group/contributions/submit").permitAll();
+
                     authorize.anyRequest().authenticated();
                 })
                 .addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class)

@@ -35,9 +35,14 @@ public class GroupContributionController {
             "or hasRole('COMMITTEE_TREASURER') or hasRole('COMMUNITY_CHAIRPERSON') or hasRole('COMMUNITY_SECRETARY')" +
             "or hasRole('COMMUNITY_TREASURER') or hasAuthority('WRITE_COMMUNITIES') or hasAuthority('WRITE_CONTRIBUTIONS')")
     @PostMapping("/declare")
-    public ResponseEntity<GroupContributionRequirementDTO> declareContribution(@RequestBody CreateGroupContributionRequirementCommand command) {
+    public ResponseEntity<GroupContributionRequirementDTO> declareContribution(
+            @RequestBody CreateGroupContributionRequirementCommand command,
+            HttpServletRequest request
+    ) {
+        command.setRequest(request);  // Manually inject request into command
         return createRequirementService.execute(command);
     }
+
 
     @GetMapping("/declarations")
     public ResponseEntity<List<GroupContributionRequirementDTO>> getGroupContributionDeclarations(
@@ -47,7 +52,7 @@ public class GroupContributionController {
         return getGroupContributionDeclarationsService.execute(request, fulfilled);
     }
 
-    @PreAuthorize("hasRole('COMMUNITY_CHAIRPERSON') or hasRole('COMMUNITY_SECRETARY') or hasRole('COMMUNITY_TREASURER')")
+//    @PreAuthorize("hasRole('COMMUNITY_CHAIRPERSON') or hasRole('COMMUNITY_SECRETARY') or hasRole('COMMUNITY_TREASURER')")
     @PostMapping("/submit")
     public ResponseEntity<GroupContributionSubmissionDTO> submitContribution(
             @RequestBody SubmitGroupContributionCommand command
