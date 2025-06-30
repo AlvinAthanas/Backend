@@ -2,10 +2,7 @@ package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.CreateGroupContributionRequirementCommand;
 import com.example.cms_backend.Model.Commands.SubmitGroupContributionCommand;
-import com.example.cms_backend.Model.DTO.GroupContributionDebtDTO;
-import com.example.cms_backend.Model.DTO.GroupContributionRequirementDTO;
-import com.example.cms_backend.Model.DTO.GroupContributionSubmissionDTO;
-import com.example.cms_backend.Model.DTO.GroupContributionSubmissionViewDTO;
+import com.example.cms_backend.Model.DTO.*;
 import com.example.cms_backend.Services.GroupContributionServices.*;
 import com.example.cms_backend.Utils.GroupContributionExcelExporter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +27,7 @@ public class GroupContributionController {
     private final ExportGroupContributionPDFService exportGroupContributionPDFService;
     private final GetMyGroupContributionSubmissionsService getMyGroupContributionSubmissionsService;
     private final GetUserGroupContributionDebtsService getUserGroupContributionDebtsService;
+    private final GetGroupContributionMemberProgressService getGroupContributionMemberProgressService;
 
     @PreAuthorize("hasRole('PARISHIONER') or hasRole('COMMITTEE_CHAIRPERSON') or hasRole('COMMITTEE_SECRETARY') " +
             "or hasRole('COMMITTEE_TREASURER') or hasRole('COMMUNITY_CHAIRPERSON') or hasRole('COMMUNITY_SECRETARY')" +
@@ -101,6 +99,13 @@ public class GroupContributionController {
     @GetMapping("/my-debts")
     public ResponseEntity<List<GroupContributionDebtDTO>> getUserDebts(HttpServletRequest request) {
         return getUserGroupContributionDebtsService.execute(request);
+    }
+
+    @GetMapping("/{requirementId}/members-progress")
+    public ResponseEntity<List<GroupContributionMemberProgressDTO>> getMemberProgress(
+            @PathVariable Long requirementId
+    ) {
+        return getGroupContributionMemberProgressService.execute(requirementId);
     }
 
 

@@ -58,8 +58,9 @@ public class SecurityConfiguration {
                     //TODO: Remove this next endpoint
                     authorize.requestMatchers("/group/contributions/declarations").permitAll();
                     authorize.requestMatchers("/group/contributions/submit").permitAll();
+                    authorize.requestMatchers("/group/contributions/requirement/members-progress").permitAll();
 
-                    authorize.anyRequest().authenticated();
+                    authorize.anyRequest().permitAll();
                 })
                 .addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
