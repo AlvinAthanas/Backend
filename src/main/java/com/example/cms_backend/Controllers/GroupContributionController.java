@@ -37,7 +37,7 @@ public class GroupContributionController {
             @RequestBody CreateGroupContributionRequirementCommand command,
             HttpServletRequest request
     ) {
-        command.setRequest(request);  // Manually inject request into command
+        command.setRequest(request);  // Manually inject a request into command
         return createRequirementService.execute(command);
     }
 
