@@ -1,6 +1,7 @@
 package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.CreateNotificationCommand;
+import com.example.cms_backend.Model.DTO.NotificationViewDTO;
 import com.example.cms_backend.Model.Entities.Notification;
 import com.example.cms_backend.Model.Commands.UpdateNotificationCommand;
 import com.example.cms_backend.Services.NotificationServices.*;
@@ -46,9 +47,10 @@ public class NotificationController {
     }
 
     @GetMapping("/notifications")
-    public ResponseEntity<List<Notification>> getNotifications(HttpServletRequest request) {
+    public ResponseEntity<List<NotificationViewDTO>> getNotifications(HttpServletRequest request) {
         return getNotificationsService.execute(request);
     }
+
 
     @PutMapping("/notification/{id}")
     public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification notification, HttpServletRequest request) {
@@ -65,7 +67,7 @@ public class NotificationController {
      */
 
     @GetMapping("/notifications/parish")
-    public ResponseEntity<List<Notification>> getParishNotifications(HttpServletRequest request) {
+    public ResponseEntity<List<NotificationViewDTO>> getParishNotifications(HttpServletRequest request) {
         return getParishNotificationsService.execute(request);
     }
 

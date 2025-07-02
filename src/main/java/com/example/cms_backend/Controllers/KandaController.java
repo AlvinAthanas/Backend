@@ -62,9 +62,10 @@ public class KandaController {
     }
 
     @GetMapping("/kandas")
-    public ResponseEntity<List<Kanda>> getAll() {
-        return getAllKandaService.execute(null);
+    public ResponseEntity<List<Kanda>> getKandas(HttpServletRequest request) {
+        return getAllKandaService.execute(request);
     }
+
 
     @PutMapping("/kanda/{id}")
     public ResponseEntity<Kanda> update(@PathVariable Long id, @RequestBody Kanda kanda) {

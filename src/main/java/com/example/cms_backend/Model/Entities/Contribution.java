@@ -21,6 +21,9 @@ public class Contribution {
     @Column(name = "parish_id")
     private Long parishId;
 
+    @Column(name = "recorder_id")
+    private Long recorderId;
+
     @Column(name = "user_id")
     private Long userId;
 

@@ -50,7 +50,7 @@ public class CreateUsersService implements Command<List<User>,List<UserDTO>> {
         for (User user : users) {
             UserValidator.validateUser(user);
             if (!userRepository.existsByEmail(user.getEmail())) {
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setPassword(passwordEncoder.encode(user.getEmail()));
 
                 // Set parishId if it's null and we have a logged-in user's parishId
                 if (user.getParishId() == null && loggedInUserParishId != null) {

@@ -79,7 +79,7 @@ public class UserController {
         return  createUserService.execute(user, request);
     }
 
-    @PreAuthorize("hasRole('COMMITTEE_CHAIRPERSON')")
+    @PreAuthorize("hasRole('COMMITTEE_CHAIRPERSON') or hasRole('PARISHIONER')")
     @PostMapping("/users")
     public ResponseEntity<List<UserDTO>> createUsers(@RequestBody List<User> users, HttpServletRequest request){
         return createUsersService.execute(users, request);

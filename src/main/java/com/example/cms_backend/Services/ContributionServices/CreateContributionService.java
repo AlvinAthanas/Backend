@@ -34,7 +34,7 @@ public class CreateContributionService implements Command<Contribution,Contribut
             Optional<User> userOptional = userRepository.findByEmail(email);
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
-                contribution.setUserId(user.getId());
+                contribution.setRecorderId(user.getId());
                 contribution.setParishId(user.getParishId());
             }
         }
