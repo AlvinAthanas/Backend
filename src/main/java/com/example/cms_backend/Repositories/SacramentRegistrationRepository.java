@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface SacramentRegistrationRepository extends JpaRepository<SacramentRegistration, Long> {
     List<SacramentRegistration> findByParishIdAndSacramentTypeAndStartDateAndCompletionDate(
@@ -25,5 +26,7 @@ public interface SacramentRegistrationRepository extends JpaRepository<Sacrament
     List<SacramentSessionInfo> findDistinctSessionsByParishAndType(@Param("parishId") Long parishId,
                                                                    @Param("type") SacramentType type);
 
+
+    Optional<SacramentRegistration> findByCandidateIdAndSacramentType(Long candidateId, SacramentType sacramentType);
 
 }

@@ -2,6 +2,7 @@ package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.CreateSacramentRegistrationCommand;
 import com.example.cms_backend.Model.Commands.GetSessionFilterCommand;
+import com.example.cms_backend.Model.Commands.UpdateSacramentCompletionStatusCommand;
 import com.example.cms_backend.Model.Commands.UpdateSacramentRegistrationCommand;
 import com.example.cms_backend.Model.DTO.SacramentSessionInfo;
 import com.example.cms_backend.Model.Entities.SacramentRegistration;
@@ -25,19 +26,30 @@ public class SacramentRegistrationController {
     private final DeleteSacramentRegistrationService deleteService;
     private final GetSacramentSessionsService getSacramentSessionsService;
 
+    private final UpdateSacramentCompletionStatusService updateCompletionStatusService;
+
     public SacramentRegistrationController(CreateSacramentRegistrationService createService,
                                            GetSacramentRegistrationService getService,
                                            GetSacramentRegistrationsService listService,
                                            UpdateSacramentRegistrationService updateService,
                                            DeleteSacramentRegistrationService deleteService,
-                                           GetSacramentSessionsService getSacramentSessionsService) {
+                                           GetSacramentSessionsService getSacramentSessionsService,
+                                           UpdateSacramentCompletionStatusService updateCompletionStatusService) {
         this.createService = createService;
         this.getService = getService;
         this.listService = listService;
         this.updateService = updateService;
         this.deleteService = deleteService;
         this.getSacramentSessionsService = getSacramentSessionsService;
+        this.updateCompletionStatusService = updateCompletionStatusService;
     }
+
+    @PutMapping("/sacrament/completion")
+    public ResponseEntity<SacramentRegistration> updateCompletionStatus(
+            @RequestBody UpdateSacramentCompletionStatusCommand command) {
+        return updateCompletionStatusService.execute(command);
+    }
+
 
     @PostMapping("/sacrament")
     public ResponseEntity<SacramentRegistration> create(
@@ -62,7 +74,7 @@ public class SacramentRegistrationController {
         return listService.execute(null);
     }
 
-    @PutMapping("sacrament/{id}")
+    @PutMapping("/sacrament/{id}")
     public ResponseEntity<SacramentRegistration> update(@PathVariable Long id, @RequestBody UpdateSacramentRegistrationCommand command) {
         command.setId(id);
         return updateService.execute(command);
