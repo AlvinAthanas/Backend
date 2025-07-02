@@ -21,12 +21,13 @@ public class UserDTO {
     private String email;
     private String phone;
     private String address;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private Long parishId;
     private String profilePicture; // Base64 string
     private String password;
-    private List<String> groups; // ✅ New field: List of group names
+    private List<GroupDTO> groups; // ✅ Now list of GroupDTOs
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -39,10 +40,9 @@ public class UserDTO {
         this.profilePicture = encodeImageToBase64(user.getProfilePicture());
         this.password = user.getPassword();
 
-        // ✅ Map group names
         if (user.getGroups() != null) {
             this.groups = user.getGroups().stream()
-                    .map(Group::getName)
+                    .map(GroupDTO::new)
                     .collect(Collectors.toList());
         }
     }
@@ -57,11 +57,11 @@ public class UserDTO {
         this.gender = user.get().getGender();
         this.parishId = user.get().getParishId();
         this.profilePicture = encodeImageToBase64(user.get().getProfilePicture());
+        this.password = user.get().getPassword();
 
-        // ✅ Map group names for Optional constructor
         if (user.get().getGroups() != null) {
             this.groups = user.get().getGroups().stream()
-                    .map(Group::getName)
+                    .map(GroupDTO::new)
                     .collect(Collectors.toList());
         }
     }
