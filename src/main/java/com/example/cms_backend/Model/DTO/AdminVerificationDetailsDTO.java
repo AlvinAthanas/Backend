@@ -10,11 +10,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AdminVerificationDetailsDTO {
 
+    private Long keyId;                  // ✅ NEW FIELD: Verification Key ID
     private Long userId;
     private String email;
     private String fullName;
     private String verificationKey;
     private boolean keyUsed;
-    private AdminVerificationStatus verificationStatus;   // VERIFIED / NOT_VERIFIED
+    private AdminVerificationStatus verificationStatus;
     private LocalDateTime keyCreatedAt;
+
+    private Long parishId;
+    private String parishName;
+    private String parishLocation;
 }

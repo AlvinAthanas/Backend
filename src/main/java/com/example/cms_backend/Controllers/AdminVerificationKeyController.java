@@ -2,6 +2,7 @@ package com.example.cms_backend.Controllers;
 
 import com.example.cms_backend.Model.Commands.VerifyAdminKeyCommand;
 import com.example.cms_backend.Model.DTO.AdminVerificationDetailsDTO;
+import com.example.cms_backend.Model.DTO.AdminVerificationFilterDTO;
 import com.example.cms_backend.Model.DTO.UserDTO;
 import com.example.cms_backend.Services.AdminServices.GetAllVerifiedParishionersOfParishService;
 import com.example.cms_backend.Services.AdminVerificationKeyServices.GetAllAdminVerificationDetailsService;
@@ -9,6 +10,7 @@ import com.example.cms_backend.Services.AdminVerificationKeyServices.VerifyAdmin
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -39,9 +41,26 @@ public class AdminVerificationKeyController {
 
     @GetMapping("/keys")
     public ResponseEntity<List<AdminVerificationDetailsDTO>> getAll(
-            @RequestParam(required = false, defaultValue = "ALL") String status) {
+            @RequestParam(required = false, defaultValue = "ALL") String status,
+            @RequestParam(required = false, defaultValue = "ALL") String dateFilterType,
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate
+    ) {
+        AdminVerificationFilterDTO filterDto = new AdminVerificationFilterDTO();
+        filterDto.setStatusFilter(status);
+        filterDto.setDateFilterType(dateFilterType);
 
-        return adminVerificationDetailsService.execute(status);
+        if (fromDate != null && !fromDate.isEmpty()) {
+            filterDto.setFromDate(LocalDate.parse(fromDate));
+        }
+
+        if (toDate != null && !toDate.isEmpty()) {
+            filterDto.setToDate(LocalDate.parse(toDate));
+        }
+
+        return adminVerificationDetailsService.execute(filterDto);
     }
+
+
 
 }

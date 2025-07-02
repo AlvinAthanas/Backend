@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ParishRepository extends JpaRepository<Parish,Long> {
-    public List<Parish> findByNameContaining(String name);
+    List<Parish> findByNameContaining(String name);
+
 }

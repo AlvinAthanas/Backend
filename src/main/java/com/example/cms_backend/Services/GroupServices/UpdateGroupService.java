@@ -32,8 +32,9 @@ public class UpdateGroupService implements Command<UpdateGroupCommand, Group> {
     public ResponseEntity<Group> execute(UpdateGroupCommand command, HttpServletRequest request) {
         Optional<Group> groupOptional = groupRepository.findById(command.getId());
         if (groupOptional.isPresent()) {
-            Group group = command.getGroup();
-            group.setId(command.getId());
+            Group group = groupOptional.get();
+            group.setName(command.getGroup().getName());
+            group.setDescription(command.getGroup().getDescription());
 
             // Set parishId from logged-in user if it's null and request is provided
             if (group.getParishId() == null && request != null) {

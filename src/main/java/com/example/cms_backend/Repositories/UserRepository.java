@@ -2,6 +2,7 @@ package com.example.cms_backend.Repositories;
 
 import com.example.cms_backend.Model.Entities.Role;
 import com.example.cms_backend.Model.Entities.User;
+import com.example.cms_backend.Model.Enums.AdminVerificationStatus;
 import com.example.cms_backend.Model.Enums.Roles;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -59,6 +60,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u JOIN u.groups g WHERE g.id = :groupId")
     List<User> findUsersByGroupId(@Param("groupId") Long groupId);
+
+    List<User> findByAdminVerificationStatus(AdminVerificationStatus status);
 
 
 }

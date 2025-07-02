@@ -1,5 +1,6 @@
 package com.example.cms_backend.Model.DTO;
 
+import com.example.cms_backend.Model.Entities.Group;
 import com.example.cms_backend.Model.Entities.User;
 import com.example.cms_backend.Model.Enums.Gender;
 import jakarta.persistence.EnumType;
@@ -8,7 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -23,6 +26,7 @@ public class UserDTO {
     private Long parishId;
     private String profilePicture; // Base64 string
     private String password;
+    private List<String> groups; // ✅ New field: List of group names
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -34,6 +38,13 @@ public class UserDTO {
         this.parishId = user.getParishId();
         this.profilePicture = encodeImageToBase64(user.getProfilePicture());
         this.password = user.getPassword();
+
+        // ✅ Map group names
+        if (user.getGroups() != null) {
+            this.groups = user.getGroups().stream()
+                    .map(Group::getName)
+                    .collect(Collectors.toList());
+        }
     }
 
     public UserDTO(Optional<User> user) {
@@ -46,6 +57,13 @@ public class UserDTO {
         this.gender = user.get().getGender();
         this.parishId = user.get().getParishId();
         this.profilePicture = encodeImageToBase64(user.get().getProfilePicture());
+
+        // ✅ Map group names for Optional constructor
+        if (user.get().getGroups() != null) {
+            this.groups = user.get().getGroups().stream()
+                    .map(Group::getName)
+                    .collect(Collectors.toList());
+        }
     }
 
     private String encodeImageToBase64(byte[] imageData) {
