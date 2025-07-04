@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasRole('COMMITTEE_TREASURER') or hasRole('PARISHIONER')")
+@PreAuthorize("hasRole('COMMITTEE_TREASURER') or hasRole('PARISHIONER') or hasRole('COMMITTEE_SECRETARY') or hasRole('COMMITTEE_CHAIRPERSON')")
 public class ContributionController {
     private final CreateContributionService createContributionService;
     private final UpdateContributionService updateContributionService;

@@ -39,10 +39,7 @@ public class AssignRolesService implements Command<AssignRoleCommand,String> {
             }
             user.getRoles().add(defaultRole.get());
 
-            Optional<Role> commiteeChairperson = roleRepository.findByName(Roles.COMMITTEE_CHAIRPERSON.toString());
-            if (commiteeChairperson.isPresent()) {
-                user.getRoles().add(commiteeChairperson.get());
-            }
+
 
             // Update authorities based on the assigned roles
             roleBasedAuthorityService.updateAuthoritiesBasedOnRoles(user);
