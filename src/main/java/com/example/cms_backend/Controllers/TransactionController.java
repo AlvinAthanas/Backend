@@ -1,5 +1,6 @@
 package com.example.cms_backend.Controllers;
 
+import com.example.cms_backend.Model.Commands.GetExpenseTotalQuery;
 import com.example.cms_backend.Model.Commands.TransactionCommand;
 import com.example.cms_backend.Model.DTO.TransactionDTO;
 import com.example.cms_backend.Model.Entities.FinancialTransaction;
@@ -21,6 +22,7 @@ public class TransactionController {
     private final GetTransactionsService  getTransactionsService;
     private final CreateTransactionsService createTransactionsService;
     private final SearchTransactionService searchTransactionService;
+    private final GetTotalExpenseService getTotalExpenseService;
 
     public TransactionController(CreateTransactionService createTransactionService,
                                  GetTransactionService getTransactionService,
@@ -28,7 +30,8 @@ public class TransactionController {
                                  DeleteTransactionService deleteTransactionService,
                                  GetTransactionsService getTransactionsService,
                                  CreateTransactionsService createTransactionsService,
-                                 SearchTransactionService searchTransactionService) {
+                                 SearchTransactionService searchTransactionService,
+                                 GetTotalExpenseService getTotalExpenseService) {
         this.createTransactionService = createTransactionService;
         this.getTransactionService = getTransactionService;
         this.updateTransactionService = updateTransactionService;
@@ -36,6 +39,7 @@ public class TransactionController {
         this.getTransactionsService = getTransactionsService;
         this.createTransactionsService = createTransactionsService;
         this.searchTransactionService = searchTransactionService;
+        this.getTotalExpenseService = getTotalExpenseService;
     }
 
     @PostMapping("/transaction")
@@ -73,5 +77,10 @@ public class TransactionController {
     @DeleteMapping("/transaction/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id){
         return deleteTransactionService.execute(id);
+    }
+
+    @GetMapping("/total-expense")
+    public ResponseEntity<Long> getTotalExpense(HttpServletRequest request) {
+        return getTotalExpenseService.execute(new GetExpenseTotalQuery(request));
     }
 }
