@@ -1,4 +1,4 @@
-package com.example.cms_backend.config;
+package com.example.cms_backend;
 
 import com.example.cms_backend.model.Entities.Diocese;
 import com.example.cms_backend.model.Entities.Parish;
@@ -39,7 +39,7 @@ public class BootstrapDataLoader implements CommandLineRunner {
         // Load Diocese
         // =======================
         InputStream dioceseStream =
-                getClass().getResourceAsStream("/bootstrap/diocese.json");
+                getClass().getResourceAsStream("bootstrap/diocese.json");
 
         List<DioceseSeedDto> dioceses =
                 objectMapper.readValue(dioceseStream,
@@ -59,7 +59,7 @@ public class BootstrapDataLoader implements CommandLineRunner {
         // Load Parishes
         // =======================
         InputStream parishStream =
-                getClass().getResourceAsStream("/bootstrap/parish.json");
+                getClass().getResourceAsStream("bootstrap/parish.json");
 
         List<ParishSeedDto> parishes =
                 objectMapper.readValue(parishStream,
