@@ -3,10 +3,12 @@ package com.example.cms_backend;
 import com.example.cms_backend.model.Entities.Diocese;
 import com.example.cms_backend.model.Entities.Parish;
 import com.example.cms_backend.model.Entities.Role;
+import com.example.cms_backend.model.Entities.Authority;
 import com.example.cms_backend.model.Enums.Roles;
 import com.example.cms_backend.repositories.DioceseRepository;
 import com.example.cms_backend.repositories.ParishRepository;
 import com.example.cms_backend.repositories.RoleRepository;
+import com.example.cms_backend.repositories.AuthorityRepository;
 import com.example.cms_backend.seed.DioceseSeedDto;
 import com.example.cms_backend.seed.ParishSeedDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -26,6 +28,7 @@ public class BootstrapDataLoader implements CommandLineRunner {
     private final DioceseRepository dioceseRepository;
     private final ParishRepository parishRepository;
     private final RoleRepository roleRepository;
+    private final AuthorityRepository authorityRepository;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -117,8 +120,26 @@ public class BootstrapDataLoader implements CommandLineRunner {
             System.out.println("ℹ️ Roles already exist. Skipping population");
         }
 
+        // =======================
+        // Load Authorities
+        // =======================
+        if (authorityRepository.count() == 0) {
+            System.out.println("Authority table is empty. Loading default authorities...");
+
+            List<Authority> authorities = Stream.of(com.example.cms_backend.model.Enums.Authority.values())
+                    .map(a -> {
+                        Authority auth = new Authority();
+                        auth.setName(a.name());
+                        return auth;
+                    })
+                    .toList();
+
+            authorityRepository.saveAll(authorities);
+            System.out.println("✅ Authorities loaded successfully");
+        } else {
+            System.out.println("ℹ️ Authorities already exist. Skipping population");
+        }
 
         System.out.println("🎉 BootstrapDataLoader finished");
     }
 }
-
