@@ -25,6 +25,9 @@ public class BootstrapDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("🚀 BootstrapDataLoader RUNNING");
+        System.out.println("Diocese count: " + dioceseRepository.count());
+
 
         // ✅ Prevent duplicate inserts
         if (dioceseRepository.count() > 0) {
