@@ -26,71 +26,77 @@ public class BootstrapDataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("🚀 BootstrapDataLoader RUNNING");
-        System.out.println("Diocese count: " + dioceseRepository.count());
-
-
-        // ✅ Prevent duplicate inserts
-        if (dioceseRepository.count() > 0) {
-            System.out.println("ℹ️ Bootstrap data already exists. Skipping.");
-            return;
-        }
 
         // =======================
         // Load Diocese
         // =======================
-        InputStream dioceseStream =
-                getClass().getResourceAsStream("bootstrap/diocese.json");
+        Diocese savedDiocese = null;
+        if (dioceseRepository.count() == 0) {
+            System.out.println("Diocese table is empty. Loading bootstrap dioceses...");
 
-        List<DioceseSeedDto> dioceses =
-                objectMapper.readValue(dioceseStream,
-                        new TypeReference<>() {});
+            InputStream dioceseStream =
+                    getClass().getClassLoader().getResourceAsStream("bootstrap/diocese.json");
+            if (dioceseStream == null)
+                throw new RuntimeException("🚨 Diocese JSON not found!");
 
-        Diocese diocese = dioceses.stream().findFirst()
-                .map(d -> new Diocese(
-                        d.name,
-                        d.location,
-                        d.bishopName
-                ))
-                .orElseThrow(() -> new RuntimeException("No diocese data found"));
+            List<DioceseSeedDto> dioceses =
+                    objectMapper.readValue(dioceseStream, new TypeReference<>() {});
 
-        Diocese savedDiocese = dioceseRepository.save(diocese);
+            Diocese diocese = dioceses.stream().findFirst()
+                    .map(d -> new Diocese(d.name, d.location, d.bishopName))
+                    .orElseThrow(() -> new RuntimeException("No diocese data found"));
+
+            savedDiocese = dioceseRepository.save(diocese);
+            System.out.println("✅ Diocese loaded successfully");
+        } else {
+            savedDiocese = dioceseRepository.findAll().get(0); // assume first one
+            System.out.println("ℹ️ Diocese already exists, using existing record");
+        }
 
         // =======================
         // Load Parishes
         // =======================
-        InputStream parishStream =
-                getClass().getResourceAsStream("bootstrap/parish.json");
+        if (parishRepository.count() == 0) {
+            System.out.println("Parish table is empty. Loading bootstrap parishes...");
 
-        List<ParishSeedDto> parishes =
-                objectMapper.readValue(parishStream,
-                        new TypeReference<>() {});
+            InputStream parishStream =
+                    getClass().getClassLoader().getResourceAsStream("bootstrap/parish.json");
+            if (parishStream == null)
+                throw new RuntimeException("🚨 Parish JSON not found!");
 
-        List<Parish> parishEntities = parishes.stream().map(p -> {
-            Parish parish = new Parish();
-            parish.setName(p.name);
-            parish.setParishPriest(p.parishPriest);
-            parish.setLocation(p.location);
-            parish.setContactInfo(p.contactInfo);
-            parish.setImageUrl(p.imageUrl);
-            parish.setEmail(p.email);
-            parish.setParishPhoneNumber(p.parishPhoneNumber);
-            parish.setHistory(p.history);
-            parish.setStreet(p.street);
-            parish.setCity(p.city);
-            parish.setRegion(p.region);
-            parish.setPoBox(p.poBox);
-            parish.setFacebookLink(p.facebookLink);
-            parish.setTwitterLink(p.twitterLink);
-            parish.setInstagramLink(p.instagramLink);
+            List<ParishSeedDto> parishes =
+                    objectMapper.readValue(parishStream, new TypeReference<>() {});
 
-            // 🔑 THIS is the critical link
-            parish.setDioceseId(savedDiocese.getId());
+            Diocese finalSavedDiocese = savedDiocese;
+            List<Parish> parishEntities = parishes.stream().map(p -> {
+                Parish parish = new Parish();
+                parish.setName(p.name);
+                parish.setParishPriest(p.parishPriest);
+                parish.setLocation(p.location);
+                parish.setContactInfo(p.contactInfo);
+                parish.setImageUrl(p.imageUrl);
+                parish.setEmail(p.email);
+                parish.setParishPhoneNumber(p.parishPhoneNumber);
+                parish.setHistory(p.history);
+                parish.setStreet(p.street);
+                parish.setCity(p.city);
+                parish.setRegion(p.region);
+                parish.setPoBox(p.poBox);
+                parish.setFacebookLink(p.facebookLink);
+                parish.setTwitterLink(p.twitterLink);
+                parish.setInstagramLink(p.instagramLink);
 
-            return parish;
-        }).toList();
+                parish.setDioceseId(finalSavedDiocese.getId());
+                return parish;
+            }).toList();
 
-        parishRepository.saveAll(parishEntities);
+            parishRepository.saveAll(parishEntities);
+            System.out.println("✅ Parishes loaded successfully");
+        } else {
+            System.out.println("ℹ️ Parishes already exist. Skipping population");
+        }
 
-        System.out.println("✅ Bootstrap data loaded successfully");
+        System.out.println("🎉 BootstrapDataLoader finished");
     }
 }
+
