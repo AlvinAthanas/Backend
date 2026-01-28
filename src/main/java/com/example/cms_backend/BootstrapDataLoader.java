@@ -2,8 +2,11 @@ package com.example.cms_backend;
 
 import com.example.cms_backend.model.Entities.Diocese;
 import com.example.cms_backend.model.Entities.Parish;
+import com.example.cms_backend.model.Entities.Role;
+import com.example.cms_backend.model.Enums.Roles;
 import com.example.cms_backend.repositories.DioceseRepository;
 import com.example.cms_backend.repositories.ParishRepository;
+import com.example.cms_backend.repositories.RoleRepository;
 import com.example.cms_backend.seed.DioceseSeedDto;
 import com.example.cms_backend.seed.ParishSeedDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -14,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Configuration
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ public class BootstrapDataLoader implements CommandLineRunner {
 
     private final DioceseRepository dioceseRepository;
     private final ParishRepository parishRepository;
+    private final RoleRepository roleRepository;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -95,6 +100,23 @@ public class BootstrapDataLoader implements CommandLineRunner {
         } else {
             System.out.println("ℹ️ Parishes already exist. Skipping population");
         }
+
+        // =======================
+        // Load Roles
+        // =======================
+        if (roleRepository.count() == 0) {
+            System.out.println("Role table is empty. Loading default roles...");
+
+            List<Role> roles = Stream.of(Roles.values())
+                    .map(r -> new Role(r.getRoleName()))
+                    .toList();
+
+            roleRepository.saveAll(roles);
+            System.out.println("✅ Roles loaded successfully");
+        } else {
+            System.out.println("ℹ️ Roles already exist. Skipping population");
+        }
+
 
         System.out.println("🎉 BootstrapDataLoader finished");
     }
