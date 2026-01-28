@@ -1,0 +1,24 @@
+package com.example.cms_backend.services.SacramentRegistrationServices;
+
+import com.example.cms_backend.abstractions.Query;
+import com.example.cms_backend.model.Entities.SacramentRegistration;
+import com.example.cms_backend.repositories.SacramentRegistrationRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class GetSacramentRegistrationsService implements Query<Void, List<SacramentRegistration>> {
+
+    private final SacramentRegistrationRepository repository;
+
+    public GetSacramentRegistrationsService(SacramentRegistrationRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public ResponseEntity<List<SacramentRegistration>> execute(Void unused) {
+        return ResponseEntity.ok(repository.findAll());
+    }
+}

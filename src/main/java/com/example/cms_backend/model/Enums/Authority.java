@@ -1,0 +1,18 @@
+package com.example.cms_backend.model.Enums;
+
+public enum Authority {
+    WRITE_MEMBERS,
+    WRITE_CONTRIBUTIONS,
+    WRITE_SCHEDULES,
+    WRITE_EVENTS,
+    WRITE_COMMUNITIES,
+    WRITE_PROJECTS,
+    WRITE_SACRAMENTS,
+    READ_MEMBERS,
+    READ_CONTRIBUTIONS,
+    READ_SCHEDULES,
+    READ_EVENTS,
+    READ_COMMUNITIES,
+    READ_PROJECTS,
+    READ_SACRAMENTS;
+}

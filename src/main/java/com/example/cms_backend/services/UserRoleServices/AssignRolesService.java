@@ -1,0 +1,97 @@
+package com.example.cms_backend.services.UserRoleServices;
+
+import com.example.cms_backend.abstractions.Command;
+import com.example.cms_backend.exceptions.RoleNotFoundException;
+import com.example.cms_backend.exceptions.UserNotFoundException;
+import com.example.cms_backend.model.Entities.Role;
+import com.example.cms_backend.model.Entities.User;
+import com.example.cms_backend.model.Enums.Roles;
+import com.example.cms_backend.model.Commands.AssignRoleCommand;
+import com.example.cms_backend.repositories.RoleRepository;
+import com.example.cms_backend.repositories.UserRepository;
+import com.example.cms_backend.services.UserAuthorityServices.RoleBasedAuthorityService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Optional;
+@Service
+public class AssignRolesService implements Command<AssignRoleCommand,String> {
+    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final RoleBasedAuthorityService roleBasedAuthorityService;
+
+
+    public AssignRolesService(RoleRepository roleRepository,
+                              UserRepository userRepository,
+                              RoleBasedAuthorityService roleBasedAuthorityService) {
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.roleBasedAuthorityService = roleBasedAuthorityService;
+    }
+
+    public void AssignDefaultRole(User user) {
+        Optional<Role> defaultRole = roleRepository.findByName(Roles.PARISH_MEMBER.toString());
+        if (defaultRole.isPresent()) {
+            if (user.getRoles() == null) {
+                user.setRoles(new HashSet<>());
+            }
+            user.getRoles().add(defaultRole.get());
+
+
+
+            // Update authorities based on the assigned roles
+            roleBasedAuthorityService.updateAuthoritiesBasedOnRoles(user);
+        }
+    }
+
+    public void assignAdminRole(User user) {
+        Optional<Role> parishionerRole = roleRepository.findByName(Roles.PARISHIONER.toString());
+
+        if (parishionerRole.isPresent()) {
+            if (user.getRoles() == null) {
+                user.setRoles(new HashSet<>());
+            }
+
+            user.getRoles().add(parishionerRole.get());
+
+            // Update authorities based on the assigned roles
+            roleBasedAuthorityService.updateAuthoritiesBasedOnRoles(user);
+
+            // Save user with updated roles
+            userRepository.save(user);
+        } else {
+            throw new RoleNotFoundException();
+        }
+    }
+
+
+
+    @Override
+    public ResponseEntity<String> execute(AssignRoleCommand command) {
+        Optional<Role> assignedRole = roleRepository.findByName(command.getRoleName());
+        Optional<User> userOptional = userRepository.findById(command.getId());
+        if (assignedRole.isPresent()) {
+            if (userOptional.isPresent()) {
+                Role role = assignedRole.get();
+                User user = userOptional.get();
+                if (user.getRoles() == null) {
+                    user.setRoles(new HashSet<>());
+                }
+                user.getRoles().add(role);
+                userRepository.save(user);
+
+                // Update authorities based on the assigned roles
+                roleBasedAuthorityService.updateAuthoritiesBasedOnRoles(user);
+
+                return ResponseEntity.status(HttpStatus.CREATED).body("Role assigned: " + command.getRoleName());
+            } else {
+                throw new UserNotFoundException();
+            }
+
+        } else {
+            throw new RoleNotFoundException();
+        }
+    }
+}

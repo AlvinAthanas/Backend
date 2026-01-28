@@ -1,0 +1,66 @@
+package com.example.cms_backend.controllers;
+
+import com.example.cms_backend.model.Commands.VerifyAdminKeyCommand;
+import com.example.cms_backend.model.DTO.AdminVerificationDetailsDTO;
+import com.example.cms_backend.model.DTO.AdminVerificationFilterDTO;
+import com.example.cms_backend.model.DTO.UserDTO;
+import com.example.cms_backend.services.AdminServices.GetAllVerifiedParishionersOfParishService;
+import com.example.cms_backend.services.AdminVerificationKeyServices.GetAllAdminVerificationDetailsService;
+import com.example.cms_backend.services.AdminVerificationKeyServices.VerifyAdminKeyService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+public class AdminVerificationKeyController {
+
+    private final VerifyAdminKeyService verifyAdminKeyService;
+    private final GetAllVerifiedParishionersOfParishService getAllVerifiedParishionersOfParishService;
+    private final GetAllAdminVerificationDetailsService adminVerificationDetailsService;
+
+    public AdminVerificationKeyController(VerifyAdminKeyService verifyAdminKeyService,
+                                          GetAllVerifiedParishionersOfParishService getAllVerifiedParishionersOfParishService,
+                                          GetAllAdminVerificationDetailsService adminVerificationDetailsService) {
+        this.verifyAdminKeyService = verifyAdminKeyService;
+        this.getAllVerifiedParishionersOfParishService = getAllVerifiedParishionersOfParishService;
+        this.adminVerificationDetailsService = adminVerificationDetailsService;
+    }
+
+    @PostMapping("/verify-key")
+    public ResponseEntity<String> verifyKey(@RequestBody VerifyAdminKeyCommand command) {
+        return verifyAdminKeyService.execute(command);
+    }
+
+    // Somewhere in an AdminController
+    @GetMapping("/parish/{parishId}/verified-parishioners")
+    public ResponseEntity<List<UserDTO>> getVerifiedParishioners(@PathVariable Long parishId) {
+        return getAllVerifiedParishionersOfParishService.execute(parishId);
+    }
+
+    @GetMapping("/keys")
+    public ResponseEntity<List<AdminVerificationDetailsDTO>> getAll(
+            @RequestParam(required = false, defaultValue = "ALL") String status,
+            @RequestParam(required = false, defaultValue = "ALL") String dateFilterType,
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate
+    ) {
+        AdminVerificationFilterDTO filterDto = new AdminVerificationFilterDTO();
+        filterDto.setStatusFilter(status);
+        filterDto.setDateFilterType(dateFilterType);
+
+        if (fromDate != null && !fromDate.isEmpty()) {
+            filterDto.setFromDate(LocalDate.parse(fromDate));
+        }
+
+        if (toDate != null && !toDate.isEmpty()) {
+            filterDto.setToDate(LocalDate.parse(toDate));
+        }
+
+        return adminVerificationDetailsService.execute(filterDto);
+    }
+
+
+
+}
